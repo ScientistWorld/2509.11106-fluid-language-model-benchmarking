@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: method_runs
-notes: "Retry: using ghcr.io registry instead of Docker Hub to avoid rate limiting. Running FLUID vs RANDOM vs RANDOM IRT on 6 LMs x 30 checkpoints x 6 benchmarks."
+notes: "Retry with Red Hat UBI8 Python-39. Previous failure was transient malformed registry response. Image is publicly accessible and verified working."

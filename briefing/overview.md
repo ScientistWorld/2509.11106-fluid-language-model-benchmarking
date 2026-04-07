@@ -1,14 +1,17 @@
 # Overview
 
-- **Paper ID:** <!-- e.g. 1706.03762 -->
-- **Title:** <!-- e.g. Attention Is All You Need -->
-- **Domain:** <!-- e.g. Computer Vision / Object Detection -->
-- **TL;DR:** <!-- One sentence: what this paper does and why it matters -->
+- **Paper ID:** 2509.11106
+- **Title:** Fluid Language Model Benchmarking
+- **Domain:** NLP / LM Evaluation Methodology
+- **TL;DR:** A new LM benchmarking method that adapts evaluation items to each model's capability level, improving efficiency, validity, variance, and saturation simultaneously.
 
 ## Short Summary
 
-<!-- 3-5 sentences covering the problem, approach, and main findings -->
+This paper identifies four fundamental problems with current LM benchmarking: it's computationally expensive, often fails to measure what it claims (low validity), produces noisy results (high variance), and becomes useless as models improve (saturation). The paper proposes FLUID BENCHMARKING, which combines item response theory (IRT) with adaptive testing techniques from education. The key idea is that the best questions to ask depend on the model's capability — easy questions for weak models, hard questions for strong models. FLUID fits a psychometric model to existing evaluation data, then dynamically selects the most informative items for each model being evaluated. This produces better ability estimates using far fewer items.
 
 ## Key Results
 
-<!-- 2-3 bullet points: main findings or numbers in bullet points -->
+- FLUID BENCHMARKING with 10 items achieves better validity (rank distance 10.1) than RANDOM with 500 items (9.1) on MMLU — a 50x efficiency improvement
+- FLUID reduces variance by 3-5x compared to random sampling across all subset sizes
+- FLUID maintains high saturation (Spearman correlation 0.76-0.97) even as models improve, while random sampling saturates early
+- IRT aggregation accounts for validity gains; dynamic item selection accounts for variance reductions

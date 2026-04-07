@@ -2,16 +2,22 @@
 
 What problem does this paper address? Write this so that someone with no knowledge of the paper can understand what needs to be solved and how success is measured.
 
-Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent try to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
+Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent tries to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
 
 ## Research Question
 
-<!-- What problem or challenge does this paper tackle? What gap in existing work does it address? -->
+Language model (LM) benchmarking faces several fundamental challenges: (1) comprehensive evaluations are computationally expensive, (2) benchmarks often fail to measure the capabilities they claim to measure, and (3) evaluation quality degrades due to labeling errors in benchmark items and benchmark saturation (when frontier models score near the maximum). The research question is: can we design evaluation methods that simultaneously improve efficiency, validity, variance, and saturation of LM benchmarks?
 
 ## Why It Matters
 
-<!-- Why is this problem important? What would a good solution enable? Make it short -->
+Current LM benchmarking uses static evaluation sets — the same questions are asked of every model, regardless of the model's capability level. This is inefficient (we evaluate small models with the same expensive set as large models), noisy (random item selection produces high variance), and eventually ineffective (as models improve, benchmarks saturate and stop differentiating). Better evaluation methods would reduce computational cost, produce more reliable results, and maintain their usefulness as models improve.
 
 ## Success Criteria
 
-<!-- What would a successful solution look like? What properties should it have? This is about the goal, not the paper's specific approach. Make it short -->
+A successful evaluation method should:
+- **Improve efficiency**: achieve comparable or better quality estimates with fewer evaluation items
+- **Increase validity**: produce scores that better predict performance on related capabilities (external validity)
+- **Reduce variance**: produce more stable scores across repeated evaluations with the same model
+- **Delay saturation**: maintain the ability to differentiate between models even as model capabilities improve
+
+These properties matter because they determine how useful a benchmark is for tracking model progress, comparing models, and making decisions based on evaluation results.

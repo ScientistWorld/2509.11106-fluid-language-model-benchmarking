@@ -16,4 +16,19 @@
 
 set -e
 
-# uv pip install --system <packages>
+# Core numerical libraries needed for IRT computations and metrics
+uv pip install --system \
+    numpy \
+    scipy \
+    scikit-learn \
+    python-dateutil \
+    pytz \
+    pyyaml \
+    filelock \
+    pyarrow \
+    pandas \
+    multiprocess \
+    xxhash \
+    huggingface-hub \
+    datasets \
+    2>&1 | tail -5

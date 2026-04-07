@@ -1,0 +1,78 @@
+{
+  "experiments": {
+    "ablation_comparison": {
+      "description": "Ablation study comparing FLUID BENCHMARKING against RANDOM and RANDOM IRT baselines across different item counts. Results averaged across 6 benchmarks (ARC, GSM8K, HellaSwag, MMLU, TruthfulQA, WinoGrande), 6 LMs (Amber-6.7B, K2-65B, OLMo1-7B, OLMo2-7B, Pythia-2.8B, Pythia-6.9B), and 61-94 checkpoints per LM. Primary metric is validity (rank distance, lower is better).",
+      "weight": 0.5,
+      "primary_metric": "rank_distance",
+      "metrics": {
+        "rank_distance": {"higher_is_better": false, "coefficient": 1.0},
+        "total_variation": {"higher_is_better": false, "coefficient": 0.8},
+        "saturation": {"higher_is_better": true, "coefficient": 0.8}
+      },
+      "results": {
+        "random_10":   {"type": "baseline", "rank_distance": 20.0, "total_variation": 29.0, "saturation": 0.47},
+        "random_50":   {"type": "baseline", "rank_distance": 15.2, "total_variation": 19.1, "saturation": 0.62},
+        "random_100":  {"type": "baseline", "rank_distance": 16.9, "total_variation": 19.8, "saturation": 0.64},
+        "random_500":  {"type": "baseline", "rank_distance": 9.1,  "total_variation": 10.2, "saturation": 0.79},
+        "random_irt_10":  {"type": "baseline", "rank_distance": 14.1, "total_variation": 18.2, "saturation": 0.48},
+        "random_irt_50":  {"type": "baseline", "rank_distance": 11.1, "total_variation": 15.7, "saturation": 0.69},
+        "random_irt_100": {"type": "baseline", "rank_distance": 10.6, "total_variation": 17.8, "saturation": 0.71},
+        "random_irt_500": {"type": "baseline", "rank_distance": 8.4,  "total_variation": 10.9, "saturation": 0.85},
+        "fluid_10":     {"type": "proposed", "rank_distance": 10.1, "total_variation": 10.7, "saturation": 0.76},
+        "fluid_50":     {"type": "proposed", "rank_distance": 8.8,  "total_variation": 6.5,  "saturation": 0.86},
+        "fluid_100":    {"type": "proposed", "rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85},
+        "fluid_500":    {"type": "proposed", "rank_distance": 8.3,  "total_variation": 4.9,  "saturation": 0.88}
+      }
+    },
+    "validity_by_benchmark_100items": {
+      "description": "Validity (rank distance) breakdown by benchmark for 100 items. Tests how well estimated performance on one benchmark predicts actual performance on a similar benchmark (ARC↔MMLU for knowledge/reasoning, HellaSwag↔WinoGrande for commonsense).",
+      "weight": 0.25,
+      "primary_metric": "rank_distance",
+      "metrics": {
+        "rank_distance": {"higher_is_better": false, "coefficient": 1.0}
+      },
+      "results": {
+        "random_arc":      {"type": "baseline", "rank_distance": 21.9},
+        "random_hs":       {"type": "baseline", "rank_distance": 12.9},
+        "random_mmlu":     {"type": "baseline", "rank_distance": 20.5},
+        "random_wg":       {"type": "baseline", "rank_distance": 12.4},
+        "random_irt_arc":  {"type": "baseline", "rank_distance": 15.9},
+        "random_irt_hs":   {"type": "baseline", "rank_distance": 5.0},
+        "random_irt_mmlu": {"type": "baseline", "rank_distance": 13.4},
+        "random_irt_wg":   {"type": "baseline", "rank_distance": 8.2},
+        "fluid_arc":       {"type": "proposed", "rank_distance": 14.5},
+        "fluid_hs":        {"type": "proposed", "rank_distance": 4.5},
+        "fluid_mmlu":      {"type": "proposed", "rank_distance": 10.7},
+        "fluid_wg":        {"type": "proposed", "rank_distance": 4.9}
+      }
+    },
+    "variance_by_lm_100items": {
+      "description": "Variance (total variation) breakdown by LM for 100 items. Measures step-to-step stability of training curves during pretraining evaluation.",
+      "weight": 0.25,
+      "primary_metric": "total_variation",
+      "metrics": {
+        "total_variation": {"higher_is_better": false, "coefficient": 1.0}
+      },
+      "results": {
+        "random_a7b":   {"type": "baseline", "total_variation": 21.8},
+        "random_k65b":  {"type": "baseline", "total_variation": 14.7},
+        "random_o1_7b": {"type": "baseline", "total_variation": 10.2},
+        "random_o2_7b": {"type": "baseline", "total_variation": 15.4},
+        "random_p3b":   {"type": "baseline", "total_variation": 35.7},
+        "random_p7b":   {"type": "baseline", "total_variation": 20.9},
+        "random_irt_a7b":   {"type": "baseline", "total_variation": 16.2},
+        "random_irt_k65b":  {"type": "baseline", "total_variation": 27.0},
+        "random_irt_o1_7b": {"type": "baseline", "total_variation": 11.4},
+        "random_irt_o2_7b": {"type": "baseline", "total_variation": 12.4},
+        "random_irt_p3b":   {"type": "baseline", "total_variation": 26.1},
+        "random_irt_p7b":   {"type": "baseline", "total_variation": 13.7},
+        "fluid_a7b":    {"type": "proposed", "total_variation": 5.5},
+        "fluid_k65b":   {"type": "proposed", "total_variation": 7.1},
+        "fluid_o1_7b":  {"type": "proposed", "total_variation": 5.8},
+        "fluid_o2_7b":  {"type": "proposed", "total_variation": 6.8},
+        "fluid_p3b":    {"type": "proposed", "total_variation": 6.5},
+        "fluid_p7b":    {"type": "proposed", "total_variation": 4.5}
+      }
+    }
+  }
+}

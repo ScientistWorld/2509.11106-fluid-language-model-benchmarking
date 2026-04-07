@@ -2,7 +2,7 @@
   "experiments": {
     "ablation_comparison": {
       "description": "Comparison of FLUID BENCHMARKING against RANDOM and RANDOM IRT baselines across different item counts (10, 50, 100). Results averaged across 6 benchmarks (ARC Challenge, GSM8K, HellaSwag, MMLU, TruthfulQA, WinoGrande) and 6 LMs (Amber-6.7B, K2-65B, OLMo1-7B, OLMo2-7B, Pythia-2.8B, Pythia-6.9B). Primary metric is validity (rank distance, lower is better).",
-      "weight": 0.5,
+      "weight": 1.0,
       "primary_metric": "saturation",
       "metrics": {
         "rank_distance": {"higher_is_better": false, "coefficient": 1.0},

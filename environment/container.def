@@ -4,35 +4,24 @@
 #
 # This is a CPU-only environment — no GPU needed for IRT computations.
 #
-# Using yum bootstrap to avoid Docker Hub rate limits entirely.
-# This builds the container from CentOS/Rocky Stream 9 packages.
+# Using Red Hat UBI8 with Python — publicly accessible, no rate limits.
 
-Bootstrap: yum
-OSVersion: stream9
-Include: yum
-MirrorURL: http://mirror.centos.org/centos-9-stream/9-stream/%{OSVERSION}/%{ARCH}/os/
+Bootstrap: docker
+From: registry.access.redhat.com/ubi8/python-39:latest
 
 %post
-    set -x
-    # Install Python and essential tools
-    yum install -y \
-        python3 \
-        python3-pip \
-        tmux \
-        nano \
+    # Install essential tools via microdnf (lightweight yum)
+    microdnf install -y \
         vim-minimal \
         less \
         curl \
         wget \
         git \
-        && yum clean all
+        && microdnf clean all
 
     # Create working directory
     mkdir -p /home/user/data
     chmod 755 /home/user
-
-    # Set python3 as default python
-    ln -sf /usr/bin/python3 /usr/bin/python
 
 %environment
     export HOME=/home/user

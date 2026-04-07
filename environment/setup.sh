@@ -6,18 +6,18 @@
 # job submissions without rebuilding the container.
 #
 # Put ALL pip installs here, NOT in container.def.
-# Only use container.def for the base Docker image and apt-get/yum packages.
+# Only use container.def for the base Docker image and apt-get/microdnf packages.
 #
 # IMPORTANT: Install into the SYSTEM Python, not a virtual environment.
 # The overlay may be recreated on container rebuilds — a venv inside
 # it will be lost and all subsequent jobs will fail.
-# Use: python3 -m pip install <packages>
+# Use: pip3 install <packages>
 # Do NOT create a venv (python -m venv, virtualenv, etc.).
 
 set -e
 
 # Core numerical libraries needed for IRT computations and metrics
-python3 -m pip install --no-cache-dir \
+pip3 install --no-cache-dir \
     numpy \
     scipy \
     scikit-learn \
@@ -31,9 +31,8 @@ python3 -m pip install --no-cache-dir \
     xxhash \
     2>&1 | tail -5
 
-# HuggingFace packages for data download (only needed on login node)
-# not strictly needed in container since data is pre-downloaded in workspace
-python3 -m pip install --no-cache-dir \
+# HuggingFace packages for data download (not needed in container since data is pre-downloaded)
+pip3 install --no-cache-dir \
     huggingface-hub \
     datasets \
     2>&1 | tail -5

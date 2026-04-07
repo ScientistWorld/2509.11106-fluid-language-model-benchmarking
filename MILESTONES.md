@@ -1,21 +1,25 @@
 # Reproduction Milestones
 
-**Current: none**
-
-<!-- Milestone levels (update "Current" above as you progress):
-  none             — just started, no meaningful progress yet
-  method_runs      — the paper's method executes end-to-end without errors
-  core_claim       — minimum experiment supports the paper's central claim
-  core_claim_plus  — core claim reproduced on additional settings
-  secondary_claims — secondary results or contributions reproduced
-  majority         — more than half of reported results reproduced
-  near_complete    — most results reproduced, only minor gaps remain
-  full             — all reported results reproduced
--->
+**Current: method_runs**
 
 ## Progress Log
 
-<!-- Write your progress here -->
+### [2026-04-07 10:30] - none
+- Read the paper and identified key components
+- Paper proposes FLUID BENCHMARKING combining IRT with adaptive item selection
+- Core algorithm: 2PL IRT model + Fisher information-based item selection
+- Data available: pre-fitted IRT models, OLL results, 6 test LM checkpoint evaluations
+
+### [2026-04-07 11:00] - none → method_runs (preparation)
+- Filled in all briefing files (problem, evaluation, method, overview)
+- Implemented IRT model: ability estimation, Fisher information, logistic function
+- Implemented FluidBenchmarking class with adaptive item selection
+- Implemented all 4 evaluation metrics (validity, variance, saturation, efficiency)
+- Downloaded all data from HuggingFace (IRT models, OLL results, LM evaluation data)
+- Set up evaluation pipeline (eval/), scoring (scoring/), scripts (all .sh files)
+- Verified all code works with smoke tests
+- Committed and pushed all code
+- Submitted experiment job (CPU-only, 0 GPUs)
 
 ## Stop Justification
 
@@ -26,5 +30,3 @@
      This is NOT a progress summary — the Progress Log above covers that.
      Example: "Stopping at core_claim because the full dataset requires
      proprietary access. Core claim validated on the public subset." -->
-
-<!-- ALWAYS fill in this section when you wrap up. NEVER remove this section. -->

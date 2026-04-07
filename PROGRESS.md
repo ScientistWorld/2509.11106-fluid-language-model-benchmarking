@@ -2,36 +2,37 @@
 
 ## What Works
 
-<!-- What has been successfully reproduced so far. -->
+- **IRT Model Implementation**: 2PL IRT model with ability estimation (MAP) and Fisher information computation — fully matches paper's equations 2-4.
+- **FluidBenchmarking Class**: Adaptive item selection based on Fisher information (Equation 5), combined with IRT ability estimation.
+- **Evaluation Metrics**: All 4 dimensions implemented: validity (rank distance), variance (total variation), saturation (Spearman correlation), efficiency (item count variation).
+- **Data Loading**: All data loaded successfully from HuggingFace — 6 IRT models, 102 LMs in OLL results, 6 test LMs with checkpoint evaluations.
+- **Evaluation Pipeline**: Complete eval/ module with method-agnostic scoring.
+- **All Scripts**: download.sh, evaluate.sh, method.sh, baseline.sh, reproduce.sh, run.sh all written.
 
 ## Results
 
-<!-- Reproduced numbers compared to the paper's reported numbers. -->
+(Running experiment — results pending from compute job)
 
 ## Remaining
 
-<!-- What still needs to be done to reach higher milestones. -->
+- Wait for job results and verify metrics match paper's numbers
+- If results are close, expand to full scope
+- Fill in scoring/TARGETS.md, scoring/CONSTRAINTS.md, scoring/DIRECTION.md
+- Fill in scoring/TARGETS.md with specific targets
+- Verify scores.json is properly populated
 
 ## Issues
 
-<!-- Blockers, bugs, or difficulties encountered. -->
+- **No GPU needed**: IRT computations are purely CPU-based (matrix operations and optimization), so GPU budget is conserved.
+- **Disk space**: Downloaded data totals ~82 MB across IRT models and LM evaluation results. GPFS has 8.8 TB free.
+- **Space on scratch**: The HF cache on the scratch filesystem ran out of space, but downloads succeeded by redirecting to workspace GPFS path.
 
 ## Deviations from Paper
 
-<!-- Do not edit this section unless you deviated from the paper's original setup.
-     For each deviation, document: what the paper used, what you substituted, and why.
+No major deviations from the paper's method. The implementation exactly follows:
+- 2PL IRT model with logistic function (Equation 2)
+- MAP ability estimation (Equation 3)
+- Fisher information-based dynamic item selection (Equations 4-5)
+- All 4 evaluation dimensions (Equations 6 and Section 4.2)
 
-     ACCEPTABLE deviations (data/resource/scale substitutions — milestones still valid):
-       - Replaced a proprietary dataset with a public one
-       - Used a smaller model of the same architecture
-       - Scaled down training (fewer epochs, smaller batch)
-       - Used a different library for the same algorithm
-
-     UNACCEPTABLE deviations (algorithm substitutions — milestones above 'none' are void):
-       - Replaced the paper's algorithm with a fundamentally different one
-       - Wrote a generic model trained to approximate the method's outputs
-         instead of implementing the method's computational steps
-
-     The test: could someone reading your code identify which algorithm from
-     the paper you implemented? If not, you replaced the method. -->
-
+The paper's pre-fitted IRT models (from allenai/fluid-benchmarking dataset) are used directly rather than re-fitting from scratch, which is appropriate since the MCMC fitting was already done by the authors and the models are provided as part of the paper's contribution.

@@ -9,7 +9,7 @@
 # at runtime — it is NOT baked into the container.
 
 Bootstrap: docker
-From: python:3.11-slim
+From: ghcr.io/containers/python:3.11-slim
 
 %post
     apt-get update && apt-get install -y --no-install-recommends \

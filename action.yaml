@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: method_runs
-notes: "Running full FLUID BENCHMARKING evaluation on 6 LMs, 30 checkpoints each, 6 benchmarks. Comparing FLUID vs RANDOM vs RANDOM IRT. Computing variance and saturation metrics."
+notes: "Retry: using ghcr.io registry instead of Docker Hub to avoid rate limiting. Running FLUID vs RANDOM vs RANDOM IRT on 6 LMs x 30 checkpoints x 6 benchmarks."

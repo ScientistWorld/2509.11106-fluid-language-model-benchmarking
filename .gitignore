@@ -37,6 +37,7 @@ __pycache__/
 # Auto-added by swarm
 .python_packages/
 .cache/
+.deps/
 .codex/
 codex/
 claude_code/

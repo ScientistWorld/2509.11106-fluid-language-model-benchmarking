@@ -1,4 +1,4 @@
-"""FLUID BENCHMARKING with exact adaptive item selection."""
+"""FLUID BENCHMARKING evaluation routines."""
 
 import numpy as np
 
@@ -44,7 +44,7 @@ def adaptive_select_items(responses, a, b, n_select, theta_init=0.0, return_hist
     selected = []
     remaining_mask = np.ones(n_items, dtype=bool)
     theta = theta_init
-    history = [(0, theta)]
+    history = []
 
     for _ in range(n_select):
         info = vectorized_fisher_info(theta, a, b)
@@ -53,15 +53,16 @@ def adaptive_select_items(responses, a, b, n_select, theta_init=0.0, return_hist
         selected.append(idx)
         remaining_mask[idx] = False
 
+        running_responses = np.full(n_items, np.nan, dtype=float)
         sel = np.array(selected)
-        r_sel = responses[sel]
-        a_sel = a[sel]
-        b_sel = b[sel]
+        running_responses[sel] = responses[sel]
 
-        # Update ability estimate
-        theta = estimate_ability(r_sel, a_sel, b_sel, theta_init=theta)
-        history.append((len(selected), theta))
-    return theta
+        theta = estimate_ability(running_responses, a, b, theta_init=theta)
+        history.append((len(selected), float(theta), idx))
+
+    if return_history:
+        return float(theta), history
+    return float(theta)
 
 
 class FluidBenchmarking:
@@ -108,22 +109,27 @@ class FluidBenchmarking:
         else:
             a_all, b_all = self.irt_model.get_params(item_ids)
 
-        theta = adaptive_select_items(
+        result = adaptive_select_items(
             responses,
             a_all,
             b_all,
             n_items,
             theta_init=theta_init,
+            return_history=return_history,
         )
-
-        if return_history:
-            history = adaptive_select_items(responses, a_all, b_all, n_items, theta_init=theta_init, return_history=True)
-            return theta, history
-
-        return theta
+        return result
 
 
-def evaluate_with_method(irt_model, responses, item_ids, method='fluid', n_items=100, seed=None):
+def evaluate_with_method(
+    irt_model,
+    responses,
+    item_ids,
+    method="fluid",
+    n_items=100,
+    seed=None,
+    theta_init=0.0,
+    sample_indices=None,
+):
     """
     Evaluate a set of item responses using a specified method.
 
@@ -138,7 +144,6 @@ def evaluate_with_method(irt_model, responses, item_ids, method='fluid', n_items
     Returns:
         score (ability estimate for IRT methods, accuracy for accuracy method)
     """
-    rng = np.random.default_rng(seed)
     responses = np.array(responses, dtype=float)
     if item_ids is None:
         a_all, b_all = irt_model.get_all_params()
@@ -148,29 +153,29 @@ def evaluate_with_method(irt_model, responses, item_ids, method='fluid', n_items
 
     if method == 'fluid':
         fb = FluidBenchmarking(irt_model, seed=seed)
-        theta = fb.evaluate(responses, item_ids=item_ids, n_items=n_items, theta_init=0.0)
+        theta = fb.evaluate(
+            responses,
+            item_ids=item_ids,
+            n_items=n_items,
+            theta_init=theta_init,
+        )
         return theta
 
     elif method == 'random_irt':
-        # Random selection + IRT ability estimation
-        n_use = min(n_items, n_total)
-        indices = rng.choice(n_total, size=n_use, replace=False)
-        responses_subset = responses[indices]
-        a_sub = a_all[indices]
-        b_sub = b_all[indices]
-        theta = estimate_ability(responses_subset, a_sub, b_sub, theta_init=0.0)
+        if sample_indices is None:
+            raise ValueError("sample_indices must be provided for random_irt")
+        masked_responses = np.full(n_total, np.nan, dtype=float)
+        masked_responses[sample_indices] = responses[sample_indices]
+        theta = estimate_ability(masked_responses, a_all, b_all, theta_init=theta_init)
         return theta
 
     elif method == 'accuracy':
         return float(np.mean(responses))
 
     elif method == 'random':
-        # Random subset accuracy
-        n_use = min(n_items, n_total)
-        if n_total <= n_use:
-            return float(np.mean(responses))
-        indices = rng.choice(n_total, size=n_use, replace=False)
-        return float(np.mean(responses[indices]))
+        if sample_indices is None:
+            raise ValueError("sample_indices must be provided for random")
+        return float(np.mean(responses[sample_indices]))
 
     else:
         raise ValueError(f"Unknown method: {method}")

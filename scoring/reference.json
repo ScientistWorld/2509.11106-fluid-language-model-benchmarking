@@ -1,24 +1,27 @@
 {
   "experiments": {
-    "ablation_comparison": {
-      "description": "Comparison of FLUID BENCHMARKING against RANDOM and RANDOM IRT baselines across different item counts (10, 50, 100). Results averaged across 6 benchmarks (ARC Challenge, GSM8K, HellaSwag, MMLU, TruthfulQA, WinoGrande) and 6 LMs (Amber-6.7B, K2-65B, OLMo1-7B, OLMo2-7B, Pythia-2.8B, Pythia-6.9B). Primary metric is validity (rank distance, lower is better).",
+    "table2_ablation_comparison": {
+      "description": "Table 2 ablation comparison of FLUID BENCHMARKING against RANDOM and RANDOM IRT across item budgets 10, 50, 100, and 500. Results are averaged over 6 benchmarks, 6 LMs, and 61-94 checkpoints per LM.",
       "weight": 1.0,
-      "primary_metric": "saturation",
+      "primary_metric": "rank_distance",
       "metrics": {
         "rank_distance": {"higher_is_better": false, "coefficient": 1.0},
-        "total_variation": {"higher_is_better": false, "coefficient": 0.8},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.8},
         "saturation": {"higher_is_better": true, "coefficient": 1.0}
       },
       "results": {
         "random_10":     {"type": "baseline", "rank_distance": 20.0, "total_variation": 29.0, "saturation": 0.47},
         "random_50":     {"type": "baseline", "rank_distance": 15.2, "total_variation": 19.1, "saturation": 0.62},
         "random_100":    {"type": "baseline", "rank_distance": 16.9, "total_variation": 19.8, "saturation": 0.64},
+        "random_500":    {"type": "baseline", "rank_distance": 9.1,  "total_variation": 10.2, "saturation": 0.79},
         "random_irt_10": {"type": "baseline", "rank_distance": 14.1, "total_variation": 18.2, "saturation": 0.48},
         "random_irt_50": {"type": "baseline", "rank_distance": 11.1, "total_variation": 15.7, "saturation": 0.69},
         "random_irt_100":{"type": "baseline", "rank_distance": 10.6, "total_variation": 17.8, "saturation": 0.71},
+        "random_irt_500":{"type": "baseline", "rank_distance": 8.4,  "total_variation": 10.9, "saturation": 0.85},
         "fluid_10":      {"type": "proposed",  "rank_distance": 10.1, "total_variation": 10.7, "saturation": 0.76},
         "fluid_50":      {"type": "proposed",  "rank_distance": 8.8,  "total_variation": 6.5,  "saturation": 0.86},
-        "fluid_100":     {"type": "proposed",  "rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85}
+        "fluid_100":     {"type": "proposed",  "rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85},
+        "fluid_500":     {"type": "proposed",  "rank_distance": 8.3,  "total_variation": 4.9,  "saturation": 0.88}
       }
     }
   }

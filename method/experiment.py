@@ -22,7 +22,6 @@ import numpy as np
 from data.loaders import (
     BENCHMARKS,
     VALIDITY_PAIRS,
-    get_item_ids_for_benchmark,
     load_irt_models,
     load_lm_evaluation_results,
     load_oll_results,
@@ -150,6 +149,20 @@ def run_experiment(
     }
     accuracy_curves: dict[str, dict[str, dict[str, float]]] = {}
     selected_checkpoints = {}
+    benchmark_start_abilities = {
+        benchmark: float(np.mean(list(oll_results[benchmark]["ability"].values())))
+        for benchmark in BENCHMARKS
+    }
+    benchmark_samples = {}
+    rng = np.random.default_rng(seed)
+    for benchmark, irt_model in irt_models.items():
+        benchmark_samples[benchmark] = {}
+        n_items_total = len(irt_model.item_ids)
+        for budget in item_budgets:
+            n_use = min(budget, n_items_total)
+            benchmark_samples[benchmark][budget] = np.sort(
+                rng.choice(n_items_total, size=n_use, replace=False)
+            )
 
     for lm_index, (lm_name, df) in enumerate(lm_results.items()):
         checkpoints = list(df.columns)
@@ -159,13 +172,14 @@ def run_experiment(
 
         benchmark_payload = {}
         for benchmark in BENCHMARKS:
-            item_ids = get_item_ids_for_benchmark(df, benchmark)
+            item_ids = irt_models[benchmark].item_ids.tolist()
             responses = df.loc[item_ids, checkpoints].values.astype(np.float32).T
             benchmark_payload[benchmark] = {
                 "item_ids": item_ids,
                 "responses": responses,
                 "accuracy": responses.mean(axis=1),
                 "irt": irt_models[benchmark],
+                "theta_init": benchmark_start_abilities[benchmark],
             }
             accuracy_curves[lm_name][benchmark] = {
                 checkpoint: float(acc)
@@ -179,12 +193,12 @@ def run_experiment(
                 }
 
         for checkpoint_index, checkpoint in enumerate(checkpoints):
-            checkpoint_seed = seed + lm_index * 10000 + checkpoint_index
             for benchmark in BENCHMARKS:
                 payload = benchmark_payload[benchmark]
                 responses = payload["responses"][checkpoint_index]
                 item_ids = payload["item_ids"]
                 irt_model = payload["irt"]
+                theta_init = payload["theta_init"]
 
                 for budget in item_budgets:
                     for method in METHODS:
@@ -194,7 +208,9 @@ def run_experiment(
                             item_ids=item_ids,
                             method=method,
                             n_items=budget,
-                            seed=checkpoint_seed + budget,
+                            seed=seed,
+                            theta_init=theta_init,
+                            sample_indices=benchmark_samples[benchmark][budget],
                         )
                         score_curves[method][budget][lm_name][benchmark][checkpoint] = float(score)
 
@@ -203,6 +219,7 @@ def run_experiment(
         "methods": METHODS,
         "item_budgets": item_budgets,
         "selected_checkpoints": selected_checkpoints,
+        "benchmark_start_abilities": benchmark_start_abilities,
         "summary": summary,
         "score_curves": score_curves,
         "accuracy_curves": accuracy_curves,

@@ -14,25 +14,16 @@
 # Use: pip3 install <packages>
 # Do NOT create a venv (python -m venv, virtualenv, etc.).
 
-set -e
+set -euo pipefail
 
-# Core numerical libraries needed for IRT computations and metrics
-pip3 install --no-cache-dir \
+uv pip install --system \
     numpy \
     scipy \
+    pandas \
     scikit-learn \
+    pyyaml \
     python-dateutil \
     pytz \
-    pyyaml \
-    filelock \
-    pyarrow \
-    pandas \
-    multiprocess \
-    xxhash \
-    2>&1 | tail -5
-
-# HuggingFace packages for data download (not needed in container since data is pre-downloaded)
-pip3 install --no-cache-dir \
+    tqdm \
     huggingface-hub \
-    datasets \
-    2>&1 | tail -5
+    datasets

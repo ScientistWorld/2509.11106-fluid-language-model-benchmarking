@@ -1,21 +1,22 @@
 # Evaluation Targets
 
-## Primary: saturation
-FLUID should produce ability estimates that are well-correlated with ground-truth LLM performance, indicating the benchmark is not saturated.
-- **Metric**: saturation (higher is better)
-- **Evidence**: FLUID must outperform both RANDOM and RANDOM IRT baselines on saturation across all item counts (10, 50, 100)
-
-## Constraint: validity
-FLUID's ability estimates should correctly rank LLMs relative to each other (low rank distance from ground truth).
-- **Metric**: rank_distance (lower is better)
-- **Evidence**: FLUID must have lower rank distance than RANDOM baseline
+## Primary: validity
+FLUID should improve external validity relative to random subset evaluation.
+- **Metric**: `rank_distance` (lower is better)
+- **Experiment**: `table2_ablation_comparison`
+- **Evidence**: `fluid_10`, `fluid_50`, `fluid_100`, and `fluid_500` should beat the corresponding `random_*` baselines, and typically also `random_irt_*`
 
 ## Constraint: variance
-FLUID's ability estimates should be stable across repeated runs (low total variation).
-- **Metric**: total_variation (lower is better)
-- **Evidence**: FLUID must have lower total variation than both RANDOM and RANDOM IRT baselines
+FLUID should reduce step-to-step instability in checkpoint tracking.
+- **Metric**: `total_variation` (lower is better)
+- **Evidence**: FLUID should beat both `random_*` and `random_irt_*` at the same item budget
+
+## Constraint: saturation
+FLUID should delay benchmark saturation so late-training progress remains visible.
+- **Metric**: `saturation` (higher is better)
+- **Evidence**: FLUID should have higher monotonicity than the random baselines, especially at small budgets
 
 ## Ablation: efficiency_scaling
-FLUID's advantage over baselines should hold across different item budgets (10, 50, 100), demonstrating it works efficiently with few items.
-- **Metric**: saturation (higher is better), at each item count
-- **Evidence**: FLUID-10 should already beat RANDOM-100 on saturation; FLUID-50 and FLUID-100 should show diminishing returns
+FLUID's advantage should persist from very small to moderate item budgets.
+- **Metric**: all three metrics at budgets `10`, `50`, `100`, and `500`
+- **Evidence**: the directional advantage should remain visible as the item budget increases, with the largest gains at low budgets

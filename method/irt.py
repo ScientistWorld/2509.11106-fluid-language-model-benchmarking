@@ -1,24 +1,11 @@
-"""
-IRT Model: Two-Parameter Logistic (2PL) Item Response Theory model.
-
-Implements the IRT model used in Fluid Benchmarking:
-- 2PL model: p(u=1) = logistic(a * (theta - b))
-- a = discrimination parameter
-- b = difficulty parameter
-- theta = latent ability
-
-The paper uses pre-fitted IRT models from the OLL results dataset.
-We use those pre-fitted models and implement the ability estimation
-and Fisher information functions.
-"""
+"""2PL IRT utilities aligned with the paper's released implementation."""
 
 import numpy as np
-from scipy.special import expit  # logistic/sigmoid function
-from scipy.optimize import minimize_scalar
+from scipy.special import expit
 
 
 def logistic(x):
-    """Logistic (sigmoid) function."""
+    """Numerically stable sigmoid."""
     return expit(x)
 
 
@@ -58,47 +45,100 @@ def fisher_information(theta, a, b):
     return a * a * p * (1.0 - p)
 
 
-def estimate_ability(responses, a, b, theta_init=None, method='map'):
+def estimate_ability(
+    responses,
+    a,
+    b,
+    theta_init=None,
+    method="map",
+    theta_range=(-4.0, 4.0),
+    tol=1e-6,
+    max_iter=100,
+    prior_mean=0.0,
+    prior_std=1.0,
+):
     """
-    Estimate ability theta for a new person given item responses.
+    Estimate ability for a 2PL model with MAP or MLE.
 
-    Uses Maximum A Posteriori (MAP) estimation (Equation 3 in paper).
-    Item parameters (a, b) are treated as fixed.
-
-    Args:
-        responses: array of 0/1 responses (same length as a, b)
-        a: array of item discrimination parameters
-        b: array of item difficulty parameters
-        theta_init: initial ability estimate (default: 0)
-        method: 'map' for MAP estimation (default)
-
-    Returns:
-        Estimated ability theta
+    This follows the released FLUID Benchmarking implementation:
+    Newton updates with a normal MAP prior and bisection fallback.
     """
-    responses = np.array(responses, dtype=float)
-    a = np.array(a, dtype=float)
-    b = np.array(b, dtype=float)
+    responses = np.asarray(responses, dtype=float)
+    a = np.asarray(a, dtype=float)
+    b = np.asarray(b, dtype=float)
 
-    if theta_init is None:
-        theta_init = 0.0
+    if responses.shape != a.shape or a.shape != b.shape:
+        raise ValueError("responses, a, and b must have the same shape")
 
-    # Log-likelihood function (negative, to minimize)
-    def neg_log_lik(theta):
-        p = logistic(a * (theta - b))
-        # Clip probabilities to avoid log(0)
-        p = np.clip(p, 1e-10, 1 - 1e-10)
-        ll = np.sum(responses * np.log(p) + (1 - responses) * np.log(1 - p))
-        # MAP with weak prior: N(0, 3) — regularize toward 0
-        log_prior = -0.5 * (theta ** 2) / 9.0
-        return -(ll + log_prior)
+    method = method.lower()
+    if method not in {"map", "mle"}:
+        raise ValueError("method must be 'map' or 'mle'")
 
-    # Optimize using bounded scalar optimization
-    result = minimize_scalar(
-        neg_log_lik,
-        bounds=(-6, 6),
-        method='bounded'
-    )
-    return float(result.x)
+    mask = ~np.isnan(responses)
+    responses = responses[mask]
+    a = a[mask]
+    b = b[mask]
+    if responses.size == 0:
+        return float(prior_mean if theta_init is None else theta_init)
+
+    low, high = map(float, theta_range)
+    if low >= high:
+        raise ValueError("theta_range must satisfy low < high")
+
+    inv_sigma2 = 0.0 if method == "mle" else 1.0 / (prior_std * prior_std)
+    theta = prior_mean if theta_init is None else float(theta_init)
+    theta = float(np.clip(theta, low, high))
+
+    def score(theta_value):
+        p = logistic(a * (theta_value - b))
+        prior_term = (prior_mean - theta_value) * inv_sigma2
+        likelihood_term = np.sum(a * (responses - p))
+        return prior_term + likelihood_term
+
+    def score_prime(theta_value):
+        p = logistic(a * (theta_value - b))
+        pq = p * (1.0 - p)
+        prior_term = -inv_sigma2
+        likelihood_term = -np.sum(a * a * pq)
+        return prior_term + likelihood_term
+
+    for _ in range(max_iter):
+        s = score(theta)
+        if abs(s) < tol:
+            return float(theta)
+
+        s_prime = score_prime(theta)
+        if not np.isfinite(s_prime) or s_prime == 0.0:
+            break
+
+        new_theta = theta - (s / s_prime)
+        new_theta = float(np.clip(new_theta, low, high))
+        current_abs = abs(s)
+        for _ in range(15):
+            new_score = score(new_theta)
+            if abs(new_score) < current_abs or not np.isfinite(new_score):
+                break
+            new_theta = 0.5 * (new_theta + theta)
+        theta = new_theta
+
+    score_low = score(low)
+    score_high = score(high)
+    if score_low * score_high <= 0:
+        lo = low
+        hi = high
+        for _ in range(80):
+            mid = 0.5 * (lo + hi)
+            score_mid = score(mid)
+            if abs(score_mid) < tol:
+                return float(mid)
+            if score_low * score_mid > 0:
+                lo = mid
+                score_low = score_mid
+            else:
+                hi = mid
+        return float(0.5 * (lo + hi))
+
+    return float(high if (score_low > 0 and score_high > 0) else low)
 
 
 def estimate_ability_se(responses, a, b, theta_hat):

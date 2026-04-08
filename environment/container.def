@@ -4,14 +4,23 @@
 #
 # This is a CPU-only environment — no GPU needed for IRT computations.
 #
-# Use debootstrap to avoid OCI registry fetches entirely.
+# Use the Apptainer library transport to avoid OCI registry fetches.
 
-Bootstrap: debootstrap
-OSVersion: bookworm
-MirrorURL: http://deb.debian.org/debian/
-Include: python3,python3-pip,ca-certificates,curl,wget,git,less
+Bootstrap: library
+From: ubuntu:22.04
 
 %post
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        python3 \
+        python3-pip \
+        ca-certificates \
+        less \
+        curl \
+        wget \
+        git
+    rm -rf /var/lib/apt/lists/*
+
     # Create working directory
     mkdir -p /home/user/data
     chmod 755 /home/user

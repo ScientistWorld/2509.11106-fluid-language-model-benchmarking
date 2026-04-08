@@ -7,7 +7,7 @@ were fitted by the paper's authors using MCMC on item responses from 102 Open LL
 models. The scientist may not re-estimate IRT parameters on additional data or use IRT models
 fitted on different corpora.
 
-The LM checkpoint data (6 LMs × 30 checkpoints × 6 benchmarks with item-level 0/1 responses)
+The LM checkpoint data (6 LMs × 61-94 checkpoints each × 6 benchmarks with item-level 0/1 responses)
 must be used as-is. The scientist may not supplement with additional model checkpoints,
 additional benchmarks, or human-labeled data beyond what is provided.
 
@@ -20,8 +20,8 @@ Leaderboard. Re-fitting on different data or adding more models would change wha
 represents, making comparisons to the paper's results meaningless.
 
 ## Item Budget
-Any proposed improvement must be evaluated under the same item budgets as the paper: 10, 50, and
-100 items. A method that only works well at 1000 items does not demonstrate the efficiency
+Any proposed improvement must be evaluated under the same item budgets as the paper: 10, 50, 100,
+and 500 items. A method that only works well at 1000 items does not demonstrate the efficiency
 contribution that FLUID provides.
 
 **Why**: The paper's core claim is that FLUID outperforms baselines *at the same item count*. Beating
@@ -38,6 +38,6 @@ validity) while degrading others does not demonstrate genuine improvement.
 ## Compliance Checklist
 - [ ] IRT model parameters used are from `allenai/fluid-benchmarking`, not re-fitted
 - [ ] No external benchmarks, models, or datasets added beyond the provided data
-- [ ] Results reported at item counts 10, 50, and 100 (not higher)
+- [ ] Results reported at item counts 10, 50, 100, and 500
 - [ ] All four metrics (rank_distance, total_variation, saturation, efficiency) are reported
 - [ ] Comparison includes RANDOM and RANDOM IRT baselines at matching item counts

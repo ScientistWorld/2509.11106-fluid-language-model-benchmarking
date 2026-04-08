@@ -10,8 +10,8 @@ Check off items as you complete them. Order doesn't matter — work however make
 
 ## Scoring
 - [x] `scoring/reference.json` — paper's reported numbers
-- [ ] Workspace validated via `python validate.py`
-- [ ] `scoring/scores.json` — reproduced numbers (must match reference.json experiment/metric structure)
+- [x] Workspace validated via `python validate.py`
+- [x] `scoring/scores.json` — reproduced numbers (must match reference.json experiment/metric structure)
 - [x] `scoring/TARGETS.md` — primary, constraint, and ablation targets
 - [x] `scoring/CONSTRAINTS.md` — what a scientist must hold fixed
 - [x] `scoring/DIRECTION.md` — research direction scope for scientist
@@ -28,14 +28,14 @@ Check off items as you complete them. Order doesn't matter — work however make
 - [ ] `scripts/baseline.sh` (not applicable — baselines integrated in main evaluation)
 
 ## Environment
-- [x] `environment/container.def` + `environment/setup.sh` (container build had transient registry issues, but packages installed directly on login node)
+- [x] `environment/container.def` + `environment/setup.sh`
 
 ## Data
 - [x] Dataset acquired (from HuggingFace allenai/fluid-benchmarking)
-- [x] Pretrained models downloaded if needed (IRT models from HF)
+- [x] Pretrained models downloaded if needed (paper releases prefit IRT parameters rather than trainable model weights)
 
 ## Milestones
-- [ ] `method_runs` — executes end-to-end without errors
+- [x] `method_runs` — executes end-to-end without errors
 - [ ] `core_claim` — minimum experiment supports central claim
 - [ ] `core_claim_plus` — additional settings
 - [ ] `secondary_claims`

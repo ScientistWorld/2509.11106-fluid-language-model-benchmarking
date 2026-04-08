@@ -11,7 +11,7 @@ This paper identifies four fundamental problems with current LM benchmarking: it
 
 ## Key Results
 
-- FLUID BENCHMARKING with 10 items achieves better validity (rank distance 10.1) than RANDOM with 500 items (9.1) on MMLU — a 50x efficiency improvement
+- FLUID BENCHMARKING substantially improves over RANDOM at the same item budget; for example, at 10 items its mean validity is 10.1 versus 20.0 and its mean variance is 10.7 versus 29.0
 - FLUID reduces variance by 3-5x compared to random sampling across all subset sizes
 - FLUID maintains high saturation (Spearman correlation 0.76-0.97) even as models improve, while random sampling saturates early
 - IRT aggregation accounts for validity gains; dynamic item selection accounts for variance reductions

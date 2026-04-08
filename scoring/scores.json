@@ -1,49 +1,23 @@
 {
-  "ablation_comparison": {
-    "random_10": {
-      "rank_distance": 20.0,
-      "total_variation": 16.393678160919542,
-      "saturation": 0.386600618041276
-    },
-    "random_irt_10": {
-      "rank_distance": 14.1,
-      "total_variation": 26.461683891698485,
-      "saturation": 0.3504881967618341
-    },
-    "fluid_10": {
-      "rank_distance": 10.1,
-      "total_variation": 5.249765954659578,
-      "saturation": 0.6456933779662266
-    },
-    "random_50": {
-      "rank_distance": 15.2,
-      "total_variation": 14.05731634474138,
-      "saturation": 0.5063464009590083
-    },
-    "random_irt_50": {
-      "rank_distance": 11.1,
-      "total_variation": 36.82232803942674,
-      "saturation": 0.5732219619506409
-    },
-    "fluid_50": {
-      "rank_distance": 8.8,
-      "total_variation": 2.977793639827455,
-      "saturation": 0.7883155904069646
-    },
-    "random_100": {
-      "rank_distance": 16.9,
-      "total_variation": 11.490405525872472,
-      "saturation": 0.6106895149766122
-    },
-    "random_irt_100": {
-      "rank_distance": 10.6,
-      "total_variation": 11.876070053264273,
-      "saturation": 0.645230232797839
-    },
-    "fluid_100": {
-      "rank_distance": 8.7,
-      "total_variation": 2.5610938907410916,
-      "saturation": 0.804762756699998
+  "experiments": {
+    "table2_ablation_comparison": {
+      "results": {
+        "random_10": {
+          "rank_distance": 15.770833333333334,
+          "total_variation": 1.7777777777777777,
+          "saturation": 0.9999999999999998
+        },
+        "random_irt_10": {
+          "rank_distance": 15.416666666666666,
+          "total_variation": 1.8888888888888888,
+          "saturation": 0.9999999999999998
+        },
+        "fluid_10": {
+          "rank_distance": 13.770833333333334,
+          "total_variation": 2.0,
+          "saturation": 0.9999999999999998
+        }
+      }
     }
   }
 }

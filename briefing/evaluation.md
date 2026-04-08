@@ -39,11 +39,13 @@ Key target numbers (from paper's Table 2, averaged across 6 benchmarks, 6 LMs, 6
 | RANDOM IRT (10 items) | 14.1 | 18.2 | 0.48 |
 | RANDOM IRT (50 items) | 11.1 | 15.7 | 0.69 |
 | RANDOM IRT (100 items) | 10.6 | 17.8 | 0.71 |
+| RANDOM IRT (500 items) | 8.4 | 10.9 | 0.85 |
 | FLUID (10 items) | 10.1 | 10.7 | 0.76 |
 | FLUID (50 items) | 8.8 | 6.5 | 0.86 |
 | FLUID (100 items) | 8.7 | 6.1 | 0.85 |
+| FLUID (500 items) | 8.3 | 4.9 | 0.88 |
 
-FLUID outperforms all baselines especially at small item counts (10 items).
+FLUID outperforms RANDOM and RANDOM IRT across all three reported metrics and all four item budgets.
 
 ## Evaluation Protocol
 

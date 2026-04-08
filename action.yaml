@@ -4,5 +4,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: none
-notes: "Retry the CPU Table 2 reproduction job with a scratch-based local Apptainer rootfs that copies host /usr and /etc, avoiding OCI, library, and debootstrap bootstrap failures."
+milestone: method_runs
+notes: "Run the full released-artifact Table 2 ablation reproduction on CPU and write validated scoring/scores.json for RANDOM, RANDOM IRT, and FLUID at budgets 10/50/100/500."

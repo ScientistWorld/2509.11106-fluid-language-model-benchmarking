@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
-gpus: 0
+action: pending
+gpus: 1
 test: false
-milestone: core_claim
-notes: "Reproduction complete at core_claim. Experiment ran in previous iteration (~25 min, 6 LMs × 30 checkpoints × 6 benchmarks × 3 methods × 3 item counts). Results in scoring/scores.json show FLUID outperforms RANDOM and RANDOM IRT baselines on saturation and variance."
+milestone: method_runs
+notes: ""

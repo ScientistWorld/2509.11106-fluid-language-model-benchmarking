@@ -4,21 +4,14 @@
 #
 # This is a CPU-only environment — no GPU needed for IRT computations.
 #
-# Using the official Python slim image to avoid flaky registry responses.
+# Use debootstrap to avoid OCI registry fetches entirely.
 
-Bootstrap: docker
-From: python:3.11-slim-bookworm
+Bootstrap: debootstrap
+OSVersion: bookworm
+MirrorURL: http://deb.debian.org/debian/
+Include: python3,python3-pip,ca-certificates,curl,wget,git,less
 
 %post
-    apt-get update
-    apt-get install -y --no-install-recommends \
-        ca-certificates \
-        less \
-        curl \
-        wget \
-        git \
-    && rm -rf /var/lib/apt/lists/*
-
     # Create working directory
     mkdir -p /home/user/data
     chmod 755 /home/user

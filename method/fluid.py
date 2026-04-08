@@ -1,11 +1,8 @@
-"""
-Fluid Benchmarking: Dynamic item selection based on Fisher information.
-
-Optimized version with vectorized Fisher information computation.
-"""
+"""FLUID BENCHMARKING with exact adaptive item selection."""
 
 import numpy as np
-from .irt import estimate_ability, fisher_information, logistic
+
+from .irt import estimate_ability, logistic
 
 
 def vectorized_fisher_info(theta, a, b):
@@ -45,24 +42,17 @@ def adaptive_select_items(responses, a, b, n_select, theta_init=0.0, return_hist
     n_select = min(n_select, n_items)
 
     selected = []
-    selected_set = set()
+    remaining_mask = np.ones(n_items, dtype=bool)
     theta = theta_init
     history = [(0, theta)]
 
     for _ in range(n_select):
-        # Compute Fisher information for all remaining items (vectorized)
         info = vectorized_fisher_info(theta, a, b)
-
-        # Mask already selected items
-        info_masked = info.copy()
-        info_masked[list(selected_set)] = -1
-
-        # Select item with maximum Fisher information
-        idx = int(np.argmax(info_masked))
+        info = np.where(remaining_mask, info, -np.inf)
+        idx = int(np.argmax(info))
         selected.append(idx)
-        selected_set.add(idx)
+        remaining_mask[idx] = False
 
-        # Get responses for selected items
         sel = np.array(selected)
         r_sel = responses[sel]
         a_sel = a[sel]
@@ -71,45 +61,6 @@ def adaptive_select_items(responses, a, b, n_select, theta_init=0.0, return_hist
         # Update ability estimate
         theta = estimate_ability(r_sel, a_sel, b_sel, theta_init=theta)
         history.append((len(selected), theta))
-
-    return theta if not return_history else history
-
-
-def adaptive_select_items_fast(responses, a, b, n_select, theta_init=0.0):
-    """
-    Fast adaptive selection using pre-computed Fisher info rankings.
-
-    For large item pools (e.g., MMLU with 14K items), recomputing
-    Fisher info at each step is expensive. This version pre-selects
-    items based on initial theta and updates theta iteratively.
-    """
-    n_items = len(responses)
-    n_select = min(n_select, n_items)
-
-    # Pre-compute Fisher info at initial theta for all items
-    info = vectorized_fisher_info(theta_init, a, b)
-
-    # Get indices of top n_select items by Fisher info
-    top_indices = np.argsort(info)[::-1][:n_select]
-    selected = list(top_indices)
-
-    # Compute ability estimate with all selected items
-    r_sel = responses[selected]
-    a_sel = a[selected]
-    b_sel = b[selected]
-    theta = estimate_ability(r_sel, a_sel, b_sel, theta_init=theta_init)
-
-    # If desired, iteratively refine selection
-    # (re-select items at updated theta - only needed for very precise results)
-    for _ in range(2):  # 2 refinement iterations
-        info = vectorized_fisher_info(theta, a, b)
-        top_indices = np.argsort(info)[::-1][:n_select]
-        selected = list(top_indices)
-        r_sel = responses[selected]
-        a_sel = a[selected]
-        b_sel = b[selected]
-        theta = estimate_ability(r_sel, a_sel, b_sel, theta_init=theta)
-
     return theta
 
 
@@ -152,19 +103,21 @@ class FluidBenchmarking:
         if n_items is None:
             n_items = len(responses)
 
-        # Get all item parameters
-        a_all, b_all = self.irt_model.get_all_params()
+        if item_ids is None:
+            a_all, b_all = self.irt_model.get_all_params()
+        else:
+            a_all, b_all = self.irt_model.get_params(item_ids)
 
-        # Use fast adaptive selection
-        theta = adaptive_select_items_fast(
-            responses, a_all, b_all, n_items, theta_init=theta_init
+        theta = adaptive_select_items(
+            responses,
+            a_all,
+            b_all,
+            n_items,
+            theta_init=theta_init,
         )
 
         if return_history:
-            history = adaptive_select_items(
-                responses, a_all, b_all, n_items, theta_init=theta_init,
-                return_history=True
-            )
+            history = adaptive_select_items(responses, a_all, b_all, n_items, theta_init=theta_init, return_history=True)
             return theta, history
 
         return theta
@@ -187,7 +140,10 @@ def evaluate_with_method(irt_model, responses, item_ids, method='fluid', n_items
     """
     rng = np.random.default_rng(seed)
     responses = np.array(responses, dtype=float)
-    a_all, b_all = irt_model.get_all_params()
+    if item_ids is None:
+        a_all, b_all = irt_model.get_all_params()
+    else:
+        a_all, b_all = irt_model.get_params(item_ids)
     n_total = len(a_all)
 
     if method == 'fluid':

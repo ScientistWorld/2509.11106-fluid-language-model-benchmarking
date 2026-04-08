@@ -4,20 +4,20 @@
 #
 # This is a CPU-only environment — no GPU needed for IRT computations.
 #
-# Using Red Hat UBI8 with Python — publicly accessible, no rate limits.
+# Using the official Python slim image to avoid flaky registry responses.
 
 Bootstrap: docker
-From: registry.access.redhat.com/ubi8/python-39:latest
+From: python:3.11-slim-bookworm
 
 %post
-    # Install essential tools via microdnf (lightweight yum)
-    microdnf install -y \
-        vim-minimal \
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
         less \
         curl \
         wget \
         git \
-        && microdnf clean all
+    && rm -rf /var/lib/apt/lists/*
 
     # Create working directory
     mkdir -p /home/user/data

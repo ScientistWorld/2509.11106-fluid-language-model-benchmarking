@@ -1,13 +1,37 @@
-# Minimal Apptainer base for the CPU-only FLUID BENCHMARKING reproduction.
+# Minimal local-only Apptainer image for the CPU-only FLUID BENCHMARKING run.
 #
-# The previous scratch-based build copied the host /usr tree and timed out.
-# This variant relies on a small upstream Python image and leaves Python
-# dependencies to environment/setup.sh.
+# We avoid external registries entirely because the scheduler's OCI fetch path
+# is failing, and we avoid copying the full host /usr tree because that timed
+# out previously. This definition vendors only the local runtime needed for
+# bash, Python, uv, pip, SSL, and the job scripts.
 
-Bootstrap: docker
-From: python:3.11-slim
+Bootstrap: scratch
+
+%setup
+    set -e
+
+    mkdir -p "${APPTAINER_ROOTFS}"/{bin,usr/bin,usr/local/bin,usr/lib,usr/local/lib,lib,lib64,etc,home/user,tmp}
+    chmod 1777 "${APPTAINER_ROOTFS}/tmp"
+
+    cp -a /usr/bin/python3 "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -a /usr/bin/python3.12 "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -a /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -a /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -a /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
+    cp -a /usr/local/bin/uv "${APPTAINER_ROOTFS}/usr/local/bin/"
+
+    cp -a /usr/lib/python3.12 "${APPTAINER_ROOTFS}/usr/lib/"
+    cp -a /usr/lib/python3/dist-packages "${APPTAINER_ROOTFS}/usr/lib/python3/"
+    cp -a /lib/x86_64-linux-gnu "${APPTAINER_ROOTFS}/lib/"
+    cp -a /lib64/ld-linux-x86-64.so.2 "${APPTAINER_ROOTFS}/lib64/"
+
+    mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/usr/lib/ssl"
+    cp -a /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"
+    cp -a /usr/lib/ssl/cert.pem "${APPTAINER_ROOTFS}/usr/lib/ssl/"
+    cp -a /usr/lib/ssl/certs "${APPTAINER_ROOTFS}/usr/lib/ssl/"
 
 %environment
     export HOME=/home/user
+    export PATH=/usr/local/bin:/usr/bin:/bin
     export PYTHONUNBUFFERED=1
 

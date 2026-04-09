@@ -14,7 +14,6 @@ Bootstrap: scratch
     chmod 1777 "${APPTAINER_ROOTFS}/tmp"
 
     cp -L /usr/bin/python3 "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -L /usr/bin/python3.12 "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"

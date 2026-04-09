@@ -13,14 +13,16 @@ Bootstrap: scratch
     mkdir -p "${APPTAINER_ROOTFS}"/{bin,usr/bin,usr/local/bin,usr/lib,usr/local/lib,lib,lib64,etc,home/user,tmp}
     chmod 1777 "${APPTAINER_ROOTFS}/tmp"
 
-    PY_STDLIB="$(python3 - <<'PY'
+    PY_BIN="$(command -v python3)"
+    PY_STDLIB="$("${PY_BIN}" - <<'PY'
 import sysconfig
 print(sysconfig.get_path('stdlib'))
 PY
 )"
     PY_DIST_PACKAGES="/usr/lib/python3/dist-packages"
+    RUNTIME_BINS="${PY_BIN} /usr/bin/env /usr/bin/date /usr/bin/bash"
 
-    cp -L /usr/bin/python3 "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -L "${PY_BIN}" "${APPTAINER_ROOTFS}/usr/bin/python3"
     cp -L /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
@@ -29,8 +31,13 @@ PY
     if [ -d "${PY_DIST_PACKAGES}" ]; then
         cp -r "${PY_DIST_PACKAGES}" "${APPTAINER_ROOTFS}/usr/lib/python3/"
     fi
-    cp -r /lib/x86_64-linux-gnu "${APPTAINER_ROOTFS}/lib/"
-    cp -L /lib64/ld-linux-x86-64.so.2 "${APPTAINER_ROOTFS}/lib64/"
+    for runtime_bin in ${RUNTIME_BINS}; do
+        ldd "${runtime_bin}" | awk '/=> \// || /^\// {for (i = 1; i <= NF; ++i) if ($i ~ /^\//) print $i}' | while read -r lib; do
+            lib_dir="${APPTAINER_ROOTFS}$(dirname "${lib}")"
+            mkdir -p "${lib_dir}"
+            cp -L "${lib}" "${lib_dir}/"
+        done
+    done
 
     mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/etc/ssl" "${APPTAINER_ROOTFS}/usr/lib/ssl"
     cp -r /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"

@@ -39,6 +39,12 @@ PY
             cp -L "${lib}" "${lib_dir}/"
         done
     done
+    for lib_root in /lib64 /usr/lib64 /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu; do
+        if [ -d "${lib_root}" ]; then
+            mkdir -p "${APPTAINER_ROOTFS}${lib_root}"
+            cp -r "${lib_root}/." "${APPTAINER_ROOTFS}${lib_root}/"
+        fi
+    done
 
     mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/etc/ssl"
     cp -r /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"

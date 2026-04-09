@@ -7,11 +7,4 @@ uv pip install \
     --system \
     numpy \
     scipy \
-    pandas \
-    scikit-learn \
-    pyyaml \
-    python-dateutil \
-    pytz \
-    tqdm \
-    huggingface-hub \
-    datasets
+    pandas

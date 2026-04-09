@@ -1,33 +1,13 @@
-# Apptainer definition file for FLUID BENCHMARKING.
+# Minimal Apptainer base for the CPU-only FLUID BENCHMARKING reproduction.
 #
-# This environment avoids all remote bootstrap backends because the
-# scheduler's builder has repeatedly failed on OCI / library fetches.
-# We build from `scratch` and vendor in the minimal host runtime needed
-# for bash, Python, and pip/uv-based overlay installs.
+# The previous scratch-based build copied the host /usr tree and timed out.
+# This variant relies on a small upstream Python image and leaves Python
+# dependencies to environment/setup.sh.
 
-Bootstrap: scratch
-
-%setup
-    set -e
-
-    mkdir -p "${APPTAINER_ROOTFS}"
-
-    # Copy the host userland into the scratch rootfs. This stays fully local
-    # to the workspace build and avoids any registry or Apptainer endpoint.
-    cp -a /usr "${APPTAINER_ROOTFS}/"
-    cp -a /etc "${APPTAINER_ROOTFS}/"
-
-    # Recreate the standard merged-/usr symlinks expected by the copied tools.
-    ln -s usr/bin "${APPTAINER_ROOTFS}/bin"
-    ln -s usr/lib "${APPTAINER_ROOTFS}/lib"
-    ln -s usr/lib64 "${APPTAINER_ROOTFS}/lib64"
-    ln -s usr/sbin "${APPTAINER_ROOTFS}/sbin"
-
-    mkdir -p "${APPTAINER_ROOTFS}/tmp"
-    chmod 1777 "${APPTAINER_ROOTFS}/tmp"
-    mkdir -p "${APPTAINER_ROOTFS}/home/user/data"
+Bootstrap: docker
+From: python:3.11-slim
 
 %environment
     export HOME=/home/user
-    export PATH=/usr/local/bin:/usr/bin:/bin
     export PYTHONUNBUFFERED=1
+

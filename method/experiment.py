@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 from pathlib import Path
 
 import numpy as np
@@ -123,7 +124,7 @@ def aggregate_metrics(score_curves: dict, accuracy_curves: dict, oll_results: di
 def run_experiment(
     item_budgets: list[int],
     max_checkpoints_per_lm: int | None = None,
-    seed: int = 42,
+    seed: int = 0,
     output_path: Path = OUTPUT_PATH,
 ) -> dict:
     """Run the reproduction experiment and save raw curves plus aggregate scores."""
@@ -154,14 +155,14 @@ def run_experiment(
         for benchmark in BENCHMARKS
     }
     benchmark_samples = {}
-    rng = np.random.default_rng(seed)
+    random.seed(seed)
     for benchmark, irt_model in irt_models.items():
         benchmark_samples[benchmark] = {}
         n_items_total = len(irt_model.item_ids)
         for budget in item_budgets:
             n_use = min(budget, n_items_total)
-            benchmark_samples[benchmark][budget] = np.sort(
-                rng.choice(n_items_total, size=n_use, replace=False)
+            benchmark_samples[benchmark][budget] = np.array(
+                random.sample(range(n_items_total), n_use)
             )
 
     for lm_index, (lm_name, df) in enumerate(lm_results.items()):
@@ -234,7 +235,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--item-budgets", nargs="+", type=int, default=DEFAULT_BUDGETS)
     parser.add_argument("--max-checkpoints", type=int, default=None)
-    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
     args = parser.parse_args()
 

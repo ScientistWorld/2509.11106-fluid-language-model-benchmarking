@@ -74,7 +74,9 @@ def compute_variance(scores):
     range_val = abs(scores[-1] - scores[0])
 
     if range_val < 1e-10:
-        return 0.0
+        if total_variation < 1e-10:
+            return 0.0
+        return float("inf")
 
     # Normalized total variation
     tv = (n / (n - 1)) * total_variation / range_val
@@ -100,7 +102,7 @@ def compute_saturation(scores):
         return 1.0
 
     if len(set(scores)) <= 1:
-        return 1.0
+        return 0.0
 
     # Spearman correlation between checkpoint index and performance
     checkpoints = np.arange(n)

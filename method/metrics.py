@@ -102,8 +102,9 @@ def compute_variance(x):
     range_val = abs(x[-1] - x[0])
 
     if range_val < 1e-10:
-        # If no change, total variation should be 0
-        return 0.0
+        if total_variation < 1e-10:
+            return 0.0
+        return float("inf")
 
     # Normalized total variation
     tv = (n / (n - 1)) * total_variation / range_val
@@ -131,8 +132,7 @@ def compute_saturation(x):
         return 1.0
 
     if len(set(x)) <= 1:
-        # All values are the same
-        return 1.0
+        return 0.0
 
     # Spearman correlation between checkpoint index and performance
     checkpoints = np.arange(n)

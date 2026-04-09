@@ -10,15 +10,21 @@
 # Estimated total download size: ~70 MB
 # Estimated disk usage after extraction: ~70 MB
 #
-# All data comes from the HuggingFace dataset allenai/fluid-benchmarking
+# All data comes from the HuggingFace dataset allenai/fluid-benchmarking,
 # which contains pre-fitted IRT models, OLL results, and LM evaluation data.
+# These artifacts are specific to this paper, so the workspace copy is the
+# primary location; if a shared copy already exists, reuse it.
 
 set -e
 
 cd /home/user
 
 # Download directory
+SHARED_DIR="/home/user/shared/datasets/fluid-benchmarking"
 DATA_DIR="/home/user/data/fluid-benchmarking"
+if [ -d "$SHARED_DIR" ] && [ ! -e "$DATA_DIR" ]; then
+    ln -s "$SHARED_DIR" "$DATA_DIR"
+fi
 mkdir -p "$DATA_DIR/irt_models" "$DATA_DIR/lm_eval_results" "$DATA_DIR/hf_cache"
 export HF_HOME="$DATA_DIR/hf_cache"
 

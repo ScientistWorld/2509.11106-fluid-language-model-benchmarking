@@ -1,9 +1,9 @@
 #!/bin/bash
 # Reproduce the paper's results end-to-end.
 #
-# This script runs inside the compute container and should call
-# scripts/baseline.sh and scripts/method.sh to run baselines and
-# the paper's method, each of which calls scripts/evaluate.sh.
+# This script runs inside the compute container and executes the released-data
+# reproduction end to end. The method runner generates the raw experiment
+# payload and the evaluation runner converts it into scoring/scores.json.
 #
 # Assumes:
 #   - Container is built (environment/container.sif)
@@ -33,7 +33,7 @@ bash scripts/method.sh
 
 echo ""
 echo "Step 2: Running evaluation..."
-bash scripts/evaluate.sh
+bash scripts/evaluate.sh /home/user/checkpoints/experiment_results.json
 
 echo ""
 echo "Step 3: Validating results..."

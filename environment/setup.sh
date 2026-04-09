@@ -3,8 +3,7 @@
 #
 set -euo pipefail
 
-uv pip install \
-    --system \
+python3 -m pip install \
     numpy \
     scipy \
     pandas

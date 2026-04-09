@@ -3,7 +3,7 @@
 # We avoid external registries entirely because the scheduler's OCI fetch path
 # is failing, and we avoid copying the full host /usr tree because that timed
 # out previously. This definition vendors only the local runtime needed for
-# bash, Python, uv, pip, SSL, and the job scripts.
+# bash, Python, pip, SSL, and the job scripts.
 
 Bootstrap: scratch
 
@@ -13,24 +13,32 @@ Bootstrap: scratch
     mkdir -p "${APPTAINER_ROOTFS}"/{bin,usr/bin,usr/local/bin,usr/lib,usr/local/lib,lib,lib64,etc,home/user,tmp}
     chmod 1777 "${APPTAINER_ROOTFS}/tmp"
 
+    PY_STDLIB="$(python3 - <<'PY'
+import sysconfig
+print(sysconfig.get_path('stdlib'))
+PY
+)"
+    PY_DIST_PACKAGES="/usr/lib/python3/dist-packages"
+
     cp -L /usr/bin/python3 "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
-    cp -L /usr/local/bin/uv "${APPTAINER_ROOTFS}/usr/local/bin/"
-
     mkdir -p "${APPTAINER_ROOTFS}/usr/lib/python3"
-    cp -r /usr/lib/python3.12 "${APPTAINER_ROOTFS}/usr/lib/"
-    cp -r /usr/lib/python3/dist-packages "${APPTAINER_ROOTFS}/usr/lib/python3/"
+    cp -r "${PY_STDLIB}" "${APPTAINER_ROOTFS}/usr/lib/"
+    if [ -d "${PY_DIST_PACKAGES}" ]; then
+        cp -r "${PY_DIST_PACKAGES}" "${APPTAINER_ROOTFS}/usr/lib/python3/"
+    fi
     cp -r /lib/x86_64-linux-gnu "${APPTAINER_ROOTFS}/lib/"
     cp -L /lib64/ld-linux-x86-64.so.2 "${APPTAINER_ROOTFS}/lib64/"
 
-    mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/usr/lib/ssl"
+    mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/etc/ssl" "${APPTAINER_ROOTFS}/usr/lib/ssl"
     cp -r /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"
-    cp -L /usr/lib/ssl/cert.pem "${APPTAINER_ROOTFS}/usr/lib/ssl/"
-    cp -r /usr/lib/ssl/certs "${APPTAINER_ROOTFS}/usr/lib/ssl/"
+    cp -r /etc/ssl/certs "${APPTAINER_ROOTFS}/etc/ssl/"
+    cp -L /usr/lib/ssl/cert.pem "${APPTAINER_ROOTFS}/usr/lib/ssl/cert.pem"
+    ln -s /etc/ssl/certs "${APPTAINER_ROOTFS}/usr/lib/ssl/certs"
 
 %environment
     export HOME=/home/user
-    export PATH=/usr/local/bin:/usr/bin:/bin
+    export PATH=/usr/bin:/bin
     export PYTHONUNBUFFERED=1

@@ -11,7 +11,7 @@ This paper identifies four fundamental problems with current LM benchmarking: it
 
 ## Key Results
 
-- FLUID BENCHMARKING with 10 items achieves better validity (rank distance 10.1) than RANDOM with 500 items (9.1) on MMLU — a 50x efficiency improvement
+- FLUID BENCHMARKING substantially improves over RANDOM at the same item budget; for example, at 10 items its mean validity is 10.1 versus 20.0 and its mean variance is 10.7 versus 29.0
 - FLUID reduces variance by 3-5x compared to random sampling across all subset sizes
 - FLUID maintains high saturation (Spearman correlation 0.76-0.97) even as models improve, while random sampling saturates early
 - IRT aggregation accounts for validity gains; dynamic item selection accounts for variance reductions
@@ -150,11 +150,13 @@ Key target numbers (from paper's Table 2, averaged across 6 benchmarks, 6 LMs, 6
 | RANDOM IRT (10 items) | 14.1 | 18.2 | 0.48 |
 | RANDOM IRT (50 items) | 11.1 | 15.7 | 0.69 |
 | RANDOM IRT (100 items) | 10.6 | 17.8 | 0.71 |
+| RANDOM IRT (500 items) | 8.4 | 10.9 | 0.85 |
 | FLUID (10 items) | 10.1 | 10.7 | 0.76 |
 | FLUID (50 items) | 8.8 | 6.5 | 0.86 |
 | FLUID (100 items) | 8.7 | 6.1 | 0.85 |
+| FLUID (500 items) | 8.3 | 4.9 | 0.88 |
 
-FLUID outperforms all baselines especially at small item counts (10 items).
+FLUID outperforms RANDOM and RANDOM IRT across all three reported metrics and all four item budgets.
 
 ## Evaluation Protocol
 
@@ -240,7 +242,7 @@ FLUID outperforms all baselines especially at small item counts (10 items).
 
 # Reproduction Milestones
 
-**Current: none**
+**Current: method_runs**
 
 ## Progress Log
 
@@ -248,5 +250,10 @@ FLUID outperforms all baselines especially at small item counts (10 items).
 - Audited the paper and current workspace against the released `allenai/fluid-benchmarking` codebase
 - Confirmed the released artifact dataset is already downloaded under `data/fluid-benchmarking`
 - Identified invalid hardcoded scoring in `scripts/evaluate.sh` and method/evaluation mismatches that needed correction before any milestone claim
+
+### [2026-04-08 21:59] - method_runs
+- Ran the paper's actual FLUID algorithm end to end on the released benchmark artifacts using a smoke-test subset of checkpoints
+- Verified the pipeline writes `scoring/scores.json` in the required experiment-based schema
+- Prepared the entrypoint scripts and local dependency path for a full released-data CPU reproduction run
 
 ## Stop Justification

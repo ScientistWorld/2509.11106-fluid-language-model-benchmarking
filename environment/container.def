@@ -26,6 +26,7 @@ PY
     cp -L /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
     cp -L /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
+    ln -s /bin/bash "${APPTAINER_ROOTFS}/bin/sh"
     mkdir -p "${APPTAINER_ROOTFS}/usr/lib/python3"
     cp -r "${PY_STDLIB}" "${APPTAINER_ROOTFS}/usr/lib/"
     if [ -d "${PY_DIST_PACKAGES}" ]; then

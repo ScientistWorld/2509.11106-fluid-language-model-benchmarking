@@ -13,25 +13,25 @@ Bootstrap: scratch
     mkdir -p "${APPTAINER_ROOTFS}"/{bin,usr/bin,usr/local/bin,usr/lib,usr/local/lib,lib,lib64,etc,home/user,tmp}
     chmod 1777 "${APPTAINER_ROOTFS}/tmp"
 
-    cp -a /usr/bin/python3 "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -a /usr/bin/python3.12 "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -a /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -a /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -a /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
-    cp -a /usr/local/bin/uv "${APPTAINER_ROOTFS}/usr/local/bin/"
+    cp -L /usr/bin/python3 "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -L /usr/bin/python3.12 "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -L /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -L /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
+    cp -L /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
+    cp -L /usr/local/bin/uv "${APPTAINER_ROOTFS}/usr/local/bin/"
 
-    cp -a /usr/lib/python3.12 "${APPTAINER_ROOTFS}/usr/lib/"
-    cp -a /usr/lib/python3/dist-packages "${APPTAINER_ROOTFS}/usr/lib/python3/"
-    cp -a /lib/x86_64-linux-gnu "${APPTAINER_ROOTFS}/lib/"
-    cp -a /lib64/ld-linux-x86-64.so.2 "${APPTAINER_ROOTFS}/lib64/"
+    mkdir -p "${APPTAINER_ROOTFS}/usr/lib/python3"
+    cp -r /usr/lib/python3.12 "${APPTAINER_ROOTFS}/usr/lib/"
+    cp -r /usr/lib/python3/dist-packages "${APPTAINER_ROOTFS}/usr/lib/python3/"
+    cp -r /lib/x86_64-linux-gnu "${APPTAINER_ROOTFS}/lib/"
+    cp -L /lib64/ld-linux-x86-64.so.2 "${APPTAINER_ROOTFS}/lib64/"
 
     mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/usr/lib/ssl"
-    cp -a /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"
-    cp -a /usr/lib/ssl/cert.pem "${APPTAINER_ROOTFS}/usr/lib/ssl/"
-    cp -a /usr/lib/ssl/certs "${APPTAINER_ROOTFS}/usr/lib/ssl/"
+    cp -r /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"
+    cp -L /usr/lib/ssl/cert.pem "${APPTAINER_ROOTFS}/usr/lib/ssl/"
+    cp -r /usr/lib/ssl/certs "${APPTAINER_ROOTFS}/usr/lib/ssl/"
 
 %environment
     export HOME=/home/user
     export PATH=/usr/local/bin:/usr/bin:/bin
     export PYTHONUNBUFFERED=1
-

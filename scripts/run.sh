@@ -1,18 +1,27 @@
 #!/bin/bash
-# CPU-only reproduction run for FLUID BENCHMARKING.
+# Full FLUID BENCHMARKING reproduction run.
 #
-# This evaluates RANDOM, RANDOM IRT, and FLUID on the released benchmark data
-# at item budgets 10/50/100/500, then writes scoring/scores.json.
+# Runs the paper's three ablation methods (RANDOM, RANDOM IRT, FLUID)
+# at item budgets 10/50/100/500 on all 6 LMs × 6 benchmarks with all checkpoints,
+# then converts outputs into scoring/scores.json.
 
 set -euo pipefail
 
 cd /home/user
-export PYTHONPATH="/home/user/.deps/fluid_benchmarking${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="/home/user/.deps/fluid_benchmarking:${PYTHONPATH:-}"
 
-echo "=== FLUID BENCHMARKING reproduction ==="
+echo "=== FLUID BENCHMARKING: Full Reproduction ==="
 echo "Start: $(date -u)"
 
-python3 -m method.experiment --item-budgets 10 50 100 500
-bash /home/user/scripts/evaluate.sh /home/user/checkpoints/experiment_results.json
+python3 -m method.experiment --item-budgets 10 50 100 500 --seed 42
 
+echo ""
+echo "Converting results..."
+python3 -m eval.score_results --results /home/user/checkpoints/experiment_results.json --output /home/user/scoring/scores.json
+
+echo ""
+echo "Comparing against paper reference..."
+python3 validate.py --compare || true
+
+echo ""
 echo "End: $(date -u)"

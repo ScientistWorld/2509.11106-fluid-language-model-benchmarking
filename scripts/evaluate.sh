@@ -6,7 +6,7 @@
 set -euo pipefail
 
 cd /home/user
-export PYTHONPATH="/home/user/.deps/fluid_benchmarking${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="/home/user"
 
 RESULTS_FILE="${1:-/home/user/checkpoints/experiment_results.json}"
 

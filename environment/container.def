@@ -1,58 +1,27 @@
-# Minimal local-only Apptainer image for the CPU-only FLUID BENCHMARKING run.
+# Lightweight container for FLUID BENCHMARKING CPU-only reproduction.
 #
-# We avoid external registries entirely because the scheduler's OCI fetch path
-# is failing, and we avoid copying the full host /usr tree because that timed
-# out previously. This definition vendors only the local runtime needed for
-# bash, Python, pip, SSL, and the job scripts.
+# Uses python:3.12-slim-bookworm as base (~45MB) with numpy, scipy, pandas.
 
-Bootstrap: scratch
+Bootstrap: docker
+From: python:3.12-slim-bookworm
 
-%setup
+%post
     set -e
-
-    mkdir -p "${APPTAINER_ROOTFS}"/{bin,usr/bin,usr/local/bin,usr/lib,usr/local/lib,lib,lib64,etc,home/user,tmp}
-    chmod 1777 "${APPTAINER_ROOTFS}/tmp"
-
-    PY_BIN="$(command -v python3)"
-    PY_STDLIB="$("${PY_BIN}" - <<'PY'
-import sysconfig
-print(sysconfig.get_path('stdlib'))
-PY
-)"
-    PY_DIST_PACKAGES="/usr/lib/python3/dist-packages"
-    RUNTIME_BINS="${PY_BIN} /usr/bin/env /usr/bin/date /usr/bin/bash"
-
-    cp -L "${PY_BIN}" "${APPTAINER_ROOTFS}/usr/bin/python3"
-    cp -L /usr/bin/env "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -L /usr/bin/date "${APPTAINER_ROOTFS}/usr/bin/"
-    cp -L /usr/bin/bash "${APPTAINER_ROOTFS}/bin/bash"
-    ln -s /bin/bash "${APPTAINER_ROOTFS}/bin/sh"
-    mkdir -p "${APPTAINER_ROOTFS}/usr/lib/python3"
-    cp -r "${PY_STDLIB}" "${APPTAINER_ROOTFS}/usr/lib/"
-    if [ -d "${PY_DIST_PACKAGES}" ]; then
-        cp -r "${PY_DIST_PACKAGES}" "${APPTAINER_ROOTFS}/usr/lib/python3/"
-    fi
-    for runtime_bin in ${RUNTIME_BINS}; do
-        ldd "${runtime_bin}" | awk '/=> \// || /^\// {for (i = 1; i <= NF; ++i) if ($i ~ /^\//) print $i}' | while read -r lib; do
-            lib_dir="${APPTAINER_ROOTFS}$(dirname "${lib}")"
-            mkdir -p "${lib_dir}"
-            cp -L "${lib}" "${lib_dir}/"
-        done
-    done
-    for lib_root in /lib64 /usr/lib64 /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu; do
-        if [ -d "${lib_root}" ]; then
-            mkdir -p "${APPTAINER_ROOTFS}${lib_root}"
-            cp -r "${lib_root}/." "${APPTAINER_ROOTFS}${lib_root}/"
-        fi
-    done
-
-    mkdir -p "${APPTAINER_ROOTFS}/etc/pki" "${APPTAINER_ROOTFS}/etc/ssl"
-    cp -r /etc/pki/ca-trust "${APPTAINER_ROOTFS}/etc/pki/"
-    cp -r /etc/ssl/certs "${APPTAINER_ROOTFS}/etc/ssl/"
+    apt-get update -qq
+    apt-get install -y --no-install-recommends \
+        curl \
+        ca-certificates \
+        libgomp1 \
+        libmpdec3 \
+        libblas3 \
+        liblapack3 \
+    && rm -rf /var/lib/apt/lists/*
+    python3 -m pip install --no-cache-dir \
+        numpy \
+        scipy \
+        pandas
 
 %environment
     export HOME=/home/user
-    export PATH=/usr/bin:/bin
     export PYTHONUNBUFFERED=1
-    export SSL_CERT_DIR=/etc/ssl/certs
-    export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    export PYTHONPATH="/home/user/.deps/fluid_benchmarking"

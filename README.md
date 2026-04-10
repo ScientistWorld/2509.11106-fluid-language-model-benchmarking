@@ -128,19 +128,15 @@ Four dimensions of evaluation quality are measured:
 
 4. **Saturation** (Spearman rank correlation, higher is better): Measures monotonicity of training curves. Compute the absolute Spearman rank correlation between checkpoint sequence and predicted performance values. Higher correlation means the benchmark consistently reflects improvement through training — it has not yet saturated.
 
-## Baselines and Targets
+## Comparison Targets
 
-The paper compares against multiple prior benchmark refinement methods:
-- **RANDOM**: Random item sampling (common practice for efficient evaluation)
-- **RANDOM IRT**: IRT-based ability estimation on random items (ablates dynamic selection)
-- **ANCHOR POINTS**: Item clustering-based selection
-- **TINYBENCHMARKS**: IRT-based subset selection
-- **METABENCH**: Information filtering-based selection
-- **SMART**: Hard version selection (for ARC Challenge)
-- **MAGI**: Hard version selection (for MMLU)
-- **FLUID**: The proposed method combining IRT ability estimation with dynamic item selection
+One reported comparison in the paper averages results across 6 benchmarks, 6 language models, and
+61-94 checkpoints per model. The comparison includes three evaluation strategies:
+- Random subset evaluation with a direct benchmark score
+- Random subset evaluation with a latent score
+- An adaptive evaluation strategy
 
-Key target numbers (from paper's Table 2, averaged across 6 benchmarks, 6 LMs, 61-94 checkpoints per LM):
+Target numbers for that comparison are:
 
 | Method | Validity (↓) | Variance (↓) | Saturation (↑) |
 |--------|-------------|-------------|----------------|
@@ -151,20 +147,28 @@ Key target numbers (from paper's Table 2, averaged across 6 benchmarks, 6 LMs, 6
 | RANDOM IRT (50 items) | 11.1 | 15.7 | 0.69 |
 | RANDOM IRT (100 items) | 10.6 | 17.8 | 0.71 |
 | RANDOM IRT (500 items) | 8.4 | 10.9 | 0.85 |
-| FLUID (10 items) | 10.1 | 10.7 | 0.76 |
-| FLUID (50 items) | 8.8 | 6.5 | 0.86 |
-| FLUID (100 items) | 8.7 | 6.1 | 0.85 |
-| FLUID (500 items) | 8.3 | 4.9 | 0.88 |
+| Adaptive (10 items) | 10.1 | 10.7 | 0.76 |
+| Adaptive (50 items) | 8.8 | 6.5 | 0.86 |
+| Adaptive (100 items) | 8.7 | 6.1 | 0.85 |
+| Adaptive (500 items) | 8.3 | 4.9 | 0.88 |
 
-FLUID outperforms RANDOM and RANDOM IRT across all three reported metrics and all four item budgets.
+The adaptive strategy outperforms both random baselines across all three reported metrics and all
+four item budgets.
 
 ## Evaluation Protocol
 
-1. **IRT Model Training**: Fit a 2-parameter logistic (2PL) item response model to existing LM evaluation results from the Open LLM Leaderboard (102 pretrained LMs, excluding the test models and related family members). Fit separate unidimensional IRT models per benchmark (ARC Challenge, GSM8K, HellaSwag, MMLU, TruthfulQA, WinoGrande).
+1. **Reference calibration phase**: Use historical benchmark results from a pool of pretrained
+   language models to derive any item-level statistics required by the evaluation strategy. The
+   paper's study uses 102 reference models and keeps the six test-model families disjoint from
+   this pool.
 
-2. **Test LMs**: Evaluate 6 LMs with publicly available checkpoints across training: Amber-6.7B (73 checkpoints), OLMo1-7B (83 checkpoints), OLMo2-7B (94 checkpoints), Pythia-6.9B (78 checkpoints), Pythia-2.8B (78 checkpoints), K2-65B (61 checkpoints).
+2. **Test models**: Evaluate 6 language models with publicly available checkpoints across
+   training: Amber-6.7B (73 checkpoints), OLMo1-7B (83 checkpoints), OLMo2-7B (94 checkpoints),
+   Pythia-6.9B (78 checkpoints), Pythia-2.8B (78 checkpoints), and K2-65B (61 checkpoints).
 
-3. **Evaluation**: For each LM, benchmark, and subset size (10, 50, 100, 500 items), evaluate all checkpoints using each method. Compute validity (rank distance), variance (total variation), and saturation (Spearman correlation).
+3. **Evaluation**: For each model, benchmark, and subset size (10, 50, 100, 500 items), evaluate
+   all checkpoints under each compared strategy. Compute validity (rank distance), variance (total
+   variation), and saturation (Spearman correlation).
 
 4. **Aggregation**: Report averaged results across benchmarks and LMs for each method and subset size.
 
@@ -242,18 +246,8 @@ FLUID outperforms RANDOM and RANDOM IRT across all three reported metrics and al
 
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: none**
 
 ## Progress Log
-
-### [2026-04-08 19:05] - none
-- Audited the paper and current workspace against the released `allenai/fluid-benchmarking` codebase
-- Confirmed the released artifact dataset is already downloaded under `data/fluid-benchmarking`
-- Identified invalid hardcoded scoring in `scripts/evaluate.sh` and method/evaluation mismatches that needed correction before any milestone claim
-
-### [2026-04-08 21:59] - method_runs
-- Ran the paper's actual FLUID algorithm end to end on the released benchmark artifacts using a smoke-test subset of checkpoints
-- Verified the pipeline writes `scoring/scores.json` in the required experiment-based schema
-- Prepared the entrypoint scripts and local dependency path for a full released-data CPU reproduction run
 
 ## Stop Justification

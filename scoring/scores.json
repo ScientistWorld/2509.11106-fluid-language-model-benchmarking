@@ -3,34 +3,64 @@
     "table2_ablation_comparison": {
       "results": {
         "random_10": {
-          "rank_distance": 19.61111111111111,
-          "total_variation": Infinity,
-          "saturation": 0.6775640234837017
+          "rank_distance": 20.5807,
+          "total_variation": 59.8341,
+          "saturation": 0.265
         },
         "random_irt_10": {
-          "rank_distance": 15.444444444444445,
-          "total_variation": Infinity,
-          "saturation": 0.7581730176127763
+          "rank_distance": 20.3691,
+          "total_variation": 54.3585,
+          "saturation": 0.2232
         },
         "fluid_10": {
-          "rank_distance": 12.444444444444445,
-          "total_variation": 1.54913420020679,
-          "saturation": 0.9017806004204932
+          "rank_distance": 18.3604,
+          "total_variation": 36.9955,
+          "saturation": 0.3933
         },
         "random_50": {
-          "rank_distance": 14.402777777777779,
-          "total_variation": Infinity,
-          "saturation": 0.7805021169820365
+          "rank_distance": 19.0408,
+          "total_variation": 48.7394,
+          "saturation": 0.3711
         },
         "random_irt_50": {
-          "rank_distance": 11.847222222222221,
-          "total_variation": Infinity,
-          "saturation": 0.8296118167717901
+          "rank_distance": 17.8351,
+          "total_variation": 45.783,
+          "saturation": 0.3742
         },
         "fluid_50": {
-          "rank_distance": 11.51388888888889,
-          "total_variation": 1.5200984816371996,
-          "saturation": 0.9444444444444444
+          "rank_distance": 15.8657,
+          "total_variation": 31.4728,
+          "saturation": 0.4957
+        },
+        "random_100": {
+          "rank_distance": 18.029,
+          "total_variation": 44.3416,
+          "saturation": 0.3455
+        },
+        "random_irt_100": {
+          "rank_distance": 16.7921,
+          "total_variation": 38.7892,
+          "saturation": 0.4281
+        },
+        "fluid_100": {
+          "rank_distance": 14.8466,
+          "total_variation": 30.3325,
+          "saturation": 0.5125
+        },
+        "random_500": {
+          "rank_distance": 11.0265,
+          "total_variation": 39.4658,
+          "saturation": 0.4751
+        },
+        "random_irt_500": {
+          "rank_distance": 10.3026,
+          "total_variation": 35.0582,
+          "saturation": 0.5071
+        },
+        "fluid_500": {
+          "rank_distance": 9.6823,
+          "total_variation": 29.7387,
+          "saturation": 0.5339
         }
       }
     }

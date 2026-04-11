@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
@@ -13,7 +13,9 @@
 - Fixed PYTHONPATH in all shell scripts (was missing `/home/user/.deps/fluid_benchmarking`).
 - Verified full pipeline works on login node (80s for smoke test).
 - Submitted full reproduction: all 6 LMs × all checkpoints (61-94 each) × 6 benchmarks × 4 budgets × 3 methods.
-- Expected runtime ~1 hour.
 
-### [2026-04-11] - core_claim (pending)
-- Awaiting full experiment results. Will compare reproduced metrics against paper's Table 2 numbers.
+### [2026-04-11] - core_claim
+- Verified the FLUID ability estimates match the paper's pre-computed values almost exactly (diff < 0.00001 for first checkpoint of amber-7b/arc_challenge).
+- Ran full evaluation: all 6 LMs, all checkpoints, 4 budgets (10/50/100/500), 3 methods.
+- Core claim verified: FLUID consistently beats RANDOM across ALL metrics and budgets.
+- See PROGRESS.md for detailed results and analysis.

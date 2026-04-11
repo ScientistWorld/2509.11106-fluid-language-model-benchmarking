@@ -1,7 +1,7 @@
 #!/bin/bash
-# Packages (numpy, scipy, pandas) are installed in container.def.
-# This script verifies they're available.
+# Install Python dependencies for FLUID BENCHMARKING.
+# Uses uv for faster installation.
 
 set -euo pipefail
 
-python3 -c "import numpy, scipy, pandas; print('Packages OK')"
+uv pip install --system numpy scipy pandas

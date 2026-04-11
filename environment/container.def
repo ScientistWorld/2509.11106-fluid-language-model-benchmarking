@@ -1,6 +1,6 @@
 # Lightweight container for FLUID BENCHMARKING CPU-only reproduction.
 #
-# Uses python:3.12-slim-bookworm as base (~45MB) with numpy, scipy, pandas.
+# Uses python:3.12-slim-bookworm as base (~45MB) with numerical libraries.
 
 Bootstrap: docker
 From: python:3.12-slim-bookworm
@@ -16,12 +16,7 @@ From: python:3.12-slim-bookworm
         libblas3 \
         liblapack3 \
     && rm -rf /var/lib/apt/lists/*
-    python3 -m pip install --no-cache-dir \
-        numpy \
-        scipy \
-        pandas
 
 %environment
     export HOME=/home/user
     export PYTHONUNBUFFERED=1
-    export PYTHONPATH="/home/user/.deps/fluid_benchmarking"

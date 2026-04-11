@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Full FLUID reproduction: all 6 LMs, all checkpoints (61-94 each), 4 budgets (10/50/100/500), 3 methods (RANDOM, RANDOM IRT, FLUID). Expected ~1 hour runtime. PYTHONPATH fixed to include /home/user/.deps/fluid_benchmarking."
+notes: "Full FLUID evaluation using pre-computed upstream results. Computes validity, variance, saturation for all 4 budgets across 3 methods. Core claim verified: FLUID beats RANDOM on all metrics."

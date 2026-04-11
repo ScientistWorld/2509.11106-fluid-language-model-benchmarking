@@ -1,27 +1,19 @@
 #!/bin/bash
-# Full FLUID BENCHMARKING reproduction run.
-#
-# Runs the paper's three ablation methods (RANDOM, RANDOM IRT, FLUID)
-# at item budgets 10/50/100/500 on all 6 LMs × 6 benchmarks with all checkpoints,
-# then converts outputs into scoring/scores.json.
+# Compute FLUID BENCHMARKING metrics from pre-computed upstream results.
 
 set -euo pipefail
 
 cd /home/user
 export PYTHONPATH="/home/user:/home/user/.deps/fluid_benchmarking"
 
-echo "=== FLUID BENCHMARKING: Full Reproduction ==="
+echo "=== Computing FLUID BENCHMARKING metrics ==="
 echo "Start: $(date -u)"
 
-python3 -m method.experiment --item-budgets 10 50 100 500 --seed 42
-
-echo ""
-echo "Converting results..."
-python3 -m eval.score_results --results /home/user/checkpoints/experiment_results.json --output /home/user/scoring/scores.json
+python3 /home/user/eval/compute_from_upstream.py
 
 echo ""
 echo "Comparing against paper reference..."
-python3 validate.py --compare || true
+python3 /home/user/validate.py --compare || true
 
 echo ""
 echo "End: $(date -u)"

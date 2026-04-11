@@ -8,7 +8,7 @@
 set -euo pipefail
 
 cd /home/user
-export PYTHONPATH="/home/user"
+export PYTHONPATH="/home/user:/home/user/.deps/fluid_benchmarking"
 
 echo "=== FLUID BENCHMARKING: Full Reproduction ==="
 echo "Start: $(date -u)"

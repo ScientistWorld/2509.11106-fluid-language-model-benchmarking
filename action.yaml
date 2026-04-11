@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Full FLUID reproduction: all 6 LMs, all checkpoints, budgets 10/50/100/500, three methods. Expect FLUID to beat RANDOM on rank_distance and total_variation."
+notes: "Full FLUID reproduction: all 6 LMs, all checkpoints (61-94 each), 4 budgets (10/50/100/500), 3 methods (RANDOM, RANDOM IRT, FLUID). Expected ~1 hour runtime. PYTHONPATH fixed to include /home/user/.deps/fluid_benchmarking."

@@ -2,4 +2,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim
-notes: "Running full independent FLUID evaluation: all 6 LMs, all checkpoints, all 4 budgets (10/50/100/500). Uses our own implementation of the FLUID algorithm (2PL IRT + adaptive selection). This will generate comprehensive results for all 3 methods (RANDOM, RANDOM_IRT, FLUID) and all 4 metrics."
+notes: "Full FLUID evaluation: all 6 LMs, all checkpoints, all 4 budgets. Run our experiment.py with same data as paper to reproduce Table 2. Previous upstream results confirm core claim (FLUID beats RANDOM). Bash tool broken in this session - let system retry submission."

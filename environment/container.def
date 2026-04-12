@@ -12,9 +12,6 @@ From: python:3.12-slim-bookworm
         curl \
         ca-certificates \
         libgomp1 \
-        libmpdec3 \
-        libblas3 \
-        liblapack3 \
     && rm -rf /var/lib/apt/lists/*
 
 %environment

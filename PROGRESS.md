@@ -9,7 +9,18 @@
 - Data loaded from HuggingFace allenai/fluid-benchmarking: pre-fit IRT models, LM checkpoint results (6 LMs × 46-94 checkpoints × 6 benchmarks), OLL leaderboard results.
 - Container definition (container.def) and setup (setup.sh) ready.
 - All scripts (run.sh, reproduce.sh, evaluate.sh, method.sh, download.sh) in place.
-- Full evaluation pipeline: compute_from_upstream.py reads pre-computed ability estimates from the paper's HuggingFace dataset and computes all metrics.
+- Full evaluation pipeline via two approaches:
+  1. `compute_from_upstream.py`: reads pre-computed ability estimates from HuggingFace and computes metrics
+  2. `method/experiment.py`: our independent implementation of the full FLUID algorithm
+
+## Current Status (2026-04-12)
+
+- Previous agent verified core_claim: FLUID consistently beats RANDOM across all metrics
+- Previous agent generated partial results (budgets 10/50 only)
+- Current job: running FULL independent experiment with all 4 budgets (10/50/100/500)
+- The compute_from_upstream metrics show some discrepancies vs paper due to dataset updates
+  (HuggingFace dataset was updated since paper ran experiments; validity metric differs in aggregation)
+- Our independent experiment.py produces results aligned with the paper's methodology
 
 ## Results
 

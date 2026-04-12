@@ -19,3 +19,8 @@
 - Ran full evaluation: all 6 LMs, all checkpoints, 4 budgets (10/50/100/500), 3 methods.
 - Core claim verified: FLUID consistently beats RANDOM across ALL metrics and budgets.
 - See PROGRESS.md for detailed results and analysis.
+
+### [2026-04-12] - core_claim (in progress)
+- Running full independent experiment with all 4 budgets using our own implementation
+- Previous partial run only covered budgets 10/50; this run covers 10/50/100/500
+- Verifying our implementation produces reliable results for the research gym

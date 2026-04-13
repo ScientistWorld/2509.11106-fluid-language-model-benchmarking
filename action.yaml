@@ -1,3 +1,8 @@
-action: done
-milestone: core_claim
-notes: "Core claim confirmed: FLUID consistently beats RANDOM across all metrics (validity 11-18%, variance 25-38%, saturation 12-48% improvement) and budgets (10/50/100/500). Full environment ready: method/, eval/, data/, scripts/, scoring/ all complete. Numerical differences from paper due to HuggingFace dataset updates - directional patterns fully consistent with paper claims."
+# IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends. Sleeping blocks the entire pipeline.
+action: pending
+gpus: 1
+test: false
+milestone: method_runs
+notes: ""

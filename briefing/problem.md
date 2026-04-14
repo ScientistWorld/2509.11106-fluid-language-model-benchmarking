@@ -1,9 +1,5 @@
 # Problem Definition
 
-What problem does this paper address? Write this so that someone with no knowledge of the paper can understand what needs to be solved and how success is measured.
-
-Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent tries to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
-
 ## Research Question
 
 Language model (LM) benchmarking faces several fundamental challenges: (1) comprehensive evaluations are computationally expensive, (2) benchmarks often fail to measure the capabilities they claim to measure, and (3) evaluation quality degrades due to labeling errors in benchmark items and benchmark saturation (when frontier models score near the maximum). The research question is: can we design evaluation methods that simultaneously improve efficiency, validity, variance, and saturation of LM benchmarks?

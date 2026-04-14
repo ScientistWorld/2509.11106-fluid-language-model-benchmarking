@@ -52,7 +52,7 @@ Local evaluation now also scores the paper's Appendix H comparison:
 | FULL_ACCURACY | 9.13 | 9.1 | 11.05 | 23.8 | 0.854 | 0.85 |
 | FLUID/500 | 8.28 | 8.3 | 4.83 | 4.9 | 0.877 | 0.88 |
 
-This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact. A CPU test job is being submitted to verify this updated scorer through the same job path future agents will use.
+This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact. The final verifier re-ran `scripts/evaluate.sh` against the saved raw experiment artifact and confirmed that it regenerates `scoring/scores.json` successfully.
 
 ## Deviations from Paper
 
@@ -71,4 +71,4 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 - `method_runs`: The paper's 2PL IRT ability estimation and Fisher-information adaptive item-selection algorithm runs end-to-end.
 - `core_claim`: The independent reproduction verifies the Table 2 claim that FLUID beats RANDOM and RANDOM_IRT on validity, variance, and saturation at matched budgets.
-- `core_claim_plus`: Not yet claimed. Appendix H scoring passes locally, and a CPU test job is being submitted to verify it in the compute environment before raising the milestone.
+- `core_claim_plus`: Not claimed. Appendix H scoring passes from the saved raw artifact, but the reported milestone remains `core_claim` because the verified reproduction scope is still the paper's core Table 2 claim plus one secondary comparison rather than a broader majority of paper results.

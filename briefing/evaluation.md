@@ -1,7 +1,5 @@
 # Evaluation
 
-How success is measured. Describe only the metrics, targets, and evaluation procedure — do NOT describe the paper's method or how they achieved these results. Think of this as a general evaluation protocol for other scientists trying to solve the same problem, where they should not see this paper's solution.
-
 ## Metrics
 
 Four dimensions of evaluation quality are measured:
@@ -31,6 +29,7 @@ Target numbers for that comparison are:
 | RANDOM (10 items) | 20.0 | 29.0 | 0.47 |
 | RANDOM (50 items) | 15.2 | 19.1 | 0.62 |
 | RANDOM (100 items) | 16.9 | 19.8 | 0.64 |
+| RANDOM (500 items) | 9.1 | 10.2 | 0.79 |
 | RANDOM score baseline (10 items) | 14.1 | 18.2 | 0.48 |
 | RANDOM score baseline (50 items) | 11.1 | 15.7 | 0.69 |
 | RANDOM score baseline (100 items) | 10.6 | 17.8 | 0.71 |
@@ -45,7 +44,7 @@ and all four item budgets.
 
 ## Evaluation Protocol
 
-1. **Reference phase**: Use only the provided reference-model benchmark results and item metadata
+1. **Reference phase**: Use only the provided reference-model benchmark results and calibration metadata
    supplied with this environment. Keep the six test-model families disjoint from this reference
    pool.
 

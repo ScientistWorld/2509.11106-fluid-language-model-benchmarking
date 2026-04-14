@@ -4,17 +4,17 @@
 The candidate strategy should improve external validity relative to random subset evaluation.
 - **Metric**: `rank_distance` (lower is better)
 - **Experiment**: `table2_ablation_comparison`
-- **Evidence**: `fluid_10`, `fluid_50`, `fluid_100`, and `fluid_500` should beat the corresponding `random_*` baselines, and typically also `random_irt_*`
+- **Evidence**: the candidate rows at 10, 50, 100, and 500 items should beat the corresponding random subset baselines, and typically also the calibrated random subset baselines
 
 ## Constraint: variance
 The candidate strategy should reduce step-to-step instability in checkpoint tracking.
 - **Metric**: `total_variation` (lower is better)
-- **Evidence**: `fluid_*` should beat both `random_*` and `random_irt_*` at the same item budget
+- **Evidence**: the candidate rows should beat both matched baselines at the same item budget
 
 ## Constraint: saturation
 The candidate strategy should delay benchmark saturation so late-training progress remains visible.
 - **Metric**: `saturation` (higher is better)
-- **Evidence**: `fluid_*` should have higher monotonicity than the random baselines, especially at small budgets
+- **Evidence**: the candidate rows should have higher monotonicity than the random baselines, especially at small budgets
 
 ## Ablation: efficiency_scaling
 The candidate strategy's advantage should persist from very small to moderate item budgets.
@@ -28,5 +28,5 @@ The candidate strategy should remain competitive with, and preferably outperform
 entire benchmark with standard accuracy aggregation.
 - **Metric**: `rank_distance`, `total_variation`, and `saturation`
 - **Experiment**: `appendix_h_full_accuracy_comparison`
-- **Evidence**: `fluid_500` should beat `full_accuracy`, showing that a lower-budget strategy can
+- **Evidence**: the 500-item candidate row should beat the full-accuracy baseline, showing that a lower-budget strategy can
   improve evaluation quality even when full-benchmark accuracy uses more items

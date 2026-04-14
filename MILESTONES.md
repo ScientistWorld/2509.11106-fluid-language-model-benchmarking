@@ -24,10 +24,11 @@
 - `scripts/evaluate.sh` passed locally after scoring and documentation fixes.
 - Method-agnostic docs were tightened for from-scratch gym use, and generated package/upstream cache files were removed from the tracked root layout.
 
-### [2026-04-14 03:25] - core_claim
+### [2026-04-14 02:55] - core_claim
 - Added `scripts/baseline.sh` as a wrapper for the matched RANDOM and RANDOM_IRT Table 2 baselines.
 - Documented that this reproduction uses the authors' released fitted 2PL item parameters rather than re-running hierarchical MCMC IRT fitting.
-- Submitting a CPU test job to verify the updated Appendix H scorer through the compute job path before raising any milestone beyond `core_claim`.
+- Final verifier re-ran `scripts/evaluate.sh /home/user/checkpoints/experiment_results.json`; validation passed and regenerated `scoring/scores.json`.
+- Removed method identifiers from strictly method-agnostic experiment/target docs and removed an unused `tmp_apt/` scratch directory.
 
 ## Stop Justification
-- Current verified milestone remains `core_claim`; Appendix H remains local-only until the next CPU test job completes.
+- Completed at milestone `core_claim`; the workspace is ready for gym use with the limitation that it uses the authors' released fitted 2PL item parameters and does not reproduce every broader baseline family from the paper.

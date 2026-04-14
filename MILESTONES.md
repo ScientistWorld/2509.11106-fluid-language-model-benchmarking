@@ -25,4 +25,4 @@
 - Method-agnostic docs were tightened for from-scratch gym use, and generated package/upstream cache files were removed from the tracked root layout.
 
 ## Stop Justification
-- Verified `core_claim` reproduction is complete and the workspace is ready for gym use. Appendix H scoring is included as a secondary local comparison, but the milestone remains `core_claim` because it was not separately promoted by a completed compute job.
+- Completed at milestone `core_claim`.

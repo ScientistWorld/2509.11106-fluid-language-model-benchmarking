@@ -3,64 +3,64 @@
     "table2_ablation_comparison": {
       "results": {
         "random_10": {
-          "rank_distance": 20.5807,
-          "total_variation": 37.1316,
-          "saturation": 0.265
+          "rank_distance": 28.867809734513273,
+          "total_variation": 37.64125479676737,
+          "saturation": 0.44565556182914956
         },
         "random_irt_10": {
-          "rank_distance": 20.3691,
-          "total_variation": 21.7574,
-          "saturation": 0.2232
+          "rank_distance": 14.696902654867257,
+          "total_variation": 33.94757666094803,
+          "saturation": 0.48803911024563745
         },
         "fluid_10": {
-          "rank_distance": 18.3604,
-          "total_variation": 21.7876,
-          "saturation": 0.3933
+          "rank_distance": 10.13495575221239,
+          "total_variation": 12.739771674388393,
+          "saturation": 0.7134873909528892
         },
         "random_50": {
-          "rank_distance": 19.0408,
-          "total_variation": 34.0935,
-          "saturation": 0.3711
+          "rank_distance": 14.0320796460177,
+          "total_variation": 30.138402999494133,
+          "saturation": 0.597397015493356
         },
         "random_irt_50": {
-          "rank_distance": 17.8351,
-          "total_variation": 30.2924,
-          "saturation": 0.3742
+          "rank_distance": 10.883849557522124,
+          "total_variation": 28.71203669289561,
+          "saturation": 0.6038484803620099
         },
         "fluid_50": {
-          "rank_distance": 15.8657,
-          "total_variation": 17.7674,
-          "saturation": 0.4957
+          "rank_distance": 8.793141592920353,
+          "total_variation": 6.622751538877548,
+          "saturation": 0.8347767992230828
         },
         "random_100": {
-          "rank_distance": 18.029,
-          "total_variation": 28.4392,
-          "saturation": 0.3455
+          "rank_distance": 11.940818584070797,
+          "total_variation": 15.12829408270464,
+          "saturation": 0.652613278783758
         },
         "random_irt_100": {
-          "rank_distance": 16.7921,
-          "total_variation": 26.5471,
-          "saturation": 0.4281
+          "rank_distance": 8.788716814159292,
+          "total_variation": 15.696522476234678,
+          "saturation": 0.7060209348594427
         },
         "fluid_100": {
-          "rank_distance": 14.8466,
-          "total_variation": 16.399,
-          "saturation": 0.5125
+          "rank_distance": 8.669800884955752,
+          "total_variation": 5.944602091106919,
+          "saturation": 0.8478821644322289
         },
         "random_500": {
-          "rank_distance": 11.0265,
-          "total_variation": 22.1703,
-          "saturation": 0.4751
+          "rank_distance": 12.373340707964601,
+          "total_variation": 11.062785708897662,
+          "saturation": 0.8092675581673596
         },
         "random_irt_500": {
-          "rank_distance": 10.3026,
-          "total_variation": 19.3826,
-          "saturation": 0.5071
+          "rank_distance": 8.474557522123893,
+          "total_variation": 8.690591929011028,
+          "saturation": 0.829419990350022
         },
         "fluid_500": {
-          "rank_distance": 9.6823,
-          "total_variation": 12.7791,
-          "saturation": 0.5339
+          "rank_distance": 8.27599557522124,
+          "total_variation": 4.829651978867632,
+          "saturation": 0.8766320699089123
         }
       }
     }

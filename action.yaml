@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
 test: false
-milestone: method_runs
-notes: "CPU reproduction job: run the independent FLUID Table 2 implementation for budgets 10/50/100/500, write scoring/scores.json, and validate."
+milestone: core_claim
+notes: "Reproduced the Table 2 core claim with the independent FLUID implementation; job 7d2d5bf5-1b5 completed and FLUID beat RANDOM and RANDOM IRT on rank distance, total variation, and saturation at budgets 10/50/100/500."

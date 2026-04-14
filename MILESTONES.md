@@ -1,12 +1,18 @@
 # Reproduction Milestones
 
-**Current: method_runs**
+**Current: core_claim**
 
 ## Progress Log
 
 ### [2026-04-14 00:00] - method_runs
 - FLUID's 2PL ability estimation and Fisher-information adaptive item selection are implemented and runnable on the released item-level data.
-- Current submission is a CPU verification run for the Table 2 core-claim metrics.
+- Submitted a CPU verification run for the Table 2 core-claim metrics.
+
+### [2026-04-14 02:27] - core_claim
+- Job 7d2d5bf5-1b5 completed successfully with exit code 0.
+- The end-to-end reproduction ran FLUID, RANDOM_IRT, and RANDOM for budgets 10, 50, 100, and 500.
+- FLUID beat both baselines on rank distance, total variation, and saturation at every evaluated budget.
+- `scripts/evaluate.sh` wrote `scoring/scores.json`, and `validate.py --compare` passed.
 
 ## Stop Justification
-- Not stopped; preparing the next verification job.
+- Reached the minimum target milestone, `core_claim`, with a reusable method/evaluation environment and job-verified scores.

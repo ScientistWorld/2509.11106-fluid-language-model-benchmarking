@@ -19,5 +19,10 @@
 - Local evaluation shows `fluid_500` beating `full_accuracy` on rank distance, total variation, and saturation.
 - Submitting a CPU test job to verify the updated evaluator in the compute environment before raising the milestone.
 
+### [2026-04-14 03:10] - core_claim
+- Final verification kept the milestone at `core_claim`.
+- `scripts/evaluate.sh` passed locally after scoring and documentation fixes.
+- Method-agnostic docs were tightened for from-scratch gym use, and generated package/upstream cache files were removed from the tracked root layout.
+
 ## Stop Justification
-- Current verified compute milestone is `core_claim`; Appendix H extension is pending compute-job verification.
+- Verified `core_claim` reproduction is complete and the workspace is ready for gym use. Appendix H scoring is included as a secondary local comparison, but the milestone remains `core_claim` because it was not separately promoted by a completed compute job.

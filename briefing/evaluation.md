@@ -20,10 +20,9 @@ Four dimensions of evaluation quality are measured:
 ## Comparison Targets
 
 One reported comparison in the paper averages results across 6 benchmarks, 6 language models, and
-61-94 checkpoints per model. The comparison includes three evaluation strategies:
-- Random subset evaluation with a direct benchmark score
-- Random subset evaluation with a latent score
-- An adaptive evaluation strategy
+61-94 checkpoints per model. The comparison includes fixed-size subset baselines and a candidate
+evaluation strategy at the same item budgets. Future methods should produce the same output format
+so they can be compared at equal item counts.
 
 Target numbers for that comparison are:
 
@@ -32,24 +31,23 @@ Target numbers for that comparison are:
 | RANDOM (10 items) | 20.0 | 29.0 | 0.47 |
 | RANDOM (50 items) | 15.2 | 19.1 | 0.62 |
 | RANDOM (100 items) | 16.9 | 19.8 | 0.64 |
-| RANDOM IRT (10 items) | 14.1 | 18.2 | 0.48 |
-| RANDOM IRT (50 items) | 11.1 | 15.7 | 0.69 |
-| RANDOM IRT (100 items) | 10.6 | 17.8 | 0.71 |
-| RANDOM IRT (500 items) | 8.4 | 10.9 | 0.85 |
-| Adaptive (10 items) | 10.1 | 10.7 | 0.76 |
-| Adaptive (50 items) | 8.8 | 6.5 | 0.86 |
-| Adaptive (100 items) | 8.7 | 6.1 | 0.85 |
-| Adaptive (500 items) | 8.3 | 4.9 | 0.88 |
+| RANDOM score baseline (10 items) | 14.1 | 18.2 | 0.48 |
+| RANDOM score baseline (50 items) | 11.1 | 15.7 | 0.69 |
+| RANDOM score baseline (100 items) | 10.6 | 17.8 | 0.71 |
+| RANDOM score baseline (500 items) | 8.4 | 10.9 | 0.85 |
+| Candidate (10 items) | 10.1 | 10.7 | 0.76 |
+| Candidate (50 items) | 8.8 | 6.5 | 0.86 |
+| Candidate (100 items) | 8.7 | 6.1 | 0.85 |
+| Candidate (500 items) | 8.3 | 4.9 | 0.88 |
 
-The adaptive strategy outperforms both random baselines across all three reported metrics and all
-four item budgets.
+The candidate strategy should outperform both random baselines across all three reported metrics
+and all four item budgets.
 
 ## Evaluation Protocol
 
-1. **Reference calibration phase**: Use historical benchmark results from a pool of pretrained
-   language models to derive any item-level statistics required by the evaluation strategy. The
-   paper's study uses 102 reference models and keeps the six test-model families disjoint from
-   this pool.
+1. **Reference phase**: Use only the provided reference-model benchmark results and item metadata
+   supplied with this environment. Keep the six test-model families disjoint from this reference
+   pool.
 
 2. **Test models**: Evaluate 6 language models with publicly available checkpoints across
    training: Amber-6.7B (73 checkpoints), OLMo1-7B (83 checkpoints), OLMo2-7B (94 checkpoints),

@@ -17,7 +17,7 @@
 set -e
 
 cd /home/user
-export PYTHONPATH="/home/user:/home/user/.deps/fluid_benchmarking"
+export PYTHONPATH="/home/user:/home/user/.pkgs"
 
 echo "=== FLUID BENCHMARKING: Full Reproduction ==="
 echo ""

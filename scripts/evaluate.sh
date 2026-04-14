@@ -6,7 +6,7 @@
 set -euo pipefail
 
 cd /home/user
-export PYTHONPATH="/home/user"
+export PYTHONPATH="/home/user:/home/user/.pkgs"
 export TMPDIR="${TMPDIR:-/home/user/tmp}"
 mkdir -p "$TMPDIR"
 

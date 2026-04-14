@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 
@@ -30,10 +31,18 @@ def build_scores(payload: dict, reference: dict) -> dict:
             method_name = f"{method}_{budget}"
             if method_name not in ref_methods:
                 continue
+            cleaned = {}
+            for metric_name in ref_experiment["metrics"]:
+                if metric_name not in metrics:
+                    continue
+                value = float(metrics[metric_name])
+                if not math.isfinite(value):
+                    value = 100.0
+                cleaned[metric_name] = value
             scores["experiments"][EXPERIMENT_NAME]["results"][method_name] = {
-                metric_name: float(metrics[metric_name])
+                metric_name: cleaned[metric_name]
                 for metric_name in ref_experiment["metrics"]
-                if metric_name in metrics
+                if metric_name in cleaned
             }
 
     if not scores["experiments"][EXPERIMENT_NAME]["results"]:

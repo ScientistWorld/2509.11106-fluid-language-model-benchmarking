@@ -17,6 +17,7 @@ FLUID should delay benchmark saturation so late-training progress remains visibl
 - **Evidence**: FLUID should have higher monotonicity than the random baselines, especially at small budgets
 
 ## Ablation: efficiency_scaling
-FLUID's advantage should persist from very small to moderate item budgets.
+FLUID's advantage should persist from very small to moderate item budgets. Efficiency is represented
+by the item-budget sweep (`10`, `50`, `100`, and `500` items), not by a separate scalar metric.
 - **Metric**: all three metrics at budgets `10`, `50`, `100`, and `500`
 - **Evidence**: the directional advantage should remain visible as the item budget increases, with the largest gains at low budgets

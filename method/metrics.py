@@ -104,11 +104,11 @@ def compute_variance(x):
     if range_val < 1e-10:
         if total_variation < 1e-10:
             return 0.0
-        return float("inf")
+        return 100.0
 
     # Normalized total variation
     tv = (n / (n - 1)) * total_variation / range_val
-    return float(tv)
+    return min(float(tv), 100.0)
 
 
 def compute_saturation(x):

@@ -4,5 +4,5 @@
 set -euo pipefail
 
 cd /home/user
-export PYTHONPATH="/home/user:/home/user/.deps/fluid_benchmarking"
+export PYTHONPATH="/home/user:/home/user/.pkgs"
 python3 -m method.experiment --item-budgets 10 50 100 500 "$@"

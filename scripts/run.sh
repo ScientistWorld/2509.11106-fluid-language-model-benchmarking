@@ -1,12 +1,8 @@
 #!/bin/bash
-# Run the FLUID BENCHMARKING evaluation end-to-end.
+# CPU job entrypoint for the FLUID BENCHMARKING reproduction.
 #
-# This script:
-# 1. Loads pre-computed HuggingFace upstream data
-# 2. Computes validity, variance, and saturation metrics
-# 3. Writes results to scoring/scores.json
-#
-# This is a CPU-only workload (no GPU needed).
+# Runs the paper-method implementation on the released item-level data, converts
+# the resulting curves into scoring/scores.json, and validates the workspace.
 
 set -euo pipefail
 
@@ -16,25 +12,14 @@ export TMPDIR="${TMPDIR:-/home/user/tmp}"
 export PYTHONDONTWRITEBYTECODE=1
 mkdir -p "$TMPDIR"
 
-echo "=== FLUID BENCHMARKING: Full Independent Evaluation ==="
+echo "=== FLUID BENCHMARKING: Reproduction Job ==="
 echo "Start: $(date -u)"
 echo ""
 
-# Verify upstream data exists
-if [ ! -f "/home/user/tmp_fluid_upstream/results/experiments.jsonl" ]; then
-    echo "Upstream data not found at /home/user/tmp_fluid_upstream/results/experiments.jsonl"
-    exit 1
-fi
-
-# Run the evaluation script (computes all metrics + writes scores.json)
-python3 -m eval.run_evaluation 2>&1
+bash scripts/reproduce.sh
 
 echo ""
-echo "Step 2: Validating results..."
-python3 validate_new.py --compare 2>&1 || true
-
-echo ""
-echo "=== Results ==="
+echo "=== scores.json ==="
 cat /home/user/scoring/scores.json
 
 echo ""

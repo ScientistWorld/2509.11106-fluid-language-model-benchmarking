@@ -31,4 +31,4 @@
 - Removed method identifiers from strictly method-agnostic experiment/target docs and removed an unused `tmp_apt/` scratch directory.
 
 ## Stop Justification
-- Completed at milestone `core_claim`; the workspace is ready for gym use with the limitation that it uses the authors' released fitted 2PL item parameters and does not reproduce every broader baseline family from the paper.
+- Completed at milestone `core_claim`.

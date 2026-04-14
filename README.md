@@ -20,10 +20,6 @@ This paper identifies four fundamental problems with current LM benchmarking: it
 
 # Problem Definition
 
-What problem does this paper address? Write this so that someone with no knowledge of the paper can understand what needs to be solved and how success is measured.
-
-Do NOT describe the paper's method or solution here — only the problem itself. Think about if a future scientist agent tries to solve this problem from scratch without knowing what approach the paper took. If you leak the solution, you compromise the benchmark.
-
 ## Research Question
 
 Language model (LM) benchmarking faces several fundamental challenges: (1) comprehensive evaluations are computationally expensive, (2) benchmarks often fail to measure the capabilities they claim to measure, and (3) evaluation quality degrades due to labeling errors in benchmark items and benchmark saturation (when frontier models score near the maximum). The research question is: can we design evaluation methods that simultaneously improve efficiency, validity, variance, and saturation of LM benchmarks?
@@ -111,8 +107,6 @@ The paper separates the contributions of IRT aggregation vs. dynamic selection:
 
 # Evaluation
 
-How success is measured. Describe only the metrics, targets, and evaluation procedure — do NOT describe the paper's method or how they achieved these results. Think of this as a general evaluation protocol for other scientists trying to solve the same problem, where they should not see this paper's solution.
-
 ## Metrics
 
 Four dimensions of evaluation quality are measured:
@@ -142,6 +136,7 @@ Target numbers for that comparison are:
 | RANDOM (10 items) | 20.0 | 29.0 | 0.47 |
 | RANDOM (50 items) | 15.2 | 19.1 | 0.62 |
 | RANDOM (100 items) | 16.9 | 19.8 | 0.64 |
+| RANDOM (500 items) | 9.1 | 10.2 | 0.79 |
 | RANDOM score baseline (10 items) | 14.1 | 18.2 | 0.48 |
 | RANDOM score baseline (50 items) | 11.1 | 15.7 | 0.69 |
 | RANDOM score baseline (100 items) | 10.6 | 17.8 | 0.71 |
@@ -156,7 +151,7 @@ and all four item budgets.
 
 ## Evaluation Protocol
 
-1. **Reference phase**: Use only the provided reference-model benchmark results and item metadata
+1. **Reference phase**: Use only the provided reference-model benchmark results and calibration metadata
    supplied with this environment. Keep the six test-model families disjoint from this reference
    pool.
 
@@ -445,6 +440,42 @@ and all four item budgets.
 - Final verification kept the milestone at `core_claim`.
 - `scripts/evaluate.sh` passed locally after scoring and documentation fixes.
 - Method-agnostic docs were tightened for from-scratch gym use, and generated package/upstream cache files were removed from the tracked root layout.
+
+</details>
+
+### Iteration 5: gpt-5.4 (verifier)
+- **Milestone**: `core_claim` | **Status**: done
+- **Working time**: 7m | **GPU**: 0.0h
+- **Jobs**: 4 total (1 completed, 2 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-04-14 00:00] - method_runs
+- FLUID's 2PL ability estimation and Fisher-information adaptive item selection are implemented and runnable on the released item-level data.
+- Submitted a CPU verification run for the Table 2 core-claim metrics.
+
+### [2026-04-14 02:27] - core_claim
+- Job 7d2d5bf5-1b5 completed successfully with exit code 0.
+- The end-to-end reproduction ran FLUID, RANDOM_IRT, and RANDOM for budgets 10, 50, 100, and 500.
+- FLUID beat both baselines on rank distance, total variation, and saturation at every evaluated budget.
+- `scripts/evaluate.sh` wrote `scoring/scores.json`, and `validate.py --compare` passed.
+
+### [2026-04-14 02:45] - core_claim
+- Extended the local scoring target to include Appendix H's full-benchmark accuracy comparison.
+- Local evaluation shows `fluid_500` beating `full_accuracy` on rank distance, total variation, and saturation.
+- Submitting a CPU test job to verify the updated evaluator in the compute environment before raising the milestone.
+
+### [2026-04-14 03:10] - core_claim
+- Final verification kept the milestone at `core_claim`.
+- `scripts/evaluate.sh` passed locally after scoring and documentation fixes.
+- Method-agnostic docs were tightened for from-scratch gym use, and generated package/upstream cache files were removed from the tracked root layout.
+
+### [2026-04-14 02:55] - core_claim
+- Added `scripts/baseline.sh` as a wrapper for the matched RANDOM and RANDOM_IRT Table 2 baselines.
+- Documented that this reproduction uses the authors' released fitted 2PL item parameters rather than re-running hierarchical MCMC IRT fitting.
+- Final verifier re-ran `scripts/evaluate.sh /home/user/checkpoints/experiment_results.json`; validation passed and regenerated `scoring/scores.json`.
+- Removed method identifiers from strictly method-agnostic experiment/target docs and removed an unused `tmp_apt/` scratch directory.
 
 </details>
 

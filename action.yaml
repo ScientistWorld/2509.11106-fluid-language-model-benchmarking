@@ -1,6 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
+action: submit
+gpus: 0
+test: true
 milestone: core_claim
-notes: "Final verification passed; gym is ready at core_claim with method-agnostic docs and corrected scoring coefficients."
+notes: "CPU test job to re-run scripts/reproduce.sh end to end and verify the updated Appendix H scorer through the compute job path."

@@ -8,7 +8,7 @@
 - Evaluation code in `eval/` is independent of `method/`; `scripts/evaluate.sh` converts raw method outputs to `scoring/scores.json` and validates the score file.
 - Data are loaded from the released `allenai/fluid-benchmarking` artifacts under `data/`, including pre-fit 2PL IRT parameters and LM checkpoint item responses.
 - Container definition and setup are in place, with Python packages installed via `environment/setup.sh` rather than `container.def`.
-- Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
+- Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
 
@@ -52,13 +52,14 @@ Local evaluation now also scores the paper's Appendix H comparison:
 | FULL_ACCURACY | 9.13 | 9.1 | 11.05 | 23.8 | 0.854 | 0.85 |
 | FLUID/500 | 8.28 | 8.3 | 4.83 | 4.9 | 0.877 | 0.88 |
 
-This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact.
+This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact. A CPU test job is being submitted to verify this updated scorer through the same job path future agents will use.
 
 ## Deviations from Paper
 
 1. The reproduction uses the released HuggingFace `allenai/fluid-benchmarking` data artifacts rather than regenerating the entire raw benchmark collection from external model APIs.
-2. The released data snapshot has minor differences from the paper's exact reporting snapshot, including baseline metric deviations and the number of available checkpoints for some models.
-3. The reproduction focuses on Table 2, the core ablation comparing RANDOM, RANDOM_IRT, and FLUID across budgets. Broader Table 1 comparisons against additional benchmark-selection methods remain future work.
+2. The reproduction uses the authors' released fitted 2PL item parameters. It implements MAP ability estimation and Fisher-information adaptive item selection, but it does not re-run the paper's hierarchical MCMC IRT fitting procedure from the raw Open LLM Leaderboard response matrix.
+3. The released data snapshot has minor differences from the paper's exact reporting snapshot, including baseline metric deviations and the number of available checkpoints for some models.
+4. The reproduction focuses on Table 2, the core ablation comparing RANDOM, RANDOM_IRT, and FLUID across budgets. Broader Table 1 comparisons against additional benchmark-selection methods remain future work.
 
 ## Environment Details
 
@@ -70,4 +71,4 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 - `method_runs`: The paper's 2PL IRT ability estimation and Fisher-information adaptive item-selection algorithm runs end-to-end.
 - `core_claim`: The independent reproduction verifies the Table 2 claim that FLUID beats RANDOM and RANDOM_IRT on validity, variance, and saturation at matched budgets.
-- `core_claim_plus`: Locally extended scoring to Appendix H, where FLUID/500 beats full-benchmark accuracy on the same metrics. A CPU job submission is pending to re-run this updated evaluator in the compute environment.
+- `core_claim_plus`: Not yet claimed. Appendix H scoring passes locally, and a CPU test job is being submitted to verify it in the compute environment before raising the milestone.

@@ -20,13 +20,14 @@ Check off items as you complete them. Order doesn't matter — work however make
 ## Code
 - [x] Evaluation code in `eval/` (compute_metrics, score_results, scoring, run_evaluation)
 - [x] Method implementation in `method/` (irt, fluid, experiment, fluid_benchmarking)
-- [x] Baseline implementations (integrated in method/fluid.py: RANDOM, RANDOM_IRT, FLUID)
+- [x] Baseline implementations (integrated in method/fluid.py and wrapped by scripts/baseline.sh: RANDOM, RANDOM_IRT)
 
 ## Scripts
 - [x] `scripts/evaluate.sh` — self-contained evaluation runner
 - [x] `scripts/reproduce.sh` — end-to-end reproduction script
 - [x] `scripts/download.sh` — idempotent download script with size comment
 - [x] `scripts/method.sh` — runs FLUID method on experiment data
+- [x] `scripts/baseline.sh` — runs matched RANDOM and RANDOM_IRT baselines as part of the shared ablation experiment
 - [x] `scripts/run.sh` — job script for compute submission
 
 ## Environment

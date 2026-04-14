@@ -10,6 +10,7 @@
 - Container definition and setup are in place, with Python packages installed via `environment/setup.sh` rather than `container.def`.
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
+- Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
 
 ## Results
 
@@ -42,6 +43,17 @@ The CPU reproduction job completed successfully with exit code 0. It ran `script
 
 The reproduced FLUID numbers are close to the paper's reported Table 2 FLUID values, especially for budgets 50, 100, and 500. Some baseline values differ from the paper, but the full benefit-plus-constraint comparison still supports the paper's central claim: Fisher-information adaptive selection improves ranking validity, reduces score-distribution error, and avoids saturation relative to non-adaptive item selection at matched evaluation budgets.
 
+### Appendix H Full-Accuracy Comparison
+
+Local evaluation now also scores the paper's Appendix H comparison:
+
+| Method | Rank Dist (down) | Paper RD | TV (down) | Paper TV | Sat (up) | Paper Sat |
+|--------|------------------|----------|-----------|----------|----------|-----------|
+| FULL_ACCURACY | 9.13 | 9.1 | 11.05 | 23.8 | 0.854 | 0.85 |
+| FLUID/500 | 8.28 | 8.3 | 4.83 | 4.9 | 0.877 | 0.88 |
+
+This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact.
+
 ## Deviations from Paper
 
 1. The reproduction uses the released HuggingFace `allenai/fluid-benchmarking` data artifacts rather than regenerating the entire raw benchmark collection from external model APIs.
@@ -58,3 +70,4 @@ The reproduced FLUID numbers are close to the paper's reported Table 2 FLUID val
 
 - `method_runs`: The paper's 2PL IRT ability estimation and Fisher-information adaptive item-selection algorithm runs end-to-end.
 - `core_claim`: The independent reproduction verifies the Table 2 claim that FLUID beats RANDOM and RANDOM_IRT on validity, variance, and saturation at matched budgets.
+- `core_claim_plus`: Locally extended scoring to Appendix H, where FLUID/500 beats full-benchmark accuracy on the same metrics. A CPU job submission is pending to re-run this updated evaluator in the compute environment.

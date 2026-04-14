@@ -2,7 +2,7 @@
   "experiments": {
     "table2_ablation_comparison": {
       "description": "Table 2 ablation comparison of FLUID BENCHMARKING against RANDOM and RANDOM IRT across item budgets 10, 50, 100, and 500. Results are averaged over 6 benchmarks, 6 LMs, and 61-94 checkpoints per LM.",
-      "weight": 1.0,
+      "weight": 0.8,
       "primary_metric": "rank_distance",
       "metrics": {
         "rank_distance": {"higher_is_better": false, "coefficient": 1.0},
@@ -22,6 +22,20 @@
         "fluid_50":      {"type": "proposed",  "rank_distance": 8.8,  "total_variation": 6.5,  "saturation": 0.86},
         "fluid_100":     {"type": "proposed",  "rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85},
         "fluid_500":     {"type": "proposed",  "rank_distance": 8.3,  "total_variation": 4.9,  "saturation": 0.88}
+      }
+    },
+    "appendix_h_full_accuracy_comparison": {
+      "description": "Appendix H comparison showing that FLUID BENCHMARKING with 500 adaptively selected items outperforms full-benchmark accuracy on the same validity, variance, and saturation metrics.",
+      "weight": 0.2,
+      "primary_metric": "rank_distance",
+      "metrics": {
+        "rank_distance": {"higher_is_better": false, "coefficient": 1.0},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.8},
+        "saturation": {"higher_is_better": true, "coefficient": 1.0}
+      },
+      "results": {
+        "full_accuracy": {"type": "baseline", "rank_distance": 9.1, "total_variation": 23.8, "saturation": 0.85},
+        "fluid_500": {"type": "proposed", "rank_distance": 8.3, "total_variation": 4.9, "saturation": 0.88}
       }
     }
   }

@@ -12,3 +12,13 @@ Reported methods:
 - `random_*`: random subset evaluation with accuracy aggregation
 - `random_irt_*`: random subset evaluation with latent ability aggregation
 - `fluid_*`: adaptive item selection with latent ability aggregation
+
+## appendix_h_full_accuracy_comparison
+Tests the paper's Appendix H claim that FLUID BENCHMARKING can outperform full-benchmark
+accuracy even when efficiency is not the only concern. The reproduced `full_accuracy` curve uses
+all available item-level checkpoint responses with standard accuracy aggregation, while `fluid_500`
+uses the Table 2 FLUID run at a 500-item adaptive budget.
+
+Reported methods:
+- `full_accuracy`: full-benchmark static evaluation with accuracy aggregation
+- `fluid_500`: adaptive item selection with latent ability aggregation

@@ -63,6 +63,20 @@
           "saturation": 0.8766320699089123
         }
       }
+    },
+    "appendix_h_full_accuracy_comparison": {
+      "results": {
+        "full_accuracy": {
+          "rank_distance": 9.128318584070797,
+          "total_variation": 11.052324860834148,
+          "saturation": 0.8544797644759946
+        },
+        "fluid_500": {
+          "rank_distance": 8.27599557522124,
+          "total_variation": 4.829651978867632,
+          "saturation": 0.8766320699089123
+        }
+      }
     }
   }
 }

@@ -9,9 +9,9 @@ Check off items as you complete them. Order doesn't matter — work however make
 - [x] `briefing/overview.md`
 
 ## Scoring
-- [x] `scoring/reference.json` — paper's reported numbers (12 methods, all budgets)
+- [x] `scoring/reference.json` — paper's reported numbers (Table 2 plus Appendix H)
 - [x] Workspace validated via `python validate.py`
-- [x] `scoring/scores.json` — reproduced numbers (all 12 methods present)
+- [x] `scoring/scores.json` — reproduced numbers (Table 2 plus Appendix H)
 - [x] `scoring/TARGETS.md` — primary, constraint, and ablation targets
 - [x] `scoring/CONSTRAINTS.md` — what a scientist must hold fixed
 - [x] `scoring/DIRECTION.md` — research direction scope for scientist
@@ -39,7 +39,7 @@ Check off items as you complete them. Order doesn't matter — work however make
 
 ## Results
 - [x] Core claim verified: FLUID beats RANDOM on all metrics (rank_distance, total_variation, saturation) across all 4 budgets (10, 50, 100, 500)
-- [x] 12 methods scored across 4 budgets = complete results matrix
+- [x] 12 Table 2 method-budget entries plus Appendix H full-accuracy comparison scored
 
 ## Milestones
 - [x] `method_runs` — FLUID algorithm executes end-to-end without errors

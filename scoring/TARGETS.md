@@ -21,3 +21,11 @@ FLUID's advantage should persist from very small to moderate item budgets. Effic
 by the item-budget sweep (`10`, `50`, `100`, and `500` items), not by a separate scalar metric.
 - **Metric**: all three metrics at budgets `10`, `50`, `100`, and `500`
 - **Evidence**: the directional advantage should remain visible as the item budget increases, with the largest gains at low budgets
+
+## Secondary: full_benchmark_accuracy
+FLUID should remain competitive with, and preferably outperform, evaluating the entire benchmark with
+standard accuracy aggregation.
+- **Metric**: `rank_distance`, `total_variation`, and `saturation`
+- **Experiment**: `appendix_h_full_accuracy_comparison`
+- **Evidence**: `fluid_500` should beat `full_accuracy`, showing that adaptive IRT scoring can improve
+  evaluation quality even when full-benchmark accuracy uses more items

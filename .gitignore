@@ -79,6 +79,7 @@ tmp_jax*/
 .pylib[0-9]*/
 .pylibs/
 .packages/
+.pkgs/
 .local_pkgs/
 rootfs*/
 *_rootfs/

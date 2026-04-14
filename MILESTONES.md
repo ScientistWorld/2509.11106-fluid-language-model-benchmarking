@@ -14,5 +14,10 @@
 - FLUID beat both baselines on rank distance, total variation, and saturation at every evaluated budget.
 - `scripts/evaluate.sh` wrote `scoring/scores.json`, and `validate.py --compare` passed.
 
+### [2026-04-14 02:45] - core_claim
+- Extended the local scoring target to include Appendix H's full-benchmark accuracy comparison.
+- Local evaluation shows `fluid_500` beating `full_accuracy` on rank distance, total variation, and saturation.
+- Submitting a CPU test job to verify the updated evaluator in the compute environment before raising the milestone.
+
 ## Stop Justification
-- Reached the minimum target milestone, `core_claim`, with a reusable method/evaluation environment and job-verified scores.
+- Current verified compute milestone is `core_claim`; Appendix H extension is pending compute-job verification.

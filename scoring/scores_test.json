@@ -1,0 +1,82 @@
+{
+  "experiments": {
+    "table2_ablation_comparison": {
+      "results": {
+        "random_10": {
+          "rank_distance": 29.74381188118812,
+          "total_variation": 33.256679345997505,
+          "saturation": 0.4480447780455951
+        },
+        "random_irt_10": {
+          "rank_distance": 17.21658415841584,
+          "total_variation": 38.72822569012608,
+          "saturation": 0.505213624775596
+        },
+        "fluid_10": {
+          "rank_distance": 9.448019801980198,
+          "total_variation": 13.590845138611876,
+          "saturation": 0.7029536782171244
+        },
+        "random_50": {
+          "rank_distance": 15.430693069306932,
+          "total_variation": 35.04615742750382,
+          "saturation": 0.5694558499322927
+        },
+        "random_irt_50": {
+          "rank_distance": 10.832920792079207,
+          "total_variation": 41.318366185899556,
+          "saturation": 0.60944148906155
+        },
+        "fluid_50": {
+          "rank_distance": 8.087871287128714,
+          "total_variation": 6.919152699510405,
+          "saturation": 0.848279727274327
+        },
+        "random_100": {
+          "rank_distance": 13.694306930693068,
+          "total_variation": 19.895790744530714,
+          "saturation": 0.6607617568961722
+        },
+        "random_irt_100": {
+          "rank_distance": 8.747524752475247,
+          "total_variation": 22.411066617124405,
+          "saturation": 0.7193232322772933
+        },
+        "fluid_100": {
+          "rank_distance": 8.091584158415841,
+          "total_variation": 6.2383643754249105,
+          "saturation": 0.8512105739422303
+        },
+        "random_500": {
+          "rank_distance": 12.774752475247524,
+          "total_variation": 12.595781199407945,
+          "saturation": 0.795638218996221
+        },
+        "random_irt_500": {
+          "rank_distance": 8.31559405940594,
+          "total_variation": 11.263366745899056,
+          "saturation": 0.8147116042756948
+        },
+        "fluid_500": {
+          "rank_distance": 7.61509900990099,
+          "total_variation": 4.866498090744147,
+          "saturation": 0.877672422675523
+        }
+      }
+    },
+    "appendix_h_full_accuracy_comparison": {
+      "results": {
+        "full_accuracy": {
+          "rank_distance": 8.475247524752476,
+          "total_variation": 17.13438775236447,
+          "saturation": 0.8421155649077497
+        },
+        "fluid_500": {
+          "rank_distance": 7.61509900990099,
+          "total_variation": 4.866498090744147,
+          "saturation": 0.877672422675523
+        }
+      }
+    }
+  }
+}

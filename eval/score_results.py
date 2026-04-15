@@ -15,7 +15,7 @@ TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
 BENCHMARKS = ["arc_challenge", "gsm8k", "hellaswag", "truthfulqa_mc2", "winogrande", "mmlu"]
 VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
-OLL_RESULTS_PATH = Path("/home/user/data/fluid-benchmarking/open_llm_leaderboard_results.json")
+OLL_RESULTS_PATH = Path("/home/user/data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json")
 
 
 def load_json(path: Path) -> dict:

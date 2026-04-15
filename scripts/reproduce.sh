@@ -23,7 +23,7 @@ echo "=== FLUID BENCHMARKING: Full Reproduction ==="
 echo ""
 
 # Verify data exists
-if [ ! -f "data/fluid-benchmarking/open_llm_leaderboard_results.json" ]; then
+if [ ! -f "data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json" ]; then
     echo "Data not found. Run scripts/download.sh first."
     exit 1
 fi

@@ -3,4 +3,4 @@
 # only after your turn ends. Sleeping blocks the entire pipeline.
 action: done
 milestone: core_claim
-notes: "Final verification passed: scoring, method-agnostic docs, import separation, and standalone evaluation are ready at core_claim."
+notes: "Packaged downloads for fresh clone: removed shared cache dependency and aligned data paths under data/downloads."

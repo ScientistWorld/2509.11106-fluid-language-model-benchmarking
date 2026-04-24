@@ -1,7 +1,7 @@
 # Robust CPU-only container for FLUID BENCHMARKING reproduction.
 #
-# Uses Ubuntu with Python and the small numerical stack installed via apt so
-# the scheduler does not need to run a separate setup phase.
+# OS-level packages live here. Python dependencies are installed in
+# environment/setup.sh via uv pip, per workspace protocol.
 
 Bootstrap: docker
 From: ubuntu:22.04
@@ -17,9 +17,6 @@ From: ubuntu:22.04
         python3 \
         python3-pip \
         python3-dev \
-        python3-numpy \
-        python3-pandas \
-        python3-scipy \
     && rm -rf /var/lib/apt/lists/*
 
 %environment

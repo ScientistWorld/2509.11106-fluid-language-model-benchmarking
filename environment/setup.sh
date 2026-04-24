@@ -1,6 +1,9 @@
 #!/bin/bash
-# Runtime dependencies are installed in environment/container.def via apt.
+# Install Python dependencies for FLUID BENCHMARKING.
 
 set -euo pipefail
 
-echo "No additional setup steps required."
+uv pip install --system \
+  numpy \
+  pandas \
+  scipy

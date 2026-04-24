@@ -7,7 +7,7 @@
 - Method implementation in `method/`: 2PL IRT (irt.py), adaptive Fisher-information item selection (fluid.py), metrics (metrics.py), and Table 2 experiment runner (experiment.py).
 - Evaluation code in `eval/` is independent of `method/`; `scripts/evaluate.sh` converts raw method outputs to `scoring/scores.json` and validates the score file.
 - Data are loaded from the released `allenai/fluid-benchmarking` artifacts under `data/`, including pre-fit 2PL IRT parameters and LM checkpoint item responses.
-- Container definition and setup are in place, with Python and the required numerical stack installed directly in `environment/container.def`.
+- Container definition and setup are in place, with OS-level packages in `environment/container.def` and the numerical Python stack installed from `environment/setup.sh`.
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete for the reproduced scope: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
@@ -66,7 +66,7 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 The final CPU packaging-validation job completed successfully with exit code 0 after the container simplification. This run is important because it exercised the committed deliverable path rather than a stale local environment:
 
-- Built and launched the Ubuntu-based container with Python plus `numpy`, `pandas`, and `scipy` installed from `environment/container.def`.
+- Built and launched the Ubuntu-based container, then installed `numpy`, `pandas`, and `scipy` through `environment/setup.sh`.
 - Ran `scripts/run.sh`, which called `scripts/reproduce.sh`, then re-generated `checkpoints/experiment_results.json` and `scoring/scores.json` from scratch inside the container.
 - Re-ran the full scoring/structure validation suite successfully, including import-separation checks, train/test scoring checks, and `shared/`-path checks.
 
@@ -88,11 +88,11 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 ## Issues Encountered
 
 - The previous successful job artifacts were generated before the latest packaging commit, so the algorithm audit and packaging audit briefly referred to different repository states. The resolved fix was a final cheap CPU validation run on the committed container.
-- The scheduler's generated setup-wrapper path was brittle, so the environment was simplified to install the numerical Python stack directly in `environment/container.def` and eliminate the separate `environment/setup.sh` phase.
+- The scheduler's generated setup-wrapper path was brittle in an earlier iteration. The final packaged environment follows repo protocol instead: OS-level packages stay in `environment/container.def`, and Python dependencies are installed from `environment/setup.sh`.
 
 ## Environment Details
 
-- Container: Ubuntu 22.04 base image with Python plus `numpy`, `scipy`, and `pandas` installed in `environment/container.def` via `apt`.
+- Container: Ubuntu 22.04 base image with OS-level packages in `environment/container.def`; `numpy`, `scipy`, and `pandas` are installed in `environment/setup.sh` via `uv pip install --system`.
 - Compute: CPU job, no GPU required for the Table 2 reproduction.
 
 ## Milestones Reached

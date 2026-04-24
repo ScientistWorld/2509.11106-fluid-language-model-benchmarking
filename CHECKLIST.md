@@ -31,8 +31,8 @@ Check off items as you complete them. Order doesn't matter — work however make
 - [x] `scripts/run.sh` — job script for compute submission
 
 ## Environment
-- [x] `environment/container.def` — Apptainer container definition (ubuntu:22.04 with Python/numpy/pandas/scipy installed via apt)
-- [x] `environment/setup.sh` — no-op shim; runtime Python dependencies are installed in `environment/container.def`
+- [x] `environment/container.def` — Apptainer container definition (ubuntu:22.04 with only OS-level packages)
+- [x] `environment/setup.sh` — installs Python runtime dependencies with `uv pip install --system`
 
 ## Data
 - [x] Dataset acquired (from HuggingFace allenai/fluid-benchmarking)

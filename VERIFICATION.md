@@ -8,12 +8,14 @@ The workspace started in a mostly usable `secondary_claims` state. The core FLUI
 - **Minor**: `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` described `appendix_f_table4_lm_breakdown_100`, but that experiment is not present in `scoring/scores.json`.
 - **Minor**: `PROGRESS.md`, `CHECKLIST.md`, and `MILESTONES.md` still implied the root-level setup shim was part of the final packaged layout.
 - **Minor**: The `saturation` metric descriptions in `scoring/reference.json` said Pearson correlation, while the scorer computes an absolute Spearman-style rank correlation.
+- **Minor**: The environment packaged Python dependencies through `apt` in `environment/container.def`, which conflicts with the repo rule that Python packages belong in `environment/setup.sh`.
 
 ## Fixes Applied
 - Removed the duplicate root-level `container.def` and `setup.sh` so the environment entrypoints live only in `environment/`.
 - Aligned `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` with the experiments actually present in `scoring/scores.json` (Table 2 and Appendix H).
 - Updated `PROGRESS.md`, `CHECKLIST.md`, and `MILESTONES.md` to reflect the cleaned packaging layout and to describe Appendix F as reference coverage rather than an active reproduced score target.
 - Corrected the `saturation` descriptions in `scoring/reference.json` to match the implemented absolute Spearman-style computation.
+- Moved `numpy`, `pandas`, and `scipy` installation out of `environment/container.def` and into `environment/setup.sh` via `uv pip install --system`.
 - Re-verified `scripts/download.sh` URLs; every committed fetch target resolves successfully (HTTP 200) from the login node.
 - Re-ran `python3 validate.py` and confirmed the structure/import checks still pass.
 

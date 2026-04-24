@@ -24,10 +24,14 @@
 
 ### [2026-04-24 06:55] - secondary_claims
 - Extended the scorer and reference tables to cover Appendix F / Table 4, the per-LM breakdown at 100 items, using the same saved FLUID/RANDOM/RANDOM_IRT curves rather than any surrogate artifact.
-- Added the missing `environment/setup.sh` no-op shim for the packaged environment.
+- Added `environment/setup.sh` so the packaged environment can install Python dependencies through `uv pip install --system`.
 - Kept the milestone at `secondary_claims` because the active reproduced score surface still consists of Table 2 plus Appendix H.
 
 ### [2026-04-24 06:58] - secondary_claims
 - Final verification removed duplicate root-level environment entrypoints so the workspace root only exposes the packaged `environment/` deliverables.
 - Aligned the human-readable scoring docs with the experiments actually present in `scoring/scores.json`.
 - Corrected the saturation metric descriptions in `scoring/reference.json` to match the implemented absolute Spearman-style computation.
+
+### [2026-04-24 07:05] - secondary_claims
+- Moved Python runtime dependencies out of `environment/container.def` and into `environment/setup.sh` to satisfy the workspace packaging protocol.
+- Kept the container definition focused on OS-level packages only, with a follow-up CPU test submission required to revalidate the rebuilt environment.

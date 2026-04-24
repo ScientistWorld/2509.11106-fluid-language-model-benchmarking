@@ -1,3 +1,4 @@
-action: done
-milestone: secondary_claims
-notes: "Split verified solid. No changes needed. Train=amber-7b/olmo1-7b/olmo2-7b, test=k2-65b/pythia-3b/pythia-7b. Scripts correct, no leakage, no paper-agreement metrics. Added DESIGN_NOTES.md."
+action: submit
+gpus: 0
+test: false
+notes: "Run scripts/evaluate_{train,test}.sh on checkpoints/experiment_results.json; populate complete scores_{train,test}.json with all three experiments and matching result keys."

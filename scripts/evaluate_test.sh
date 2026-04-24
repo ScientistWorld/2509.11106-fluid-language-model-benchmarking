@@ -19,4 +19,4 @@ if [ ! -f "$RESULTS_FILE" ]; then
     exit 1
 fi
 
-python3 -m eval.test.score_slice --results "$RESULTS_FILE" --output "$ROOT_DIR/scoring/scores_test.json"
+python3 "$ROOT_DIR/eval/test/score_slice.py" --results "$RESULTS_FILE" --output "$ROOT_DIR/scoring/scores_test.json"

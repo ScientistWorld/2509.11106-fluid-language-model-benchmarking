@@ -14,6 +14,13 @@
 
 ## Results
 
+### Audit Status (2026-04-24 03:30 UTC)
+
+- The method-fidelity audit passed for the core FLUID algorithm. `method/irt.py` implements 2PL MAP ability estimation and `method/fluid.py` implements adaptive item selection by maximizing Fisher information under the current ability estimate.
+- The evaluation-honesty audit also passed. `scripts/evaluate.sh` calls only `eval/`, and `scoring/scores.json` contains numerically plausible values relative to `scoring/reference.json`.
+- The main limitation is scope, not honesty: this workspace uses released fitted IRT parameters and released checkpoint response tables, rather than reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard data.
+- The remaining operational task is packaging validation. The last completed cluster job predates the current setup-based packaging commit, so one CPU smoke test is queued against the current committed environment.
+
 ### Job 7d2d5bf5-1b5
 
 The CPU reproduction job completed successfully with exit code 0. It ran `scripts/reproduce.sh`, which executed the independent FLUID implementation and then evaluated the resulting JSON through the method-independent evaluator. `validate.py --compare` passed, including the import-separation checks for `eval/` and `data/`.
@@ -60,6 +67,15 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 2. The reproduction uses the authors' released fitted 2PL item parameters. It implements MAP ability estimation and Fisher-information adaptive item selection, but it does not re-run the paper's hierarchical MCMC IRT fitting procedure from the raw Open LLM Leaderboard response matrix.
 3. The released data snapshot has minor differences from the paper's exact reporting snapshot, including baseline metric deviations and the number of available checkpoints for some models.
 4. The reproduction focuses on Table 2, the core ablation comparing RANDOM, RANDOM_IRT, and FLUID across budgets. Broader Table 1 comparisons against additional benchmark-selection methods remain future work.
+
+## What Remains
+
+- Validate the current committed packaging path once on cluster: `environment/setup.sh` should install the required Python dependencies and `scripts/run.sh` should complete by calling the canonical `scripts/reproduce.sh` workflow.
+- If that CPU job succeeds, the workspace is ready to close at `core_claim`. If it fails, fix the surfaced packaging/runtime issue and resubmit.
+
+## Issues Encountered
+
+- The previous successful job artifacts were generated before the latest packaging commit, so the algorithm audit and packaging audit briefly referred to different repository states. The fix is a single cheap CPU validation run, not a method rewrite.
 
 ## Environment Details
 

@@ -1,3 +1,3 @@
 action: done
 milestone: secondary_claims
-notes: "Final verification passed; workspace is ready for gym use at secondary_claims."
+notes: "Train/test split by LM: train=amber-7b/olmo1-7b/olmo2-7b, test=k2-65b/pythia-3b/pythia-7b. Both eval slices self-contained, methods enumerated from payload. Design-only iteration complete."

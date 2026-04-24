@@ -9,7 +9,7 @@ Check off items as you complete them. Order doesn't matter — work however make
 - [x] `briefing/overview.md`
 
 ## Scoring
-- [x] `scoring/reference.json` — paper's reported numbers (Table 2 plus Appendix H)
+- [x] `scoring/reference.json` — paper's reported numbers (Table 2, Appendix H, plus Appendix F reference coverage)
 - [x] Workspace validated via `python validate.py`
 - [x] `scoring/scores.json` — reproduced numbers (Table 2 plus Appendix H)
 - [x] `scoring/TARGETS.md` — primary, constraint, and ablation targets

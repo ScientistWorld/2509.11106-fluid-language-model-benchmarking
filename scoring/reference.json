@@ -7,7 +7,7 @@
       "metrics": {
         "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks. Measures cross-benchmark validity: good selection should produce scores that rank LM abilities consistently across related benchmarks."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves across checkpoints. Measures score stability: good selection should produce smooth, non-oscillating score progressions."},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Pearson correlation between checkpoint index and score rank. Measures learning curve shape: good selection should show monotonic improvement (high saturation) rather than flat or noisy curves."}
+        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Absolute Spearman rank correlation between checkpoint index and score level. Measures learning curve shape: good selection should show monotonic improvement rather than flat or noisy curves."}
       },
       "results": {
         "random_10":     {"type": "baseline", "rank_distance": 20.0, "total_variation": 29.0, "saturation": 0.47},
@@ -31,7 +31,7 @@
       "metrics": {
         "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks. Measures cross-benchmark validity."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves. Measures score stability."},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Pearson correlation of checkpoint index vs score rank. Measures learning curve shape."}
+        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Absolute Spearman rank correlation of checkpoint index vs score level. Measures learning curve shape."}
       },
       "results": {
         "full_accuracy": {"type": "baseline", "rank_distance": 9.1, "total_variation": 23.8, "saturation": 0.85},

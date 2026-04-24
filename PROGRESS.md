@@ -9,9 +9,9 @@
 - Data are loaded from the released `allenai/fluid-benchmarking` artifacts under `data/`, including pre-fit 2PL IRT parameters and LM checkpoint item responses.
 - Container definition and setup are in place, with Python and the required numerical stack installed directly in `environment/container.def`.
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
-- Scoring files are complete: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
+- Scoring files are complete for the reproduced scope: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
-- Added a scored Appendix F / Table 4 target for the per-LM breakdown at 100 items, derived from the same released checkpoint-response curves.
+- Added reference coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items, but that experiment is not yet counted as reproduced because it is not present in `scoring/scores.json`.
 
 ## Results
 
@@ -83,7 +83,7 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 
 - The packaged reproduction environment is complete for the released-artifact scope of this project.
 - Work left for a higher milestone would be broader method coverage, especially reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard responses and expanding toward the broader Table 1 comparisons.
-- The current turn adds Table 4 scoring support locally, but it still needs one more containerized CPU validation run before the per-LM experiment can be counted as reproduced.
+- The current packaged milestone remains `secondary_claims` through Table 2 plus Appendix H. Appendix F / Table 4 is documented in `reference.json` for future expansion, but it is not part of the active reproduced score surface yet.
 
 ## Issues Encountered
 
@@ -93,7 +93,6 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 ## Environment Details
 
 - Container: Ubuntu 22.04 base image with Python plus `numpy`, `scipy`, and `pandas` installed in `environment/container.def` via `apt`.
-- Root `setup.sh`: no-op shim because runtime Python dependencies are already present in the container image.
 - Compute: CPU job, no GPU required for the Table 2 reproduction.
 
 ## Milestones Reached

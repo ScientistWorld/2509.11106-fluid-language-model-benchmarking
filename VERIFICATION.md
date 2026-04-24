@@ -1,40 +1,26 @@
 # Verification Report
 
 ## Initial Assessment
-The workspace started at `core_claim` with a working implementation of the paper's benchmark
-scoring loop, saved raw experiment outputs, and reproduced Table 2-style scores. The claimed
-milestone is justified: the code implements the core runtime computation for the proposed
-benchmarking strategy, compares it against matched random-subset baselines, and the reproduced
-scores support the paper's main directional claim on validity, variance, and saturation.
+The workspace started in a mostly usable `secondary_claims` state. The core FLUID reproduction was intact, `validate.py` passed, the method/eval separation was clean, and the packaged environment had already been validated on-cluster. The main issues were gym-facing consistency problems: stale root-level environment duplicates, scoring docs that described an unreproduced Appendix F experiment as if it were active, and metric text in `reference.json` that did not match the implemented saturation computation.
 
 ## Issues Found
-- **Minor**: `briefing/problem.md` and `briefing/evaluation.md` still contained template guidance
-  text that was not useful to future scientist agents.
-- **Minor**: `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` named method result IDs in
-  method-agnostic prose. The JSON keys remain unchanged for scoring, but the explanatory docs
-  should describe candidate and baseline families rather than exposing method identifiers.
-- **Minor**: `briefing/evaluation.md` omitted the 500-item row for the standard random baseline
-  in the human-readable target table.
-- **Cosmetic**: An unused `tmp_apt/` scratch directory remained at the workspace root.
+- **Minor**: The workspace root still contained duplicate `container.def` and `setup.sh` files even though the packaged deliverables live under `environment/`.
+- **Minor**: `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` described `appendix_f_table4_lm_breakdown_100`, but that experiment is not present in `scoring/scores.json`.
+- **Minor**: `PROGRESS.md`, `CHECKLIST.md`, and `MILESTONES.md` still implied the root-level setup shim was part of the final packaged layout.
+- **Minor**: The `saturation` metric descriptions in `scoring/reference.json` said Pearson correlation, while the scorer computes an absolute Spearman-style rank correlation.
 
 ## Fixes Applied
-- Removed template guidance text from the method-agnostic briefing files.
-- Reworded `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` to describe the evaluation at the
-  strategy-family level while keeping the scoring JSON contract intact.
-- Added the missing 500-item standard random baseline row to `briefing/evaluation.md`.
-- Removed the unused `tmp_apt/` directory.
-- Re-ran `bash scripts/evaluate.sh /home/user/checkpoints/experiment_results.json`; it regenerated
-  `scoring/scores.json` and `validate.py --compare` passed. A direct AST check also found no
-  `method` imports in `eval/` or `data/`.
+- Removed the duplicate root-level `container.def` and `setup.sh` so the environment entrypoints live only in `environment/`.
+- Aligned `scoring/EXPERIMENTS.md` and `scoring/TARGETS.md` with the experiments actually present in `scoring/scores.json` (Table 2 and Appendix H).
+- Updated `PROGRESS.md`, `CHECKLIST.md`, and `MILESTONES.md` to reflect the cleaned packaging layout and to describe Appendix F as reference coverage rather than an active reproduced score target.
+- Corrected the `saturation` descriptions in `scoring/reference.json` to match the implemented absolute Spearman-style computation.
+- Re-verified `scripts/download.sh` URLs; every committed fetch target resolves successfully (HTTP 200) from the login node.
+- Re-ran `python3 validate.py` and confirmed the structure/import checks still pass.
 
 ## Final Judgment
-The workspace is ready to serve as a gym. Improve-mode agents can use the implementation, saved
-results, and method documentation directly. From-scratch-mode agents have method-agnostic problem,
-evaluation, experiment, target, constraint, and direction docs, plus an evaluator that does not
-import from `method/`.
+The workspace is ready to serve as a gym at the claimed `secondary_claims` milestone. Improve-mode agents have a working FLUID implementation, packaged environment, and reproduced Table 2 plus Appendix H score surface. From-scratch agents have method-agnostic problem and evaluation docs, reusable data access, and an evaluator that does not import from `method/`. The main remaining limitation is scope: Appendix F / Table 4 is included in `reference.json` for future extension, but it is not yet part of the active reproduced `scores.json` surface.
 
-- Milestone: core_claim
+- Milestone: secondary_claims
 - Ready for gym use: yes
 - Confidence: high
-- Key limitation: the reproduction uses the authors' released fitted 2PL item parameters and does
-  not re-run the paper's hierarchical MCMC fitting or reproduce every broader baseline family.
+- Key limitation: the reproduction still depends on the released fitted IRT artifacts and does not reproduce the paper's upstream hierarchical-MCMC fitting stage

@@ -30,11 +30,3 @@ entire benchmark with standard accuracy aggregation.
 - **Experiment**: `appendix_h_full_accuracy_comparison`
 - **Evidence**: the 500-item candidate row should beat the full-accuracy baseline, showing that a lower-budget strategy can
   improve evaluation quality even when full-benchmark accuracy uses more items
-
-## Secondary: per_lm_generalization
-The candidate strategy's advantage should persist across different LM families, not just in the
-global average.
-- **Metric**: `rank_distance`, `total_variation`, and `saturation`
-- **Experiment**: `appendix_f_table4_lm_breakdown_100`
-- **Evidence**: at the 100-item budget, the candidate rows should beat the matched random baselines
-  for most individual LMs, especially on total variation and saturation

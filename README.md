@@ -769,6 +769,34 @@ and all four item budgets.
 
 </details>
 
+### Iteration 4: gpt-5.4 (packager)
+- **Milestone**: `secondary_claims` | **Status**: done
+- **Working time**: 6m | **GPU**: 0.0h
+- **Jobs**: 6 total (3 completed, 2 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-04-24 03:13] - method_runs
+- Verified that the repository implements the paper's actual 2PL IRT ability estimation and Fisher-information adaptive item selection rather than a surrogate.
+- Confirmed the method runs end-to-end on the released benchmark artifacts and writes raw experiment outputs for all Table 2 budgets.
+
+### [2026-04-24 03:13] - core_claim
+- Re-ran the method-independent evaluator on `checkpoints/experiment_results.json` and regenerated `scoring/scores.json`.
+- Confirmed that FLUID beats both RANDOM and RANDOM_IRT on rank distance, total variation, and saturation at budgets 10, 50, 100, and 500, matching the paper's core Table 2 claim.
+
+### [2026-04-24 03:30] - core_claim
+- Audited the carried-over workspace and confirmed that `method/` implements the paper's adaptive FLUID stage directly: 2PL MAP ability estimation plus Fisher-information item selection.
+- Confirmed that `eval/` remains method-independent and that the stored scores are plausible relative to the paper's Table 2 and Appendix H references.
+- Noted the main remaining limitation honestly: the workspace reuses released fitted IRT parameters and released item-response artifacts rather than reproducing the MCMC IRT-fitting stage, so the current closure target remains `core_claim` on released artifacts rather than a fuller milestone.
+
+### [2026-04-24 03:40] - secondary_claims
+- Validated the packaged environment on the cluster with job `aae11f56-4ef`, which rebuilt the container, ran `scripts/run.sh`, and completed `scripts/reproduce.sh` end-to-end with exit code 0.
+- Confirmed the packaged run reproduces the full Table 2 FLUID-vs-RANDOM/RANDOM_IRT comparison and rewrites `scoring/scores.json` from fresh method outputs inside the container.
+- Confirmed the packaged run also reproduces the Appendix H `full_accuracy` vs `fluid_500` comparison, so the workspace now supports both the core claim and one secondary claim on the released artifacts.
+
+</details>
+
 
 ---
 

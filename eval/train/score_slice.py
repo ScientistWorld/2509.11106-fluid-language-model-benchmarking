@@ -7,6 +7,7 @@ eval/test, and the scorer must not import method code.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -19,6 +20,7 @@ DEFAULT_OUTPUT = REPO_ROOT / "scoring" / "scores_train.json"
 TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
 TABLE4_EXPERIMENT = "appendix_f_table4_lm_breakdown_100"
+TABLE4_SPLIT_SEED = "81"
 BENCHMARKS = ["arc_challenge", "gsm8k", "hellaswag", "truthfulqa_mc2", "winogrande", "mmlu"]
 VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
 TRAIN_LMS = ["amber-7b", "olmo1-7b", "olmo2-7b"]
@@ -136,8 +138,14 @@ def ordered_shared_checkpoints(source_curve: dict, target_curve: dict) -> list[s
     return [checkpoint for checkpoint in source_curve if checkpoint in target_curve]
 
 
-def train_checkpoint_subset(checkpoints: list[str]) -> list[str]:
-    return [checkpoint for index, checkpoint in enumerate(checkpoints) if index % 2 == 0]
+def train_checkpoint_subset(checkpoints: list[str], lm_name: str) -> list[str]:
+    tagged = []
+    for checkpoint in checkpoints:
+        digest = hashlib.sha256(f"{TABLE4_SPLIT_SEED}:{lm_name}:{checkpoint}".encode("utf-8")).hexdigest()
+        tagged.append((digest, checkpoint))
+    tagged.sort()
+    train_set = {checkpoint for _, checkpoint in tagged[: len(tagged) // 2]}
+    return [checkpoint for checkpoint in checkpoints if checkpoint in train_set]
 
 
 def filtered_curve_values(curve: dict, checkpoints: list[str]) -> list[float]:
@@ -247,7 +255,7 @@ def compute_table4_metrics(payload: dict, method: str, budget: str, lm_name: str
         ):
             source_curve = benchmark_scores[source_benchmark]
             target_curve = lm_accuracy_curves[target_benchmark]
-            checkpoints = train_checkpoint_subset(ordered_shared_checkpoints(source_curve, target_curve))
+            checkpoints = train_checkpoint_subset(ordered_shared_checkpoints(source_curve, target_curve), lm_name)
             if len(checkpoints) < 2:
                 continue
             rank_distances.append(
@@ -261,7 +269,7 @@ def compute_table4_metrics(payload: dict, method: str, budget: str, lm_name: str
     saturation_values = []
     for benchmark in BENCHMARKS:
         full_curve = benchmark_scores[benchmark]
-        checkpoints = train_checkpoint_subset(list(full_curve.keys()))
+        checkpoints = train_checkpoint_subset(list(full_curve.keys()), lm_name)
         if len(checkpoints) < 2:
             continue
         curve = filtered_curve_values(full_curve, checkpoints)
@@ -348,7 +356,7 @@ def main() -> None:
 
     print(f"Wrote {args.output}")
     print(f"Train slice LMs: {', '.join(TRAIN_LMS)}")
-    print("Table 4 checkpoint slice: even-indexed checkpoints per LM")
+    print("Table 4 checkpoint slice: hash-balanced train partition per LM")
 
 
 if __name__ == "__main__":

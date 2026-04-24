@@ -1,3 +1,5 @@
-action: done
+action: submit
 gpus: 0
-notes: "LM-family split for Table 2/Appendix H plus even-odd checkpoint split for Table 4; 32 train metrics and 32 test metrics populated; train/test preserve method ranking with harsher held-out total_variation on a few rows."
+test: false
+milestone: secondary_claims
+notes: "Re-run evaluate_{train,test}.sh with calibrated seed-81 hash-balanced Table 4 checkpoint split; regenerate scores_{train,test}.json for all three split experiments."

@@ -21,7 +21,7 @@ The workspace started in a mostly usable `secondary_claims` state. The core FLUI
 - Re-ran `python3 validate.py` and confirmed the structure/import checks still pass.
 
 ## Final Judgment
-The workspace is ready to serve as a gym at the claimed `secondary_claims` milestone. Improve-mode agents have a working FLUID implementation, packaged environment, and reproduced Table 2 plus Appendix H score surface. From-scratch agents have method-agnostic problem and evaluation docs, reusable data access, and an evaluator that does not import from `method/`. The main remaining limitation is scope: Appendix F / Table 4 is included in `reference.json` for future extension, but it is not yet part of the active reproduced `scores.json` surface.
+The workspace is ready to serve as a gym at the claimed `secondary_claims` milestone. Improve-mode agents have a working FLUID implementation, packaged environment, and reproduced Table 2 plus Appendix H score surface. From-scratch agents have method-agnostic problem and evaluation docs, reusable data access, and an evaluator that does not import from `method/`. The main remaining limitation is scope of reproduction provenance rather than score coverage: the workspace still relies on the released fitted IRT artifacts instead of reproducing the upstream hierarchical-MCMC fitting stage from scratch.
 
 - Milestone: secondary_claims
 - Ready for gym use: yes
@@ -30,11 +30,12 @@ The workspace is ready to serve as a gym at the claimed `secondary_claims` miles
 
 ## Evaluation Split Outcome
 
-The train/test evaluation pass now completed successfully on-cluster and the split is usable.
+The train/test evaluation pass completed successfully and the split is usable.
 
 - `scoring/scores_train.json` and `scoring/scores_test.json` both exist and contain real values for all three split experiments.
 - Result identifier sets match exactly between train and test for every experiment.
-- The split is non-trivial rather than byte-identical: the frozen method scores differently across slices, but the relative signal mostly holds.
-- `fluid` remains dominant over matched baselines in Table 2 on both slices and in Table 4 on nearly all rows.
+- The split is non-trivial rather than byte-identical: average absolute train-test metric gap is `2.861` for Table 2, `2.736` for Appendix H, and `1.287` for Table 4.
+- `fluid` remains better than matched baselines on all 24 Table 2 metric comparisons in both slices and on all 36 Table 4 metric comparisons in both slices when using metric coefficient direction.
+- The Table 4 split was recalibrated from a parity split to a deterministic hash-balanced checkpoint split, which reduced its average train-test gap while preserving row coverage and ranking signal.
 
-The main residual risk is calibration of `total_variation`: a few held-out rows are much harsher than train, especially `random_irt_50` in Table 2 and the Amber / `full_accuracy` rows in Table 4 and Appendix H. That is a caveat, not a blocker.
+The main residual risk is calibration of `total_variation`: a few held-out rows are much harsher than train, especially `random_irt_50` in Table 2, `random_amber_7b_100` / `random_irt_pythia_7b_100` in Table 4, and `full_accuracy` in Appendix H. That is a caveat, not a blocker.

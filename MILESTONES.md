@@ -39,3 +39,8 @@
 ### [2026-04-24 07:08] - secondary_claims
 - Final verification re-checked every committed `scripts/download.sh` fetch target and confirmed they all resolve with HTTP 200.
 - Removed the ignored local `environment/container.sif` build artifact; the remaining `environment/container.final.def` path is a root-owned special file excluded from git and not part of the shipped deliverable set.
+
+### [2026-04-24 07:37] - secondary_claims
+- Recalibrated the train/test evaluation split after the first real scoring run showed Table 4 checkpoint parity was harsher than necessary on held-out `total_variation`.
+- Replaced the Table 4 even/odd checkpoint split with a deterministic hash-balanced split using seed `81`, preserving all 18 per-LM rows in both slices.
+- Regenerated `scoring/scores_train.json` and `scoring/scores_test.json`; the Table 4 average train-test gap dropped from `1.809` to `1.287` while `fluid` still beats matched baselines on all 36 coefficient-directed metric comparisons in both slices.

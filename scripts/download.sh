@@ -15,14 +15,24 @@
 # These artifacts are specific to this paper and are fetched into the
 # workspace so a fresh clone can reproduce the results.
 
-set -e
+set -euo pipefail
 
 cd /home/user
 
-# Download directory
 DATA_DIR="/home/user/data/downloads/fluid-benchmarking"
-mkdir -p "$DATA_DIR/irt_models" "$DATA_DIR/lm_eval_results" "/home/user/data/downloads/hf_cache"
-export HF_HOME="/home/user/data/downloads/hf_cache"
+DATASET_BASE_URL="https://huggingface.co/datasets/allenai/fluid-benchmarking/resolve/main/data"
+
+download_file() {
+    local destination="$1"
+    local url="$2"
+    local tmp_file
+
+    tmp_file="$(mktemp "${destination}.tmp.XXXXXX")"
+    curl --fail --location --silent --show-error --retry 3 --output "$tmp_file" "$url"
+    mv "$tmp_file" "$destination"
+}
+
+mkdir -p "$DATA_DIR/irt_models" "$DATA_DIR/lm_eval_results"
 
 echo "=== Downloading FLUID BENCHMARKING data ==="
 echo "Estimated total: ~70 MB"
@@ -31,9 +41,7 @@ echo "Estimated total: ~70 MB"
 OLL_FILE="$DATA_DIR/open_llm_leaderboard_results.json"
 if [ ! -f "$OLL_FILE" ]; then
     echo "Downloading open_llm_leaderboard_results.json..."
-    curl -L -o "$OLL_FILE" \
-        "https://huggingface.co/datasets/allenai/fluid-benchmarking/resolve/main/data/open_llm_leaderboard_results.json" \
-        2>&1 | tail -3
+    download_file "$OLL_FILE" "$DATASET_BASE_URL/open_llm_leaderboard_results.json"
     echo "  Saved to $OLL_FILE"
 else
     echo "  OLL results already exist, skipping"
@@ -45,9 +53,7 @@ for bm in arc_challenge gsm8k hellaswag truthfulqa_mc2 winogrande mmlu; do
     CSV_FILE="$IRT_DIR/${bm}.csv"
     if [ ! -f "$CSV_FILE" ]; then
         echo "Downloading irt_models/${bm}.csv..."
-        curl -L -o "$CSV_FILE" \
-            "https://huggingface.co/datasets/allenai/fluid-benchmarking/resolve/main/data/irt_models/${bm}.csv" \
-            2>&1 | tail -3
+        download_file "$CSV_FILE" "$DATASET_BASE_URL/irt_models/${bm}.csv"
     else
         echo "  ${bm}.csv already exists, skipping"
     fi
@@ -59,9 +65,7 @@ for lm in amber-7b k2-65b olmo1-7b olmo2-7b pythia-3b pythia-7b; do
     CSV_FILE="$LM_DIR/${lm}.csv"
     if [ ! -f "$CSV_FILE" ]; then
         echo "Downloading lm_eval_results/${lm}.csv..."
-        curl -L -o "$CSV_FILE" \
-            "https://huggingface.co/datasets/allenai/fluid-benchmarking/resolve/main/data/lm_eval_results/${lm}.csv" \
-            2>&1 | tail -3
+        download_file "$CSV_FILE" "$DATASET_BASE_URL/lm_eval_results/${lm}.csv"
     else
         echo "  ${lm}.csv already exists, skipping"
     fi
@@ -71,9 +75,7 @@ done
 MAP_FILE="$DATA_DIR/id_to_item_map.json"
 if [ ! -f "$MAP_FILE" ]; then
     echo "Downloading id_to_item_map.json..."
-    curl -L -o "$MAP_FILE" \
-        "https://huggingface.co/datasets/allenai/fluid-benchmarking/resolve/main/data/id_to_item_map.json" \
-        2>&1 | tail -3
+    download_file "$MAP_FILE" "$DATASET_BASE_URL/id_to_item_map.json"
 else
     echo "  id_to_item_map.json already exists, skipping"
 fi

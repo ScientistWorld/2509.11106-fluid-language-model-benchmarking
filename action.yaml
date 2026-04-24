@@ -3,4 +3,4 @@
 # only after your turn ends. Sleeping blocks the entire pipeline.
 action: done
 milestone: secondary_claims
-notes: "Job aae11f56-4ef completed successfully. The packaged container rebuilt cleanly, scripts/run.sh executed scripts/reproduce.sh end-to-end, scores.json was regenerated inside the container, and the full validation suite passed. Closing at secondary_claims: core Table 2 claim plus the Appendix H full-accuracy comparison are reproduced on the released artifacts."
+notes: "Audited fresh-clone packaging: validated all public FLUID benchmark download URLs, removed the contradictory data/downloads gitignore exception, and made scripts/download.sh fail fast with real idempotent fetch commands."

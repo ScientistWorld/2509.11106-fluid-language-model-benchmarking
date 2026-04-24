@@ -1,7 +1,7 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
 test: false
-notes: "Run evaluate_{train,test}.sh against checkpoints/experiment_results.json and populate scoring/scores_{train,test}.json."
+notes: "LM split (train: amber-7b/olmo1-7b/olmo2-7b; test: k2-65b/pythia-3b/pythia-7b); 42 train metrics, 42 test metrics; fluid beats random on validity across all budgets in both slices with non-identical train/test scores; caveat: Appendix H train rank_distance slightly favors full_accuracy over fluid_500 while fluid_500 wins variance and saturation."

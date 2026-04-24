@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: true
 milestone: core_claim
-notes: "Re-run packaging validation for commit 0597b54. The latest successful packaging job, 02c18600-8f7 on 2026-04-24, returned code 0 but exercised the older split-evaluation scripts/run.sh with /home/user/.pkgs on PYTHONPATH. Current setup.sh/environment/setup.sh now install numpy/pandas/scipy and current scripts/run.sh calls scripts/reproduce.sh, so one fresh CPU packaging job is still needed before marking done."
+notes: "Resubmit CPU packaging validation after clearing stale pre-0597b54 setup logs and re-touching setup.sh/environment/setup.sh. Current environment files install numpy/pandas/scipy via uv and current scripts/run.sh calls scripts/reproduce.sh; the previous scheduler hint referenced the obsolete /home/user/.pkgs no-op path."

@@ -1,9 +1,7 @@
 #!/bin/bash
-# Install Python dependencies for FLUID BENCHMARKING.
+# No extra Python packages are required for the evaluation-only submit in this
+# iteration. The train/test scorers run on the standard library alone.
 
 set -euo pipefail
 
-uv pip install --system \
-  numpy \
-  pandas \
-  scipy
+echo "No additional Python packages required."

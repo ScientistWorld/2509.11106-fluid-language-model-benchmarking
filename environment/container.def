@@ -1,7 +1,7 @@
-# Robust CPU-only container for FLUID BENCHMARKING reproduction.
+# Robust CPU-only container for FLUID BENCHMARKING evaluation.
 #
-# OS-level packages live here. Python dependencies are installed in
-# environment/setup.sh via uv pip, per workspace protocol.
+# OS-level packages live here. The current evaluation submit does not need any
+# additional Python packages beyond the standard library.
 
 Bootstrap: docker
 From: ubuntu:22.04

@@ -5,23 +5,23 @@
       "weight": 0.8,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.8},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0}
+        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks. Measures cross-benchmark validity: good selection should produce scores that rank LM abilities consistently across related benchmarks."},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves across checkpoints. Measures score stability: good selection should produce smooth, non-oscillating score progressions."},
+        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Pearson correlation between checkpoint index and score rank. Measures learning curve shape: good selection should show monotonic improvement (high saturation) rather than flat or noisy curves."}
       },
       "results": {
-        "random_10":     {"type": "baseline", "rank_distance": 20.0, "total_variation": 29.0, "saturation": 0.47},
-        "random_50":     {"type": "baseline", "rank_distance": 15.2, "total_variation": 19.1, "saturation": 0.62},
-        "random_100":    {"type": "baseline", "rank_distance": 16.9, "total_variation": 19.8, "saturation": 0.64},
-        "random_500":    {"type": "baseline", "rank_distance": 9.1,  "total_variation": 10.2, "saturation": 0.79},
-        "random_irt_10": {"type": "baseline", "rank_distance": 14.1, "total_variation": 18.2, "saturation": 0.48},
-        "random_irt_50": {"type": "baseline", "rank_distance": 11.1, "total_variation": 15.7, "saturation": 0.69},
-        "random_irt_100":{"type": "baseline", "rank_distance": 10.6, "total_variation": 17.8, "saturation": 0.71},
-        "random_irt_500":{"type": "baseline", "rank_distance": 8.4,  "total_variation": 10.9, "saturation": 0.85},
-        "fluid_10":      {"type": "proposed",  "rank_distance": 10.1, "total_variation": 10.7, "saturation": 0.76},
-        "fluid_50":      {"type": "proposed",  "rank_distance": 8.8,  "total_variation": 6.5,  "saturation": 0.86},
-        "fluid_100":     {"type": "proposed",  "rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85},
-        "fluid_500":     {"type": "proposed",  "rank_distance": 8.3,  "total_variation": 4.9,  "saturation": 0.88}
+        "random_10":     {"rank_distance": 20.0, "total_variation": 29.0, "saturation": 0.47},
+        "random_50":     {"rank_distance": 15.2, "total_variation": 19.1, "saturation": 0.62},
+        "random_100":    {"rank_distance": 16.9, "total_variation": 19.8, "saturation": 0.64},
+        "random_500":    {"rank_distance": 9.1,  "total_variation": 10.2, "saturation": 0.79},
+        "random_irt_10": {"rank_distance": 14.1, "total_variation": 18.2, "saturation": 0.48},
+        "random_irt_50": {"rank_distance": 11.1, "total_variation": 15.7, "saturation": 0.69},
+        "random_irt_100":{"rank_distance": 10.6, "total_variation": 17.8, "saturation": 0.71},
+        "random_irt_500":{"rank_distance": 8.4,  "total_variation": 10.9, "saturation": 0.85},
+        "fluid_10":      {"rank_distance": 10.1, "total_variation": 10.7, "saturation": 0.76},
+        "fluid_50":      {"rank_distance": 8.8,  "total_variation": 6.5,  "saturation": 0.86},
+        "fluid_100":     {"rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85},
+        "fluid_500":     {"rank_distance": 8.3,  "total_variation": 4.9,  "saturation": 0.88}
       }
     },
     "appendix_h_full_accuracy_comparison": {
@@ -29,13 +29,13 @@
       "weight": 0.2,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.8},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0}
+        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks. Measures cross-benchmark validity."},
+        "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves. Measures score stability."},
+        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Pearson correlation of checkpoint index vs score rank. Measures learning curve shape."}
       },
       "results": {
-        "full_accuracy": {"type": "baseline", "rank_distance": 9.1, "total_variation": 23.8, "saturation": 0.85},
-        "fluid_500": {"type": "proposed", "rank_distance": 8.3, "total_variation": 4.9, "saturation": 0.88}
+        "full_accuracy": {"rank_distance": 9.1, "total_variation": 23.8, "saturation": 0.85},
+        "fluid_500": {"rank_distance": 8.3, "total_variation": 4.9, "saturation": 0.88}
       }
     }
   }

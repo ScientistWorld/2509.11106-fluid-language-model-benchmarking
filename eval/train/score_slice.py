@@ -127,9 +127,8 @@ def compute_validity(
             (benchmark_a, benchmark_b),
             (benchmark_b, benchmark_a),
         ):
-            source_key = "accuracy" if method == "random" else "ability"
             source_reference = np.array(
-                list(oll_results[source_benchmark][source_key].values()),
+                list(oll_results[source_benchmark]["accuracy"].values()),
                 dtype=float,
             )
             target_reference = np.array(

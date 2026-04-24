@@ -44,3 +44,8 @@
 - Recalibrated the train/test evaluation split after the first real scoring run showed Table 4 checkpoint parity was harsher than necessary on held-out `total_variation`.
 - Replaced the Table 4 even/odd checkpoint split with a deterministic hash-balanced split using seed `81`, preserving all 18 per-LM rows in both slices.
 - Regenerated `scoring/scores_train.json` and `scoring/scores_test.json`; the Table 4 average train-test gap dropped from `1.809` to `1.287` while `fluid` still beats matched baselines on all 36 coefficient-directed metric comparisons in both slices.
+
+### [2026-04-24 14:13] - secondary_claims
+- Job `47b8d925-2ed` completed with exit code 0.
+- Confirmed train/test score coverage: 12/12/18 rows across three experiments in both slices.
+- Signal verified: Table 2 (24/24 train, 24/24 test), Table 4 (36/36 train, 36/36 test) fluid beats baselines.

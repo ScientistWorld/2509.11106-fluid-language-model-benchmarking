@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: true
 milestone: core_claim
-notes: "Resubmit CPU packaging validation after fixing environment/.setup_wrapper.sh to source setup.sh relative to its own directory instead of a missing /scratch/gpfs/... path. Current setup.sh/environment/setup.sh install numpy/pandas/scipy via uv and scripts/run.sh calls scripts/reproduce.sh."
+notes: "Retry CPU packaging validation after removing the stale tracked environment/.setup_wrapper.sh and moving Python deps fully into environment/container.def via apt. setup.sh is now a no-op shim; this submission should rebuild the container and run scripts/reproduce.sh through scripts/run.sh."

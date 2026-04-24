@@ -7,7 +7,7 @@
 - Method implementation in `method/`: 2PL IRT (irt.py), adaptive Fisher-information item selection (fluid.py), metrics (metrics.py), and Table 2 experiment runner (experiment.py).
 - Evaluation code in `eval/` is independent of `method/`; `scripts/evaluate.sh` converts raw method outputs to `scoring/scores.json` and validates the score file.
 - Data are loaded from the released `allenai/fluid-benchmarking` artifacts under `data/`, including pre-fit 2PL IRT parameters and LM checkpoint item responses.
-- Container definition and setup are in place, with Python packages installed via `environment/setup.sh` rather than `container.def`.
+- Container definition and setup are in place, with Python and the required numerical stack installed directly in `environment/container.def`.
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
@@ -19,7 +19,7 @@
 - The method-fidelity audit passed for the core FLUID algorithm. `method/irt.py` implements 2PL MAP ability estimation and `method/fluid.py` implements adaptive item selection by maximizing Fisher information under the current ability estimate.
 - The evaluation-honesty audit also passed. `scripts/evaluate.sh` calls only `eval/`, and `scoring/scores.json` contains numerically plausible values relative to `scoring/reference.json`.
 - The main limitation is scope, not honesty: this workspace uses released fitted IRT parameters and released checkpoint response tables, rather than reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard data.
-- The remaining operational task is packaging validation. The last completed cluster job predates the current setup-based packaging commit, so one CPU smoke test is queued against the current committed environment.
+- The remaining operational task is packaging validation. The last completed cluster job predates the current container-only packaging commit, so one CPU smoke test is queued against the current committed environment.
 
 ### Job 7d2d5bf5-1b5
 
@@ -70,7 +70,7 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 ## What Remains
 
-- Validate the current committed packaging path once on cluster: `environment/setup.sh` should install the required Python dependencies and `scripts/run.sh` should complete by calling the canonical `scripts/reproduce.sh` workflow.
+- Validate the current committed packaging path once on cluster: `environment/container.def` should provide Python plus `numpy`/`pandas`/`scipy`, and `scripts/run.sh` should complete by calling the canonical `scripts/reproduce.sh` workflow.
 - If that CPU job succeeds, the workspace is ready to close at `core_claim`. If it fails, fix the surfaced packaging/runtime issue and resubmit.
 
 ## Issues Encountered
@@ -79,8 +79,8 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 ## Environment Details
 
-- Container: Python slim base image with OS-level dependencies only in `environment/container.def`.
-- Python dependencies: numpy, scipy, and pandas installed through `environment/setup.sh` using `uv pip install --system`.
+- Container: Ubuntu 22.04 base image with Python plus `numpy`, `scipy`, and `pandas` installed in `environment/container.def` via `apt`.
+- Root `setup.sh`: no-op shim because runtime Python dependencies are already present in the container image.
 - Compute: CPU job, no GPU required for the Table 2 reproduction.
 
 ## Milestones Reached

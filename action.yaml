@@ -1,6 +1,7 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
+action: submit
 gpus: 0
-notes: "Held-out LM-family split: train=Amber+OLMo, test=K2+Pythia; 42 metric values per slice; fluid_500 train/test gap is small (RD -1.19, TV +0.07, saturation +0.002)."
+test: false
+notes: "Run evaluate_{train,test}.sh against checkpoints/experiment_results.json and populate scoring/scores_{train,test}.json."

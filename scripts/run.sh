@@ -6,9 +6,10 @@
 
 set -euo pipefail
 
-cd /home/user
-export PYTHONPATH="/home/user"
-export TMPDIR="${TMPDIR:-/home/user/tmp}"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+export PYTHONPATH="$ROOT_DIR"
+export TMPDIR="${TMPDIR:-$ROOT_DIR/tmp}"
 export PYTHONDONTWRITEBYTECODE=1
 mkdir -p "$TMPDIR"
 
@@ -22,7 +23,7 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
-scores_path = Path("/home/user/scoring/scores.json")
+scores_path = Path.cwd() / "scoring" / "scores.json"
 scores = json.loads(scores_path.read_text())
 print("\n=== scores.json ===")
 print(json.dumps(scores, indent=2))

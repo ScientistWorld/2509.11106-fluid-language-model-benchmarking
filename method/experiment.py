@@ -34,7 +34,7 @@ from method.metrics import compute_saturation, compute_variance
 
 METHODS = ["random", "random_irt", "fluid"]
 DEFAULT_BUDGETS = [10, 50, 100, 500]
-OUTPUT_PATH = Path("/home/user/checkpoints/experiment_results.json")
+OUTPUT_PATH = Path(__file__).resolve().parents[1] / "checkpoints" / "experiment_results.json"
 
 
 def rank_against_reference(score: float, reference_scores: np.ndarray) -> int:

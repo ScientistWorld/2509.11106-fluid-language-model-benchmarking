@@ -17,9 +17,10 @@
 
 set -euo pipefail
 
-cd /home/user
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
 
-DATA_DIR="/home/user/data/downloads/fluid-benchmarking"
+DATA_DIR="$ROOT_DIR/data/downloads/fluid-benchmarking"
 DATASET_BASE_URL="https://huggingface.co/datasets/allenai/fluid-benchmarking/resolve/main/data"
 
 download_file() {

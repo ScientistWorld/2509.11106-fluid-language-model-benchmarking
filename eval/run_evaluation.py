@@ -18,9 +18,11 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import spearmanr
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
 # Budget sizes
 BUDGETS = [10, 50, 100, 500]
-UPSTREAM_PATH = Path("/home/user/tmp_fluid_upstream/results/experiments.jsonl")
+UPSTREAM_PATH = REPO_ROOT / "tmp_fluid_upstream" / "results" / "experiments.jsonl"
 
 # Validity pairs: cross-benchmark prediction task
 VALIDITY_PAIRS = [
@@ -176,8 +178,8 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=Path("/home/user/checkpoints/evaluation_results.json"))
-    parser.add_argument("--scores-output", type=Path, default=Path("/home/user/scoring/scores.json"))
+    parser.add_argument("--output", type=Path, default=REPO_ROOT / "checkpoints" / "evaluation_results.json")
+    parser.add_argument("--scores-output", type=Path, default=REPO_ROOT / "scoring" / "scores.json")
     args = parser.parse_args()
 
     print("Step 1: Loading HuggingFace upstream data...")

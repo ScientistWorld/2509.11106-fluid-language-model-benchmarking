@@ -13,10 +13,10 @@ from pathlib import Path
 
 import numpy as np
 
-
-REFERENCE_PATH = Path("/home/user/scoring/reference.json")
-DEFAULT_RESULTS = Path("/home/user/checkpoints/experiment_results.json")
-DEFAULT_OUTPUT = Path("/home/user/scoring/scores_test.json")
+REPO_ROOT = Path(__file__).resolve().parents[2]
+REFERENCE_PATH = REPO_ROOT / "scoring" / "reference.json"
+DEFAULT_RESULTS = REPO_ROOT / "checkpoints" / "experiment_results.json"
+DEFAULT_OUTPUT = REPO_ROOT / "scoring" / "scores_test.json"
 
 TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"

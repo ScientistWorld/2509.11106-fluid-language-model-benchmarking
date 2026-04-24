@@ -8,6 +8,9 @@ import json
 import numpy as np
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SCORES_PATH = REPO_ROOT / 'scoring' / 'scores.json'
+
 
 def score_and_save(scores_dict, output_path=None):
     """
@@ -15,10 +18,10 @@ def score_and_save(scores_dict, output_path=None):
 
     Args:
         scores_dict: dict with structure {experiment: {method: {metric: value}}}
-        output_path: path to save scores.json (default: /home/user/scoring/scores.json)
+        output_path: path to save scores.json (default: scoring/scores.json under repo root)
     """
     if output_path is None:
-        output_path = Path('/home/user/scoring/scores.json')
+        output_path = DEFAULT_SCORES_PATH
     else:
         output_path = Path(output_path)
 
@@ -34,7 +37,7 @@ def score_and_save(scores_dict, output_path=None):
 def load_scores(path=None):
     """Load scores from JSON file."""
     if path is None:
-        path = Path('/home/user/scoring/scores.json')
+        path = DEFAULT_SCORES_PATH
     else:
         path = Path(path)
 

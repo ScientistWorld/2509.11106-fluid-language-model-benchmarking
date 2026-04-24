@@ -10,12 +10,15 @@ from pathlib import Path
 import numpy as np
 
 
-REFERENCE_PATH = Path("/home/user/scoring/reference.json")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+REFERENCE_PATH = REPO_ROOT / "scoring" / "reference.json"
+DEFAULT_RESULTS_PATH = REPO_ROOT / "checkpoints" / "experiment_results.json"
+DEFAULT_OUTPUT_PATH = REPO_ROOT / "scoring" / "scores.json"
 TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
 BENCHMARKS = ["arc_challenge", "gsm8k", "hellaswag", "truthfulqa_mc2", "winogrande", "mmlu"]
 VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
-OLL_RESULTS_PATH = Path("/home/user/data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json")
+OLL_RESULTS_PATH = REPO_ROOT / "data" / "downloads" / "fluid-benchmarking" / "open_llm_leaderboard_results.json"
 
 
 def load_json(path: Path) -> dict:
@@ -177,7 +180,7 @@ def main() -> None:
     parser.add_argument(
         "--results",
         type=Path,
-        default=Path("/home/user/checkpoints/experiment_results.json"),
+        default=DEFAULT_RESULTS_PATH,
     )
     parser.add_argument(
         "--reference",
@@ -187,7 +190,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("/home/user/scoring/scores.json"),
+        default=DEFAULT_OUTPUT_PATH,
     )
     args = parser.parse_args()
 

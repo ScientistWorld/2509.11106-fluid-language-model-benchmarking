@@ -6,16 +6,17 @@
 
 set -euo pipefail
 
-cd /home/user
-export PYTHONPATH="/home/user"
-export TMPDIR="${TMPDIR:-/home/user/tmp}"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+export PYTHONPATH="$ROOT_DIR"
+export TMPDIR="${TMPDIR:-$ROOT_DIR/tmp}"
 mkdir -p "$TMPDIR"
 
-RESULTS_FILE="${1:-/home/user/checkpoints/experiment_results.json}"
+RESULTS_FILE="${1:-$ROOT_DIR/checkpoints/experiment_results.json}"
 
 if [ ! -f "$RESULTS_FILE" ]; then
     echo "Error: results file not found: $RESULTS_FILE"
     exit 1
 fi
 
-python3 /home/user/eval/test/score_slice.py --results "$RESULTS_FILE" --output /home/user/scoring/scores_test.json
+python3 -m eval.test.score_slice --results "$RESULTS_FILE" --output "$ROOT_DIR/scoring/scores_test.json"

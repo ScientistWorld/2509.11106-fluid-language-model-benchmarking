@@ -14,7 +14,7 @@ import pandas as pd
 from pathlib import Path
 
 # Data directory
-DATA_DIR = Path('/home/user/data/downloads/fluid-benchmarking')
+DATA_DIR = Path(__file__).resolve().parents[1] / 'data' / 'downloads' / 'fluid-benchmarking'
 
 # Benchmark names used throughout
 BENCHMARKS = ['arc_challenge', 'gsm8k', 'hellaswag', 'truthfulqa_mc2', 'winogrande', 'mmlu']

@@ -8,7 +8,7 @@
 # Assumes:
 #   - Container is built (environment/container.sif)
 #   - Data and models are downloaded (via scripts/download.sh)
-#   - Working directory is /home/user
+#   - Working directory is the repo root
 #
 # This is the "gold standard" reproduction —
 # You do not need to run this, but keep this in good shape
@@ -16,8 +16,9 @@
 
 set -e
 
-cd /home/user
-export PYTHONPATH="/home/user"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+export PYTHONPATH="$ROOT_DIR"
 
 echo "=== FLUID BENCHMARKING: Full Reproduction ==="
 echo ""
@@ -33,7 +34,7 @@ bash scripts/method.sh
 
 echo ""
 echo "Step 2: Running evaluation..."
-bash scripts/evaluate.sh /home/user/checkpoints/experiment_results.json
+bash scripts/evaluate.sh "$ROOT_DIR/checkpoints/experiment_results.json"
 
 echo ""
 echo "Step 3: Validating results..."

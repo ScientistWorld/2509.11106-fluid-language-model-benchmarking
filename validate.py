@@ -24,6 +24,14 @@ SCORING_DIR = WORKSPACE_DIR / "scoring"
 # ── Scoring validation ───────────────────────────────────────────────────────
 
 
+_FORBIDDEN_METRIC_PATTERNS = re.compile(
+    r"(?:author|deviation|published|vs_paper|fit_to_published|"
+    r"reproduction_error|paper_method|prompt_deviation|"
+    r"error_vs_|agreement_with|fidelity_to)",
+    re.IGNORECASE,
+)
+
+
 def validate_reference(data: dict) -> list[str]:
     """Validate reference.json structure. Returns list of errors."""
     errors = []
@@ -90,6 +98,14 @@ def validate_reference(data: dict) -> list[str]:
                 errors.append(f"{prefix}.metrics.{metric_name}: missing 'coefficient'")
             elif not isinstance(metric_def["coefficient"], (int, float)):
                 errors.append(f"{prefix}.metrics.{metric_name}.coefficient: must be a number")
+            if _FORBIDDEN_METRIC_PATTERNS.search(metric_name):
+                errors.append(
+                    f"{prefix}.metrics.{metric_name}: metric name matches a "
+                    f"forbidden paper-agreement pattern. The gym measures "
+                    f"the scientific quantity, not agreement with the paper. "
+                    f"Either remove this metric or rename it to reflect "
+                    f"the underlying quantity it actually measures."
+                )
 
         # primary_metric must be in metrics
         primary = exp.get("primary_metric")

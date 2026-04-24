@@ -31,4 +31,4 @@
 - Removed method identifiers from strictly method-agnostic experiment/target docs and removed an unused `tmp_apt/` scratch directory.
 
 ## Stop Justification
-- Completed at milestone `core_claim`.
+- Completed at milestone `none`.

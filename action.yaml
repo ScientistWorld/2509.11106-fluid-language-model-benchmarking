@@ -1,6 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: done
-milestone: core_claim
-notes: "Reproduction verified - FLUID matches paper at all budgets (10,50,100,500). Core claim confirmed. Environment fully reusable."
+action: pending
+gpus: 1
+test: false
+milestone: method_runs
+notes: ""

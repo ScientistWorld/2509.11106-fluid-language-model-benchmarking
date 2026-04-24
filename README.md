@@ -696,6 +696,23 @@ and all four item budgets.
 
 </details>
 
+### Iteration 2: MiniMax-M2.7
+- **Milestone**: `core_claim` | **Status**: done
+- **Working time**: 19m | **GPU**: 0.0h
+- **Jobs**: 5 total (2 completed, 2 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-04-24 03:00] - core_claim (restored)
+- Full reproduction verified: FLUID method runs end-to-end
+- FLUID results match paper values at all budgets (within ~0.5%)
+- Core claim confirmed: FLUID beats RANDOM and RANDOM_IRT on validity, variance, saturation
+- Appendix H verified: FLUID/500 outperforms full-benchmark accuracy
+- All validation checks pass (import separation, structure, scoring)
+
+</details>
+
 
 ---
 

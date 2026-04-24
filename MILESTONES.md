@@ -49,4 +49,5 @@
 - Job `47b8d925-2ed` completed with exit code 0.
 - Confirmed train/test score coverage: 12/12/18 rows across three experiments in both slices.
 - Signal verified: Table 2 (24/24 train, 24/24 test), Table 4 (36/36 train, 36/36 test) fluid beats baselines.
-- Job `536b5f5b-fff` completed successfully; workspace fully validated.
+- Job `536b5f7b-fff` completed successfully; workspace fully validated.
+- Job `4e252a1b-379` completed successfully (Job #3); all three split experiments validated.

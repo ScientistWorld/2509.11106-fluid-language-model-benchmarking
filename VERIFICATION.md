@@ -27,3 +27,14 @@ The workspace is ready to serve as a gym at the claimed `secondary_claims` miles
 - Ready for gym use: yes
 - Confidence: high
 - Key limitation: the reproduction still depends on the released fitted IRT artifacts and does not reproduce the paper's upstream hierarchical-MCMC fitting stage
+
+## Evaluation Split Outcome
+
+The train/test evaluation pass now completed successfully on-cluster and the split is usable.
+
+- `scoring/scores_train.json` and `scoring/scores_test.json` both exist and contain real values for all three split experiments.
+- Result identifier sets match exactly between train and test for every experiment.
+- The split is non-trivial rather than byte-identical: the frozen method scores differently across slices, but the relative signal mostly holds.
+- `fluid` remains dominant over matched baselines in Table 2 on both slices and in Table 4 on nearly all rows.
+
+The main residual risk is calibration of `total_variation`: a few held-out rows are much harsher than train, especially `random_irt_50` in Table 2 and the Amber / `full_accuracy` rows in Table 4 and Appendix H. That is a caveat, not a blocker.

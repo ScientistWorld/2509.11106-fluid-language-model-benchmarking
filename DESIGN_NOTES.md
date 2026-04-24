@@ -1,52 +1,58 @@
 # Design Notes — FLUID BENCHMARKING Train/Test Evaluation
 
-## Design Assessment
+## Final Split
 
-The existing train/test split is fundamentally sound. Split by LM family:
-- **Train slice**: amber-7b, olmo1-7b, olmo2-7b (6B-class OLMo family + Amber)
-- **Test slice**: k2-65b (65B LLM360), pythia-3b, pythia-7b (Pythia family, different scale/training)
+The shipped split uses two different mechanisms:
+- `table2_ablation_comparison` and `appendix_h_full_accuracy_comparison` split by LM family.
+- `appendix_f_table4_lm_breakdown_100` keeps all LM rows in both slices but splits each LM's checkpoints into disjoint even/odd subsets.
 
-This tests whether a method generalizes to unseen model families and scales, which is the core scientific claim of FLUID: adaptive item selection works across LM types.
+Train slice:
+- LMs: `amber-7b`, `olmo1-7b`, `olmo2-7b`
+- Table 4 checkpoints: even-indexed checkpoints within each LM curve
 
-## Checks Completed
+Test slice:
+- LMs: `k2-65b`, `pythia-3b`, `pythia-7b`
+- Table 4 checkpoints: odd-indexed checkpoints within each LM curve
 
-### Scripts — Correct
-- `evaluate_train.sh` invokes `eval.train.score_slice`, writes to `scores_train.json`
-- `evaluate_test.sh` invokes `eval.test.score_slice`, writes to `scores_test.json`
-- No hardcoded method defaults (methods enumerated from payload)
-- Both syntax-check cleanly
+This preserves the anti-shortcut goal: train is visible and optimized against, while test probes unseen LM families for the aggregate experiments and unseen checkpoints for the per-LM breakdown.
 
-### Output Paths — Correct
-- Train slice: `DEFAULT_OUTPUT = REPO_ROOT / "scoring" / "scores_train.json"`
-- Test slice: `DEFAULT_OUTPUT = REPO_ROOT / "scoring" / "scores_test.json"`
-- Scripts pass `--output` flag explicitly
+## Real-Run Results
 
-### Leakage — Clean
-- No cross-imports between `eval/train/` and `eval/test/`
-- Both modules are self-contained
-- Only comment-level mentions of each other (docstrings)
+The evaluation job completed successfully and wrote both `scoring/scores_train.json` and `scoring/scores_test.json`.
 
-### Paper-Agreement Metrics — None
-- All three metrics measure scientific quantities: rank distance (validity), total variation (variance), Spearman correlation (saturation)
-- No `author`, `paper`, `published`, `vs_paper`, `deviation_from_paper`, `reproduction_error`, `fit_to_published` in metric names or formulas
-- Theoretical floor is not "match the paper" — metrics are unbounded in both directions
+Coverage:
+- `table2_ablation_comparison`: 12 train rows, 12 test rows
+- `appendix_h_full_accuracy_comparison`: 2 train rows, 2 test rows
+- `appendix_f_table4_lm_breakdown_100`: 18 train rows, 18 test rows
+- Result identifier sets match exactly across train and test for every experiment
 
-### Score Files — Correct
-- `scores_train.json` and `scores_test.json` do NOT exist (deleted by Stage 2)
+Signal quality on the frozen method:
+- Table 2: `fluid` beats both matched baselines on all 24 metric comparisons in train and all 24 in test
+- Appendix H: `fluid_500` beats `full_accuracy` on `total_variation` and `saturation` in both slices, and on `rank_distance` only in test
+- Table 4: `fluid` beats matched baselines on 36/36 train metric comparisons and 34/36 test comparisons
 
-### Coverage
-- `table2_ablation_comparison`: Fully covered by both slices
-- `appendix_h_full_accuracy_comparison`: Fully covered by both slices
-- `appendix_f_table4_lm_breakdown_100`: **NOT covered** — the per-LM breakdown experiment is not handled by either train or test scorer. This experiment has 18 result rows (6 LMs × 3 methods), which would require per-LM split handling. Not adding this now to keep the design simple — the primary and secondary experiments are already split.
+## Checks Confirmed
 
-## Runtime Concerns for Next Iteration
+### Scripts
+- `scripts/evaluate_train.sh` writes `scores_train.json`
+- `scripts/evaluate_test.sh` writes `scores_test.json`
+- `scripts/run.sh` scores both slices from the frozen `checkpoints/experiment_results.json` payload
+- No method name is hardcoded; scorers enumerate available methods from the payload
 
-1. **Metric saturation**: saturation values are Spearman correlations (0-1). In the current reproduction, saturation ranges from ~0.45 to ~0.88, so there's room in both directions. No saturation risk detected.
+### Leakage
+- `eval/train/score_slice.py` and `eval/test/score_slice.py` remain self-contained
+- No cross-imports between train and test
+- No metric is defined as agreement with the paper
 
-2. **Score computation**: The train/test evaluators read from the same payload (`experiment_results.json`) and just filter by LM. No re-execution of the method is needed — the evaluator is lightweight.
+### Calibration
+- The split is not byte-identical: average absolute train-test metric gap is `2.861` for Table 2, `2.736` for Appendix H, and `1.809` for Table 4
+- The method ranking signal remains stable across slices instead of collapsing
 
-3. **Method enumeration**: Both slices use `available_methods(payload)` which reads from `payload["score_curves"].keys()`. This works as long as future agents produce score curves in the same format. No hardcoded method names.
+## Main Caveat
 
-## Improvements Made
+The largest train-test deltas are in `total_variation`, especially:
+- `random_irt_50` in Table 2: `16.11` train vs `41.32` test
+- Amber rows in Table 4: test `total_variation` is much harsher than train
+- `full_accuracy` in Appendix H: `4.97` train vs `17.13` test
 
-None required — the design was solid from Stage 2. The split correctly tests generalization to unseen model families, the metrics measure scientific quantities (not paper agreement), and the scripts are clean and independent.
+These do not break the benchmark, but they mean test is materially more punitive on volatility than train for some rows. That caveat should remain documented for downstream users.

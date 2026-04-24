@@ -1055,6 +1055,75 @@ def check_primary_metric_differs_train_test() -> list[str]:
     return errors
 
 
+def check_primary_metric_discriminates_on_train() -> list[str]:
+    """Reject papers whose primary metric is identical across methods on train.
+
+    The train slice is what a future agent optimizes against during
+    development.  If every method on train gets the same primary-metric
+    value (the metric saturates — e.g., ``coverage = 1.0`` for all
+    methods), the train slice gives that agent no ranking signal: every
+    approach they try looks equally good.  The gym cannot measure
+    improvement and the anti-shortcut design collapses.
+
+    Skips experiments with fewer than 2 methods that report a numeric
+    primary-metric value.
+    """
+    ref_path = SCORING_DIR / "reference.json"
+    train_path = SCORING_DIR / "scores_train.json"
+    if not all(p.is_file() for p in (ref_path, train_path)):
+        return []
+    try:
+        ref = json.loads(ref_path.read_text())
+        train = json.loads(train_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return []
+
+    ref_exps = ref.get("experiments", {})
+    train_exps = _extract_scores_experiments(train)
+
+    errors: list[str] = []
+    for exp_name in sorted(set(train_exps) & set(ref_exps)):
+        primary = ref_exps[exp_name].get("primary_metric")
+        if not primary:
+            continue
+
+        methods = train_exps[exp_name]
+        if not isinstance(methods, dict):
+            continue
+
+        values: list[tuple[str, float]] = []
+        for name, data in methods.items():
+            if name.startswith("_") or not isinstance(data, dict):
+                continue
+            v = data.get(primary)
+            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                values.append((name, float(v)))
+
+        if len(values) < 2:
+            continue
+        if len({v for _, v in values}) > 1:
+            continue
+
+        # All values identical across all reporting methods.
+        sample_val = values[0][1]
+        methods_shown = ", ".join(f"{n}={v}" for n, v in values[:4])
+        errors.append(
+            f"experiments.{exp_name}: primary metric '{primary}' is "
+            f"identical ({sample_val}) across every method on the train "
+            f"slice ({methods_shown}). The train slice cannot rank methods "
+            f"on this metric, so a future agent gets no feedback signal "
+            f"while developing against scores_train.json. "
+            f"Fix: either (1) change primary_metric on this experiment to "
+            f"a metric whose values already differ across methods on "
+            f"train, or (2) adjust the experiment so '{primary}' actually "
+            f"spreads methods out (harder inputs, a tighter operating "
+            f"point, a stricter scoring protocol). Do NOT simply delete "
+            f"the experiment — find a metric that discriminates."
+        )
+
+    return errors
+
+
 _SHARED_PATTERN = re.compile(r"(?<![A-Za-z0-9_/])/?shared/(?:datasets|models|hf_cache)\b")
 
 
@@ -1298,6 +1367,17 @@ def main():
         if ((SCORING_DIR / "scores_train.json").is_file()
             and (SCORING_DIR / "scores_test.json").is_file()):
             print("  primary metric train/test differentiation — OK")
+
+    # 12. Primary metric must discriminate between methods on train
+    disc_errors = check_primary_metric_discriminates_on_train()
+    if disc_errors:
+        print(f"  primary metric discriminates methods on train — {len(disc_errors)} error(s):")
+        for e in disc_errors:
+            print(f"    ✗ {e}")
+        ok = False
+    else:
+        if (SCORING_DIR / "scores_train.json").is_file():
+            print("  primary metric discriminates methods on train — OK")
 
     # Summary
     print()

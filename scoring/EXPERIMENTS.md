@@ -19,3 +19,13 @@ row uses the 500-item run from the primary experiment.
 
 The result rows compare full-benchmark static accuracy against the candidate strategy at a
 500-item budget.
+
+## appendix_f_table4_lm_breakdown_100
+Tests whether the candidate strategy's gains persist across different LM families at the paper's
+100-item setting. The reproduced rows are aggregated separately for each of the six released LMs,
+averaging across the six benchmarks and all released checkpoints for that LM.
+
+The result rows compare three strategy families per LM:
+- A random subset baseline with standard accuracy aggregation.
+- A random subset baseline with calibrated IRT aggregation.
+- The candidate adaptive strategy at the same 100-item budget.

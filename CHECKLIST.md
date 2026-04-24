@@ -32,7 +32,7 @@ Check off items as you complete them. Order doesn't matter — work however make
 
 ## Environment
 - [x] `environment/container.def` — Apptainer container definition (ubuntu:22.04 with Python/numpy/pandas/scipy installed via apt)
-- [x] `setup.sh` — no-op shim; runtime Python dependencies are installed in `environment/container.def`
+- [x] `environment/setup.sh` — no-op shim; runtime Python dependencies are installed in `environment/container.def`
 
 ## Data
 - [x] Dataset acquired (from HuggingFace allenai/fluid-benchmarking)

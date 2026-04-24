@@ -21,3 +21,8 @@
 - Validated the packaged environment on the cluster with job `aae11f56-4ef`, which rebuilt the container, ran `scripts/run.sh`, and completed `scripts/reproduce.sh` end-to-end with exit code 0.
 - Confirmed the packaged run reproduces the full Table 2 FLUID-vs-RANDOM/RANDOM_IRT comparison and rewrites `scoring/scores.json` from fresh method outputs inside the container.
 - Confirmed the packaged run also reproduces the Appendix H `full_accuracy` vs `fluid_500` comparison, so the workspace now supports both the core claim and one secondary claim on the released artifacts.
+
+### [2026-04-24 06:55] - secondary_claims
+- Extended the scorer and reference tables to cover Appendix F / Table 4, the per-LM breakdown at 100 items, using the same saved FLUID/RANDOM/RANDOM_IRT curves rather than any surrogate artifact.
+- Added the missing `environment/setup.sh` no-op shim so both the environment directory and the repo root now expose the expected setup entrypoint.
+- Pending one more containerized CPU validation run before counting the new Table 4 experiment as reproduced.

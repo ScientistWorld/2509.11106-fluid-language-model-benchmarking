@@ -16,9 +16,18 @@ DEFAULT_RESULTS_PATH = REPO_ROOT / "checkpoints" / "experiment_results.json"
 DEFAULT_OUTPUT_PATH = REPO_ROOT / "scoring" / "scores.json"
 TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
+TABLE4_EXPERIMENT = "appendix_f_table4_lm_breakdown_100"
 BENCHMARKS = ["arc_challenge", "gsm8k", "hellaswag", "truthfulqa_mc2", "winogrande", "mmlu"]
 VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
 OLL_RESULTS_PATH = REPO_ROOT / "data" / "downloads" / "fluid-benchmarking" / "open_llm_leaderboard_results.json"
+LM_RESULT_NAMES = {
+    "amber-7b": "amber_7b",
+    "k2-65b": "k2_65b",
+    "olmo1-7b": "olmo1_7b",
+    "olmo2-7b": "olmo2_7b",
+    "pythia-3b": "pythia_3b",
+    "pythia-7b": "pythia_7b",
+}
 
 
 def load_json(path: Path) -> dict:
@@ -119,6 +128,61 @@ def compute_full_accuracy_metrics(payload: dict) -> dict:
     }
 
 
+def compute_lm_breakdown_metrics(
+    payload: dict,
+    method: str,
+    budget: int,
+    lm_name: str,
+) -> dict:
+    """Compute the Table 4 per-LM breakdown at a fixed item budget."""
+    score_curves = payload.get("score_curves")
+    accuracy_curves = payload.get("accuracy_curves")
+    if not isinstance(score_curves, dict) or not isinstance(accuracy_curves, dict):
+        raise ValueError("Results payload is missing score_curves/accuracy_curves")
+
+    oll_results = load_json(OLL_RESULTS_PATH)
+    benchmark_scores = score_curves[method][str(budget) if str(budget) in score_curves[method] else budget][lm_name]
+    lm_accuracy_curves = accuracy_curves[lm_name]
+
+    rank_distances = []
+    for benchmark_a, benchmark_b in VALIDITY_PAIRS:
+        for source_benchmark, target_benchmark in (
+            (benchmark_a, benchmark_b),
+            (benchmark_b, benchmark_a),
+        ):
+            source_reference_key = "accuracy" if method == "random" else "ability"
+            source_reference = np.array(
+                list(oll_results[source_benchmark][source_reference_key].values()),
+                dtype=float,
+            )
+            target_reference = np.array(
+                list(oll_results[target_benchmark]["accuracy"].values()),
+                dtype=float,
+            )
+            source_curve = benchmark_scores[source_benchmark]
+            target_curve = lm_accuracy_curves[target_benchmark]
+            for checkpoint, source_score in source_curve.items():
+                source_rank = rank_against_reference(source_score, source_reference)
+                target_rank = rank_against_reference(
+                    target_curve[checkpoint],
+                    target_reference,
+                )
+                rank_distances.append(abs(source_rank - target_rank))
+
+    tv_values = []
+    saturation_values = []
+    for benchmark in BENCHMARKS:
+        curve = [benchmark_scores[benchmark][cp] for cp in benchmark_scores[benchmark]]
+        tv_values.append(compute_total_variation(curve))
+        saturation_values.append(compute_saturation(curve))
+
+    return {
+        "rank_distance": float(np.mean(rank_distances)),
+        "total_variation": float(np.mean(tv_values)),
+        "saturation": float(np.mean(saturation_values)),
+    }
+
+
 def clean_metrics(metrics: dict, ref_experiment: dict) -> dict:
     cleaned = {}
     for metric_name in ref_experiment["metrics"]:
@@ -171,6 +235,19 @@ def build_scores(payload: dict, reference: dict) -> dict:
             scores["experiments"][APPENDIX_H_EXPERIMENT]["results"]["fluid_500"] = (
                 scores["experiments"][TABLE2_EXPERIMENT]["results"]["fluid_500"]
             )
+
+    if TABLE4_EXPERIMENT in reference["experiments"]:
+        table4_ref = reference["experiments"][TABLE4_EXPERIMENT]
+        scores["experiments"][TABLE4_EXPERIMENT] = {"results": {}}
+        for lm_name, lm_key in LM_RESULT_NAMES.items():
+            for method in ("random", "random_irt", "fluid"):
+                result_name = f"{method}_{lm_key}_100"
+                if result_name not in table4_ref["results"]:
+                    continue
+                scores["experiments"][TABLE4_EXPERIMENT]["results"][result_name] = clean_metrics(
+                    compute_lm_breakdown_metrics(payload, method, 100, lm_name),
+                    table4_ref,
+                )
 
     return scores
 

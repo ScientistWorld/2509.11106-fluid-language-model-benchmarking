@@ -11,6 +11,7 @@
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
+- Added a scored Appendix F / Table 4 target for the per-LM breakdown at 100 items, derived from the same released checkpoint-response curves.
 
 ## Results
 
@@ -82,6 +83,7 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 
 - The packaged reproduction environment is complete for the released-artifact scope of this project.
 - Work left for a higher milestone would be broader method coverage, especially reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard responses and expanding toward the broader Table 1 comparisons.
+- The current turn adds Table 4 scoring support locally, but it still needs one more containerized CPU validation run before the per-LM experiment can be counted as reproduced.
 
 ## Issues Encountered
 

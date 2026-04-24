@@ -17,6 +17,7 @@ The workspace started in a mostly usable `secondary_claims` state. The core FLUI
 - Corrected the `saturation` descriptions in `scoring/reference.json` to match the implemented absolute Spearman-style computation.
 - Moved `numpy`, `pandas`, and `scipy` installation out of `environment/container.def` and into `environment/setup.sh` via `uv pip install --system`.
 - Re-verified `scripts/download.sh` URLs; every committed fetch target resolves successfully (HTTP 200) from the login node.
+- Removed the ignored local `environment/container.sif` build artifact. The leftover `environment/container.final.def` path is a root-owned special file excluded from git, so it does not affect the shipped workspace.
 - Re-ran `python3 validate.py` and confirmed the structure/import checks still pass.
 
 ## Final Judgment

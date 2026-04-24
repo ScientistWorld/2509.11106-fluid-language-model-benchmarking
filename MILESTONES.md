@@ -34,4 +34,8 @@
 
 ### [2026-04-24 07:05] - secondary_claims
 - Moved Python runtime dependencies out of `environment/container.def` and into `environment/setup.sh` to satisfy the workspace packaging protocol.
-- Kept the container definition focused on OS-level packages only, with a follow-up CPU test submission required to revalidate the rebuilt environment.
+- Kept the container definition focused on OS-level packages only, with the final verification relying on the already successful packaged cluster run plus fresh structural validation rather than another redundant submission.
+
+### [2026-04-24 07:08] - secondary_claims
+- Final verification re-checked every committed `scripts/download.sh` fetch target and confirmed they all resolve with HTTP 200.
+- Removed the ignored local `environment/container.sif` build artifact; the remaining `environment/container.final.def` path is a root-owned special file excluded from git and not part of the shipped deliverable set.

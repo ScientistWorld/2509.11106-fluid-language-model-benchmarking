@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim**
+**Current: secondary_claims**
 
 ## Progress Log
 
@@ -16,3 +16,8 @@
 - Audited the carried-over workspace and confirmed that `method/` implements the paper's adaptive FLUID stage directly: 2PL MAP ability estimation plus Fisher-information item selection.
 - Confirmed that `eval/` remains method-independent and that the stored scores are plausible relative to the paper's Table 2 and Appendix H references.
 - Noted the main remaining limitation honestly: the workspace reuses released fitted IRT parameters and released item-response artifacts rather than reproducing the MCMC IRT-fitting stage, so the current closure target remains `core_claim` on released artifacts rather than a fuller milestone.
+
+### [2026-04-24 03:40] - secondary_claims
+- Validated the packaged environment on the cluster with job `aae11f56-4ef`, which rebuilt the container, ran `scripts/run.sh`, and completed `scripts/reproduce.sh` end-to-end with exit code 0.
+- Confirmed the packaged run reproduces the full Table 2 FLUID-vs-RANDOM/RANDOM_IRT comparison and rewrites `scoring/scores.json` from fresh method outputs inside the container.
+- Confirmed the packaged run also reproduces the Appendix H `full_accuracy` vs `fluid_500` comparison, so the workspace now supports both the core claim and one secondary claim on the released artifacts.

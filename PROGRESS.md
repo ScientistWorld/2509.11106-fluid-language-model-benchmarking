@@ -19,7 +19,7 @@
 - The method-fidelity audit passed for the core FLUID algorithm. `method/irt.py` implements 2PL MAP ability estimation and `method/fluid.py` implements adaptive item selection by maximizing Fisher information under the current ability estimate.
 - The evaluation-honesty audit also passed. `scripts/evaluate.sh` calls only `eval/`, and `scoring/scores.json` contains numerically plausible values relative to `scoring/reference.json`.
 - The main limitation is scope, not honesty: this workspace uses released fitted IRT parameters and released checkpoint response tables, rather than reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard data.
-- The remaining operational task is packaging validation. The last completed cluster job predates the current container-only packaging commit, so one CPU smoke test is queued against the current committed environment.
+- Packaging validation is complete. The latest cluster job re-built the container, ran the packaged `scripts/run.sh` entrypoint, and completed the full reproduction successfully against the current committed environment.
 
 ### Job 7d2d5bf5-1b5
 
@@ -61,6 +61,16 @@ Local evaluation now also scores the paper's Appendix H comparison:
 
 This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact. The final verifier re-ran `scripts/evaluate.sh` against the saved raw experiment artifact and confirmed that it regenerates `scoring/scores.json` successfully.
 
+### Job aae11f56-4ef
+
+The final CPU packaging-validation job completed successfully with exit code 0 after the container simplification. This run is important because it exercised the committed deliverable path rather than a stale local environment:
+
+- Built and launched the Ubuntu-based container with Python plus `numpy`, `pandas`, and `scipy` installed from `environment/container.def`.
+- Ran `scripts/run.sh`, which called `scripts/reproduce.sh`, then re-generated `checkpoints/experiment_results.json` and `scoring/scores.json` from scratch inside the container.
+- Re-ran the full scoring/structure validation suite successfully, including import-separation checks, train/test scoring checks, and `shared/`-path checks.
+
+This closes the earlier packaging uncertainty. The shipped environment is now validated, not just the method code.
+
 ## Deviations from Paper
 
 1. The reproduction uses the released HuggingFace `allenai/fluid-benchmarking` data artifacts rather than regenerating the entire raw benchmark collection from external model APIs.
@@ -70,12 +80,13 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 ## What Remains
 
-- Validate the current committed packaging path once on cluster: `environment/container.def` should provide Python plus `numpy`/`pandas`/`scipy`, and `scripts/run.sh` should complete by calling the canonical `scripts/reproduce.sh` workflow.
-- If that CPU job succeeds, the workspace is ready to close at `core_claim`. If it fails, fix the surfaced packaging/runtime issue and resubmit.
+- The packaged reproduction environment is complete for the released-artifact scope of this project.
+- Work left for a higher milestone would be broader method coverage, especially reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard responses and expanding toward the broader Table 1 comparisons.
 
 ## Issues Encountered
 
-- The previous successful job artifacts were generated before the latest packaging commit, so the algorithm audit and packaging audit briefly referred to different repository states. The fix is a single cheap CPU validation run, not a method rewrite.
+- The previous successful job artifacts were generated before the latest packaging commit, so the algorithm audit and packaging audit briefly referred to different repository states. The resolved fix was a final cheap CPU validation run on the committed container.
+- The scheduler's generated setup-wrapper path was brittle, so the environment was simplified to install the numerical Python stack directly in `environment/container.def` and eliminate the separate `environment/setup.sh` phase.
 
 ## Environment Details
 
@@ -87,4 +98,4 @@ This supports the secondary claim that FLUID/500 outperforms full-benchmark accu
 
 - `method_runs`: The paper's 2PL IRT ability estimation and Fisher-information adaptive item-selection algorithm runs end-to-end.
 - `core_claim`: The independent reproduction verifies the Table 2 claim that FLUID beats RANDOM and RANDOM_IRT on validity, variance, and saturation at matched budgets.
-- `core_claim_plus`: Not claimed. Appendix H scoring passes from the saved raw artifact, but the reported milestone remains `core_claim` because the verified reproduction scope is still the paper's core Table 2 claim plus one secondary comparison rather than a broader majority of paper results.
+- `secondary_claims`: The packaged run also reproduces the Appendix H comparison showing `fluid_500` outperforming `full_accuracy` on the released artifact snapshot, and the containerized environment now passes the full validation path end-to-end.

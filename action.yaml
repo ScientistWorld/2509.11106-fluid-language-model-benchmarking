@@ -1,8 +1,6 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
-gpus: 0
-test: true
-milestone: core_claim
-notes: "Retry CPU packaging validation after removing the stale tracked environment/.setup_wrapper.sh and moving Python deps fully into environment/container.def via apt. setup.sh is now a no-op shim; this submission should rebuild the container and run scripts/reproduce.sh through scripts/run.sh."
+action: done
+milestone: secondary_claims
+notes: "Job aae11f56-4ef completed successfully. The packaged container rebuilt cleanly, scripts/run.sh executed scripts/reproduce.sh end-to-end, scores.json was regenerated inside the container, and the full validation suite passed. Closing at secondary_claims: core Table 2 claim plus the Appendix H full-accuracy comparison are reproduced on the released artifacts."

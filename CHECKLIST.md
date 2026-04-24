@@ -41,7 +41,9 @@ Check off items as you complete them. Order doesn't matter — work however make
 ## Results
 - [x] Core claim verified: FLUID beats RANDOM on all metrics (rank_distance, total_variation, saturation) across all 4 budgets (10, 50, 100, 500)
 - [x] 12 Table 2 method-budget entries plus Appendix H full-accuracy comparison scored
+- [x] Packaged container path validated on cluster via `scripts/run.sh` → `scripts/reproduce.sh` → `scripts/evaluate.sh`
 
 ## Milestones
 - [x] `method_runs` — FLUID algorithm executes end-to-end without errors
 - [x] `core_claim` — minimum experiment supports central claim (FLUID beats RANDOM across all metrics)
+- [x] `secondary_claims` — packaged run also reproduces the Appendix H full-accuracy comparison

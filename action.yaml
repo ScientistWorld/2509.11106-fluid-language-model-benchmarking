@@ -1,8 +1,6 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: pending
-gpus: 1
-test: false
-milestone: none
-notes: ""
+action: done
+milestone: core_claim
+notes: "Reproduced the core claim (Table 2) with FLUID matching paper values at budgets 10, 50, 100, 500. Also verified Appendix H secondary claim. Environment fully packaged and reusable."

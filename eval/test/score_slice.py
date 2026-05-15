@@ -24,7 +24,7 @@ APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
 TABLE4_EXPERIMENT = "appendix_f_table4_lm_breakdown_100"
 TABLE4_SPLIT_SEED = "81"
 BENCHMARKS = ["arc_challenge", "gsm8k", "hellaswag", "truthfulqa_mc2", "winogrande", "mmlu"]
-TEST_VALIDITY_PAIRS = [("gsm8k", "mmlu"), ("arc_challenge", "truthfulqa_mc2")]
+TEST_VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
 TEST_LMS = ["k2-65b", "pythia-3b", "pythia-7b"]
 TABLE4_RESULT_NAMES = {
     "amber-7b": "amber_7b",

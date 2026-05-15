@@ -57,3 +57,8 @@
 - Job `7c44965b-85c` completed the held-out train/test scoring pass with exit code 0 using `scripts/run.sh`.
 - Confirmed `scoring/scores_train.json` and `scoring/scores_test.json` each contain 96 finite metric values with matching method identifiers across Table 2, Appendix H, and Appendix F/Table 4.
 - Reconfirmed the workspace is above the `core_claim` threshold: `scoring/scores.json` contains the actual FLUID method run on released artifacts, where FLUID supports the primary Table 2 claim and the Appendix H full-accuracy secondary claim.
+
+### [2026-05-15 23:09] - secondary_claims
+- Restored the test-slice primary `rank_distance` benchmark pairs to the paper/reference pairs so split scores measure the same scientific quantity as `reference.json`.
+- Regenerated `scoring/scores_train.json` and `scoring/scores_test.json` from `checkpoints/experiment_results.json`.
+- Verified both `python validate.py` and `python validate.py --compare` pass with the corrected split scores.

@@ -2,4 +2,4 @@ action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Reached >= core_claim: actual FLUID method scores in scoring/scores.json support Table 2 core claim plus Appendix H; train/test split has 96 finite metrics per slice with matching IDs."
+notes: "Reached secondary_claims; restored test rank_distance to paper/reference benchmark pairs, regenerated split scores, and python validate.py --compare passes."

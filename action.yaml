@@ -1,5 +1,5 @@
-action: submit
+action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Re-run evaluate_{train,test}.sh with calibrated seed-81 hash-balanced Table 4 checkpoint split; regenerate scores_{train,test}.json for all three split experiments."
+notes: "Fixed validation: removed pre-generated scores_train/test.json; scripts now produce them at runtime."

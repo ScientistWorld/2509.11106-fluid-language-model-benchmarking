@@ -11,7 +11,7 @@
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete for the reproduced scope: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
-- Added reference and scorer coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items. The train/test score slices exercise this target, while the main active reproduced score surface remains Table 2 plus Appendix H.
+- Added reference and scorer coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items. The main score file and train/test score slices all exercise this target.
 
 ## Results
 
@@ -62,6 +62,16 @@ Local evaluation now also scores the paper's Appendix H comparison:
 
 This supports the secondary claim that FLUID/500 outperforms full-benchmark accuracy on validity, variance, and saturation. The full-accuracy total variation differs from the paper snapshot, likely because the released artifact and this reproduction use a slightly different checkpoint/data snapshot, but the directional comparison remains intact. The final verifier re-ran `scripts/evaluate.sh` against the saved raw experiment artifact and confirmed that it regenerates `scoring/scores.json` successfully.
 
+### Appendix F / Table 4 Per-Model Breakdown
+
+Local evaluation also scores the per-language-model 100-item breakdown. The active
+`scoring/scores.json` now contains all 18 Table 4 rows across the six released model
+trajectories and the three scored strategy families. FLUID remains strongest on the constraint
+metrics in the reproduced rows: it has lower total variation than both matched baselines and
+higher saturation than both matched baselines for all six language-model trajectories. Rank
+distance is directionally consistent for the larger and OLMo trajectories, while Amber and Pythia
+show the same released-artifact deviations noted elsewhere in this reproduction.
+
 ### Job aae11f56-4ef
 
 The final CPU packaging-validation job completed successfully with exit code 0 after the container simplification. This run is important because it exercised the committed deliverable path rather than a stale local environment:
@@ -83,7 +93,7 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 
 - The packaged reproduction environment is complete for the released-artifact scope of this project.
 - Work left for a higher milestone would be broader method coverage, especially reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard responses and expanding toward the broader Table 1 comparisons.
-- The current packaged milestone remains `secondary_claims` through Table 2 plus Appendix H. Appendix F / Table 4 is documented in `reference.json` and exercised by the train/test slices, but it is not part of the main active reproduced `scores.json` surface yet.
+- The current packaged milestone remains `secondary_claims` through Table 2, Appendix H, and Appendix F / Table 4 on released artifacts.
 - A packaging regression was found on 2026-05-15: the full local evaluator could not import `numpy` because `environment/setup.sh` had been reduced to a no-op. This has been fixed by restoring `numpy`, `pandas`, and `scipy` to `environment/setup.sh`; final verification also shell-checked the scripts and re-ran `python3 validate.py --compare`.
 
 ## Issues Encountered

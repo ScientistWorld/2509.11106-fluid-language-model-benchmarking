@@ -25,7 +25,7 @@
 ### [2026-04-24 06:55] - secondary_claims
 - Extended the scorer and reference tables to cover Appendix F / Table 4, the per-LM breakdown at 100 items, using the same saved FLUID/RANDOM/RANDOM_IRT curves rather than any surrogate artifact.
 - Added `environment/setup.sh` so the packaged environment can install Python dependencies through `uv pip install --system`.
-- Kept the milestone at `secondary_claims` because the active reproduced score surface still consists of Table 2 plus Appendix H.
+- Kept the milestone at `secondary_claims` while the reproduced score surface expanded beyond the core Table 2 claim.
 
 ### [2026-04-24 06:58] - secondary_claims
 - Final verification removed duplicate root-level environment entrypoints so the workspace root only exposes the packaged `environment/` deliverables.
@@ -56,7 +56,7 @@
 ### [2026-05-15 23:02] - secondary_claims
 - Job `7c44965b-85c` completed the held-out train/test scoring pass with exit code 0 using `scripts/run.sh`.
 - Confirmed `scoring/scores_train.json` and `scoring/scores_test.json` each contain 96 finite metric values with matching method identifiers across Table 2, Appendix H, and Appendix F/Table 4.
-- Reconfirmed the workspace is above the `core_claim` threshold: `scoring/scores.json` contains the actual FLUID method run on released artifacts, where FLUID supports the primary Table 2 claim and the Appendix H full-accuracy secondary claim.
+- Reconfirmed the workspace is above the `core_claim` threshold: `scoring/scores.json` contains the actual FLUID method run on released artifacts, where FLUID supports the primary Table 2 claim and secondary Appendix H/Table 4 claims.
 
 ### [2026-05-15 23:09] - secondary_claims
 - Restored the test-slice primary `rank_distance` benchmark pairs to the paper/reference pairs so split scores measure the same scientific quantity as `reference.json`.
@@ -77,3 +77,8 @@
 - Re-audited the current workspace after reactivation and confirmed `method/fluid.py` still implements 2PL MAP ability estimation plus Fisher-information adaptive item selection rather than a surrogate.
 - Re-ran `python3 validate.py --compare`, `python3 -m py_compile`, and shell syntax checks successfully.
 - Tightened `scripts/reproduce.sh` so validation failures are no longer masked during end-to-end reproduction.
+
+### [2026-05-15 23:34] - secondary_claims
+- Final verification fixed the top-level evaluator so `scripts/evaluate.sh` runs with only standard-library scoring code on the saved method artifact.
+- Re-ran `scripts/evaluate.sh`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` against `checkpoints/experiment_results.json`; all regenerated score files include Table 2, Appendix H, and Appendix F/Table 4.
+- Updated the method-safe scoring documentation to match the active `scores.json` experiment surface.

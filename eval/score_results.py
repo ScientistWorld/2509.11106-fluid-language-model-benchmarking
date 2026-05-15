@@ -7,8 +7,6 @@ import json
 import math
 from pathlib import Path
 
-import numpy as np
-
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_PATH = REPO_ROOT / "scoring" / "reference.json"
@@ -30,22 +28,28 @@ LM_RESULT_NAMES = {
 }
 
 
+def mean(values: list[float]) -> float:
+    if not values:
+        return 0.0
+    return float(sum(values) / len(values))
+
+
 def load_json(path: Path) -> dict:
     with path.open() as handle:
         return json.load(handle)
 
 
-def rank_against_reference(score: float, reference_scores: np.ndarray) -> int:
+def rank_against_reference(score: float, reference_scores: list[float]) -> int:
     """Return 1-based rank of score among reference scores, with 1 = highest."""
-    return int(1 + np.sum(reference_scores > score))
+    return int(1 + sum(reference_score > score for reference_score in reference_scores))
 
 
 def compute_total_variation(scores: list[float]) -> float:
-    x = np.asarray(scores, dtype=float)
+    x = [float(score) for score in scores]
     n = len(x)
     if n < 2:
         return 0.0
-    total_variation = float(np.sum(np.abs(np.diff(x))))
+    total_variation = float(sum(abs(x[i + 1] - x[i]) for i in range(n - 1)))
     range_value = float(abs(x[-1] - x[0]))
     if range_value < 1e-10:
         return 0.0 if total_variation < 1e-10 else 100.0
@@ -54,31 +58,41 @@ def compute_total_variation(scores: list[float]) -> float:
 
 def compute_saturation(scores: list[float]) -> float:
     """Spearman rank correlation against checkpoint order, without scipy."""
-    x = np.asarray(scores, dtype=float)
+    x = [float(score) for score in scores]
     n = len(x)
     if n < 2:
         return 1.0
-    if len(set(x.tolist())) <= 1:
+    if len(set(x)) <= 1:
         return 0.0
 
     # Values in the released curves rarely tie, but average tied ranks for correctness.
-    order = np.argsort(x, kind="mergesort")
-    ranks = np.empty(n, dtype=float)
+    order = sorted(range(n), key=lambda idx: x[idx])
+    ranks = [0.0] * n
     start = 0
     while start < n:
         end = start + 1
         while end < n and x[order[end]] == x[order[start]]:
             end += 1
-        ranks[order[start:end]] = 0.5 * (start + end - 1)
+        average_rank = 0.5 * (start + end - 1)
+        for idx in order[start:end]:
+            ranks[idx] = average_rank
         start = end
 
-    steps = np.arange(n, dtype=float)
-    ranks -= ranks.mean()
-    steps -= steps.mean()
-    denom = np.sqrt(np.sum(ranks * ranks) * np.sum(steps * steps))
+    steps = [float(idx) for idx in range(n)]
+    rank_mean = mean(ranks)
+    step_mean = mean(steps)
+    centered_ranks = [rank - rank_mean for rank in ranks]
+    centered_steps = [step - step_mean for step in steps]
+    denom = math.sqrt(
+        sum(rank * rank for rank in centered_ranks)
+        * sum(step * step for step in centered_steps)
+    )
     if denom == 0.0:
         return 0.0
-    return float(abs(np.sum(ranks * steps) / denom))
+    numerator = sum(
+        rank * step for rank, step in zip(centered_ranks, centered_steps)
+    )
+    return float(abs(numerator / denom))
 
 
 def compute_full_accuracy_metrics(payload: dict) -> dict:
@@ -94,14 +108,14 @@ def compute_full_accuracy_metrics(payload: dict) -> dict:
             (benchmark_a, benchmark_b),
             (benchmark_b, benchmark_a),
         ):
-            source_reference = np.array(
-                list(oll_results[source_benchmark]["accuracy"].values()),
-                dtype=float,
-            )
-            target_reference = np.array(
-                list(oll_results[target_benchmark]["accuracy"].values()),
-                dtype=float,
-            )
+            source_reference = [
+                float(value)
+                for value in oll_results[source_benchmark]["accuracy"].values()
+            ]
+            target_reference = [
+                float(value)
+                for value in oll_results[target_benchmark]["accuracy"].values()
+            ]
             for benchmark_scores in accuracy_curves.values():
                 source_curve = benchmark_scores[source_benchmark]
                 target_curve = benchmark_scores[target_benchmark]
@@ -122,9 +136,9 @@ def compute_full_accuracy_metrics(payload: dict) -> dict:
             saturation_values.append(compute_saturation(curve))
 
     return {
-        "rank_distance": float(np.mean(rank_distances)),
-        "total_variation": float(np.mean(tv_values)),
-        "saturation": float(np.mean(saturation_values)),
+        "rank_distance": mean(rank_distances),
+        "total_variation": mean(tv_values),
+        "saturation": mean(saturation_values),
     }
 
 
@@ -151,14 +165,16 @@ def compute_lm_breakdown_metrics(
             (benchmark_b, benchmark_a),
         ):
             source_reference_key = "accuracy" if method == "random" else "ability"
-            source_reference = np.array(
-                list(oll_results[source_benchmark][source_reference_key].values()),
-                dtype=float,
-            )
-            target_reference = np.array(
-                list(oll_results[target_benchmark]["accuracy"].values()),
-                dtype=float,
-            )
+            source_reference = [
+                float(value)
+                for value in oll_results[source_benchmark][
+                    source_reference_key
+                ].values()
+            ]
+            target_reference = [
+                float(value)
+                for value in oll_results[target_benchmark]["accuracy"].values()
+            ]
             source_curve = benchmark_scores[source_benchmark]
             target_curve = lm_accuracy_curves[target_benchmark]
             for checkpoint, source_score in source_curve.items():
@@ -177,9 +193,9 @@ def compute_lm_breakdown_metrics(
         saturation_values.append(compute_saturation(curve))
 
     return {
-        "rank_distance": float(np.mean(rank_distances)),
-        "total_variation": float(np.mean(tv_values)),
-        "saturation": float(np.mean(saturation_values)),
+        "rank_distance": mean(rank_distances),
+        "total_variation": mean(tv_values),
+        "saturation": mean(saturation_values),
     }
 
 
@@ -277,6 +293,7 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w") as handle:
         json.dump(scores, handle, indent=2)
+        handle.write("\n")
 
     print(f"Wrote {args.output}")
 

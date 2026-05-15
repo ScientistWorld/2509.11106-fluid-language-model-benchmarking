@@ -1,3 +1,3 @@
 action: done
 milestone: secondary_claims
-notes: "Re-audited method/eval separation, reran validation and syntax checks, and tightened reproduce.sh to fail on validation errors."
+notes: "Final verification passed after fixing the lightweight evaluator and aligning docs with the active Table 2, Appendix H, and Table 4 score surface."

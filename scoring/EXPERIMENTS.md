@@ -19,3 +19,14 @@ method row uses the 500-item run from the primary experiment.
 
 The result rows compare full-benchmark static accuracy against the submitted method at a
 500-item budget.
+
+## appendix_f_table4_lm_breakdown_100
+Tests whether the quality pattern in the primary comparison is consistent across individual
+language-model training trajectories at the 100-item budget. Metrics are computed separately for
+each released model trajectory and then reported as comparable rows for the same three strategy
+families used in the primary experiment.
+
+The result rows cover each model-specific trajectory for:
+- A random subset baseline with standard accuracy aggregation.
+- A random subset baseline scored with the provided reference item metadata.
+- The submitted fixed-budget method at the same item budget.

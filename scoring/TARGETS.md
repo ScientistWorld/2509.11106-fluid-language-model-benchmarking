@@ -30,3 +30,11 @@ aggregation on the scored quality metrics.
 - **Experiment**: `appendix_h_full_accuracy_comparison`
 - **Evidence**: the 500-item submitted-method row should beat the full-accuracy baseline, showing that a lower-budget strategy can
   improve evaluation quality even when full-benchmark accuracy uses more items
+
+## Secondary: per_model_consistency
+The submitted method's advantage should hold across individual language-model training trajectories,
+not only after averaging over all models.
+- **Metric**: `rank_distance`, `total_variation`, and `saturation`
+- **Experiment**: `appendix_f_table4_lm_breakdown_100`
+- **Evidence**: the submitted-method row for each model should remain competitive with or better
+  than the matched random subset baselines at the 100-item budget

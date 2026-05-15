@@ -69,12 +69,106 @@
         "full_accuracy": {
           "rank_distance": 9.128318584070797,
           "total_variation": 11.052324860834148,
-          "saturation": 0.8544797644759946
+          "saturation": 0.8544797644759947
         },
         "fluid_500": {
           "rank_distance": 8.27599557522124,
           "total_variation": 4.829651978867632,
           "saturation": 0.8766320699089123
+        }
+      }
+    },
+    "appendix_f_table4_lm_breakdown_100": {
+      "results": {
+        "random_amber_7b_100": {
+          "rank_distance": 17.36986301369863,
+          "total_variation": 10.882116255748222,
+          "saturation": 0.5722965155592342
+        },
+        "random_irt_amber_7b_100": {
+          "rank_distance": 16.53082191780822,
+          "total_variation": 9.406840988852958,
+          "saturation": 0.6706062610861596
+        },
+        "fluid_amber_7b_100": {
+          "rank_distance": 19.318493150684933,
+          "total_variation": 5.32793846261394,
+          "saturation": 0.8327419885639064
+        },
+        "random_k2_65b_100": {
+          "rank_distance": 5.081521739130435,
+          "total_variation": 12.071212705845076,
+          "saturation": 0.7454151121834843
+        },
+        "random_irt_k2_65b_100": {
+          "rank_distance": 3.858695652173913,
+          "total_variation": 19.503701157397835,
+          "saturation": 0.7463063209430191
+        },
+        "fluid_k2_65b_100": {
+          "rank_distance": 2.0706521739130435,
+          "total_variation": 7.973242511085295,
+          "saturation": 0.8701202590194265
+        },
+        "random_olmo1_7b_100": {
+          "rank_distance": 8.545180722891565,
+          "total_variation": 9.157232849122893,
+          "saturation": 0.7864526555022201
+        },
+        "random_irt_olmo1_7b_100": {
+          "rank_distance": 7.22289156626506,
+          "total_variation": 7.96706839272641,
+          "saturation": 0.807713855560158
+        },
+        "fluid_olmo1_7b_100": {
+          "rank_distance": 6.677710843373494,
+          "total_variation": 5.384881812992387,
+          "saturation": 0.9072727926784805
+        },
+        "random_olmo2_7b_100": {
+          "rank_distance": 6.954787234042553,
+          "total_variation": 11.0430431577646,
+          "saturation": 0.5746452309525777
+        },
+        "random_irt_olmo2_7b_100": {
+          "rank_distance": 4.247340425531915,
+          "total_variation": 9.572025624455458,
+          "saturation": 0.5998357956784587
+        },
+        "fluid_olmo2_7b_100": {
+          "rank_distance": 3.401595744680851,
+          "total_variation": 6.239699144760454,
+          "saturation": 0.7936464835242955
+        },
+        "random_pythia_3b_100": {
+          "rank_distance": 14.987179487179487,
+          "total_variation": 21.426902598651072,
+          "saturation": 0.5969161809727365
+        },
+        "random_irt_pythia_3b_100": {
+          "rank_distance": 8.522435897435898,
+          "total_variation": 29.809513128792904,
+          "saturation": 0.6693354528336671
+        },
+        "fluid_pythia_3b_100": {
+          "rank_distance": 8.092948717948717,
+          "total_variation": 6.366583445906649,
+          "saturation": 0.8140272249684384
+        },
+        "random_pythia_7b_100": {
+          "rank_distance": 17.48076923076923,
+          "total_variation": 26.189256929095965,
+          "saturation": 0.6399539775322959
+        },
+        "random_irt_pythia_7b_100": {
+          "rank_distance": 11.85576923076923,
+          "total_variation": 17.919985565182493,
+          "saturation": 0.7423279230551937
+        },
+        "fluid_pythia_7b_100": {
+          "rank_distance": 11.64102564102564,
+          "total_variation": 4.375267169282787,
+          "saturation": 0.869484237838826
         }
       }
     }

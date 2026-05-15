@@ -1,27 +1,34 @@
 """
-Evaluation module for FLUID BENCHMARKING.
+Method-agnostic evaluation package for the FLUID benchmarking gym.
 
-This module is method-agnostic — it evaluates how well results fulfill
-the paper's research goals (efficiency, validity, variance, saturation)
-without knowing which method produced the results.
-
-Called by scripts/evaluate.sh to score any method's output.
+The active evaluator is run as ``python -m eval.score_results``. Keep this
+package initializer lightweight so module execution does not require optional
+metric-helper dependencies before they are actually used.
 """
 
-from .compute_metrics import (
-    compute_validity,
-    compute_variance,
-    compute_saturation,
-    compute_all_metrics,
-    aggregate_results,
-)
-from .scoring import score_and_save
-
 __all__ = [
-    'compute_validity',
-    'compute_variance',
-    'compute_saturation',
-    'compute_all_metrics',
-    'aggregate_results',
-    'score_and_save',
+    "aggregate_results",
+    "compute_all_metrics",
+    "compute_saturation",
+    "compute_validity",
+    "compute_variance",
+    "score_and_save",
 ]
+
+
+def __getattr__(name):
+    if name in {
+        "compute_validity",
+        "compute_variance",
+        "compute_saturation",
+        "compute_all_metrics",
+        "aggregate_results",
+    }:
+        from . import compute_metrics
+
+        return getattr(compute_metrics, name)
+    if name == "score_and_save":
+        from .scoring import score_and_save
+
+        return score_and_save
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

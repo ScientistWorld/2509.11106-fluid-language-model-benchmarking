@@ -17,8 +17,8 @@ echo "=== FLUID BENCHMARKING: Train/Test Evaluation Job ==="
 echo "Start: $(date -u)"
 echo ""
 
-bash scripts/evaluate_train.sh /home/user/checkpoints/experiment_results.json
-bash scripts/evaluate_test.sh /home/user/checkpoints/experiment_results.json
+bash scripts/evaluate_train.sh "$ROOT_DIR/checkpoints/experiment_results.json"
+bash scripts/evaluate_test.sh "$ROOT_DIR/checkpoints/experiment_results.json"
 
 python3 - <<'PY'
 import json

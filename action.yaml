@@ -2,4 +2,4 @@ action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Reached secondary_claims; restored test rank_distance to paper/reference benchmark pairs, regenerated split scores, and python validate.py --compare passes."
+notes: "Packager audit fixed repo-relative run paths; download URLs and validation checks pass."

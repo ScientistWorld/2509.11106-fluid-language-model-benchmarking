@@ -1,8 +1,8 @@
 #!/bin/bash
-# CPU job entrypoint for the real train/test FLUID BENCHMARKING evaluation run.
+# CPU job entrypoint for the packaged FLUID BENCHMARKING reproduction.
 #
-# Scores the frozen experiment payload into scoring/scores_{train,test}.json
-# and prints a small integrity summary for the job log.
+# Runs the full released-artifact reproduction, then scores the same raw method
+# output on deterministic train/test checkpoint slices.
 
 set -euo pipefail
 
@@ -13,10 +13,15 @@ export TMPDIR="${TMPDIR:-$ROOT_DIR/tmp}"
 export PYTHONDONTWRITEBYTECODE=1
 mkdir -p "$TMPDIR"
 
-echo "=== FLUID BENCHMARKING: Train/Test Evaluation Job ==="
+echo "=== FLUID BENCHMARKING: Packaged Reproduction Job ==="
 echo "Start: $(date -u)"
 echo ""
 
+echo "=== Full reproduction ==="
+bash scripts/reproduce.sh
+
+echo ""
+echo "=== Train/test score slices ==="
 bash scripts/evaluate_train.sh "$ROOT_DIR/checkpoints/experiment_results.json"
 bash scripts/evaluate_test.sh "$ROOT_DIR/checkpoints/experiment_results.json"
 

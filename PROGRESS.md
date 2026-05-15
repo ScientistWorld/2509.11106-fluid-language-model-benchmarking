@@ -11,7 +11,7 @@
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete for the reproduced scope: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
-- Added reference coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items, but that experiment is not yet counted as reproduced because it is not present in `scoring/scores.json`.
+- Added reference and scorer coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items. The train/test score slices already exercise this target; the next packaged validation run will regenerate the main `scores.json` with the current scorer.
 
 ## Results
 
@@ -84,6 +84,7 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 - The packaged reproduction environment is complete for the released-artifact scope of this project.
 - Work left for a higher milestone would be broader method coverage, especially reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard responses and expanding toward the broader Table 1 comparisons.
 - The current packaged milestone remains `secondary_claims` through Table 2 plus Appendix H. Appendix F / Table 4 is documented in `reference.json` for future expansion, but it is not part of the active reproduced score surface yet.
+- A packaging regression was found on 2026-05-15: the full local evaluator could not import `numpy` because `environment/setup.sh` had been reduced to a no-op. This has been fixed, and the next submitted CPU job will validate the fresh container path.
 
 ## Issues Encountered
 

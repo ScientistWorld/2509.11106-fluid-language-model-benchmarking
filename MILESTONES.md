@@ -62,3 +62,8 @@
 - Restored the test-slice primary `rank_distance` benchmark pairs to the paper/reference pairs so split scores measure the same scientific quantity as `reference.json`.
 - Regenerated `scoring/scores_train.json` and `scoring/scores_test.json` from `checkpoints/experiment_results.json`.
 - Verified both `python validate.py` and `python validate.py --compare` pass with the corrected split scores.
+
+### [2026-05-15 23:16] - secondary_claims
+- Found a packaging regression where the submitted setup script no longer installed `numpy`, `pandas`, and `scipy`, even though the full method/evaluation path imports them.
+- Restored those dependencies to `environment/setup.sh` and updated `scripts/run.sh` so the next CPU validation job exercises both `scripts/reproduce.sh` and the train/test score-slice evaluators.
+- Kept the milestone at `secondary_claims` pending the new packaged validation job result.

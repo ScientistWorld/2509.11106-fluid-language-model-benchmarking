@@ -1,7 +1,6 @@
 # Robust CPU-only container for FLUID BENCHMARKING evaluation.
 #
-# OS-level packages live here. The current evaluation submit does not need any
-# additional Python packages beyond the standard library.
+# OS-level packages live here. Python packages are installed by setup.sh.
 
 Bootstrap: docker
 From: ubuntu:22.04

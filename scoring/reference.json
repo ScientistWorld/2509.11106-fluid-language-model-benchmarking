@@ -1,7 +1,7 @@
 {
   "experiments": {
     "table2_ablation_comparison": {
-      "description": "Primary comparison of the candidate efficient benchmarking strategy against matched subset baselines across item budgets 10, 50, 100, and 500. Results are averaged over 6 benchmarks, 6 LMs, and 61-94 checkpoints per LM.",
+      "description": "Primary comparison of the proposed efficient benchmarking method against matched subset baselines across item budgets 10, 50, 100, and 500. Results are averaged over 6 benchmarks, 6 LMs, and 61-94 checkpoints per LM.",
       "weight": 0.65,
       "primary_metric": "rank_distance",
       "metrics": {
@@ -25,7 +25,7 @@
       }
     },
     "appendix_h_full_accuracy_comparison": {
-      "description": "Secondary comparison showing that the 500-item candidate strategy can outperform full-benchmark accuracy on the same validity, variance, and saturation metrics.",
+      "description": "Secondary comparison showing that the 500-item proposed method can outperform full-benchmark accuracy on the same validity, variance, and saturation metrics.",
       "weight": 0.15,
       "primary_metric": "rank_distance",
       "metrics": {

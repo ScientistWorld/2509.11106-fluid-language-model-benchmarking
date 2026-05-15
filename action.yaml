@@ -1,5 +1,3 @@
-action: submit
-gpus: 0
-test: true
+action: done
 milestone: secondary_claims
-notes: "CPU validation after restoring reproducible numpy/pandas/scipy setup; run full reproduction plus train/test scoring."
+notes: "Final verification passed after documentation cleanup, portable data cleanup, URL checks, and validation."

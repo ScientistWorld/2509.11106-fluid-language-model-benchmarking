@@ -6,12 +6,12 @@
 - Briefing files complete: problem.md, evaluation.md, method.md, overview.md.
 - Method implementation in `method/`: 2PL IRT (irt.py), adaptive Fisher-information item selection (fluid.py), metrics (metrics.py), and Table 2 experiment runner (experiment.py).
 - Evaluation code in `eval/` is independent of `method/`; `scripts/evaluate.sh` converts raw method outputs to `scoring/scores.json` and validates the score file.
-- Data are loaded from the released `allenai/fluid-benchmarking` artifacts under `data/`, including pre-fit 2PL IRT parameters and LM checkpoint item responses.
+- Data are loaded from the released `allenai/fluid-benchmarking` artifacts under `data/downloads/`, including pre-fit 2PL IRT parameters and LM checkpoint item responses. `scripts/download.sh` is the canonical way to repopulate these fetched artifacts.
 - Container definition and setup are in place, with OS-level packages in `environment/container.def` and the numerical Python stack installed from `environment/setup.sh`.
 - Reusable scripts are in place: `scripts/download.sh`, `scripts/method.sh`, `scripts/baseline.sh`, `scripts/evaluate.sh`, `scripts/reproduce.sh`, and `scripts/run.sh`.
 - Scoring files are complete for the reproduced scope: `reference.json`, `scores.json`, `TARGETS.md`, `CONSTRAINTS.md`, `DIRECTION.md`, and `EXPERIMENTS.md`.
 - Added an Appendix H scoring target comparing FLUID/500 against full-benchmark accuracy using the same saved checkpoint response curves.
-- Added reference and scorer coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items. The train/test score slices already exercise this target; the next packaged validation run will regenerate the main `scores.json` with the current scorer.
+- Added reference and scorer coverage for the paper's Appendix F / Table 4 per-LM breakdown at 100 items. The train/test score slices exercise this target, while the main active reproduced score surface remains Table 2 plus Appendix H.
 
 ## Results
 
@@ -83,8 +83,8 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 
 - The packaged reproduction environment is complete for the released-artifact scope of this project.
 - Work left for a higher milestone would be broader method coverage, especially reproducing the paper's upstream hierarchical-MCMC IRT fitting stage from raw leaderboard responses and expanding toward the broader Table 1 comparisons.
-- The current packaged milestone remains `secondary_claims` through Table 2 plus Appendix H. Appendix F / Table 4 is documented in `reference.json` for future expansion, but it is not part of the active reproduced score surface yet.
-- A packaging regression was found on 2026-05-15: the full local evaluator could not import `numpy` because `environment/setup.sh` had been reduced to a no-op. This has been fixed, and the next submitted CPU job will validate the fresh container path.
+- The current packaged milestone remains `secondary_claims` through Table 2 plus Appendix H. Appendix F / Table 4 is documented in `reference.json` and exercised by the train/test slices, but it is not part of the main active reproduced `scores.json` surface yet.
+- A packaging regression was found on 2026-05-15: the full local evaluator could not import `numpy` because `environment/setup.sh` had been reduced to a no-op. This has been fixed by restoring `numpy`, `pandas`, and `scipy` to `environment/setup.sh`; final verification also shell-checked the scripts and re-ran `python3 validate.py --compare`.
 
 ## Issues Encountered
 

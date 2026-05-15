@@ -67,3 +67,8 @@
 - Found a packaging regression where the submitted setup script no longer installed `numpy`, `pandas`, and `scipy`, even though the full method/evaluation path imports them.
 - Restored those dependencies to `environment/setup.sh` and updated `scripts/run.sh` so the next CPU validation job exercises both `scripts/reproduce.sh` and the train/test score-slice evaluators.
 - Kept the milestone at `secondary_claims` pending the new packaged validation job result.
+
+### [2026-05-15 23:22] - secondary_claims
+- Final verification tightened method-agnostic problem and evaluation wording so from-scratch agents receive task and metric definitions without method-specific cues.
+- Removed an unused tracked duplicate copy of public HuggingFace data under `data/fluid-benchmarking`; `scripts/download.sh` remains the canonical fetch path into `data/downloads/`, and all committed fetch URLs returned HTTP 200.
+- Re-ran `python3 validate.py --compare` and shell syntax checks for the environment and script entrypoints successfully.

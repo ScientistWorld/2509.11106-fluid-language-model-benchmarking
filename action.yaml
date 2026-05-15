@@ -1,5 +1,9 @@
-action: done
+# This iteration writes files only — do NOT submit compute jobs.
+# Once you set action to 'done', STOP immediately.
+# Do NOT sleep, poll, or wait. The system reads this file
+# only after your turn ends.
+action: pending
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Train/test split by held-out LM families plus hash-balanced checkpoint partitions; 3 metrics in train and 3 in test; scripts written, scores produced later."
+notes: ""

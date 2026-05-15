@@ -1,4 +1,4 @@
-action: submit
+action: done
 gpus: 0
 test: false
-notes: "CPU post-hoc run of scripts/evaluate_train.sh and scripts/evaluate_test.sh against checkpoints/experiment_results.json; populate scores_train/test."
+notes: "Hash/LM held-out split; 96 train metrics, 96 test metrics; result IDs match exactly; rank_distance harder on test (~2.29x median), total_variation/saturation comparable; no nulls."

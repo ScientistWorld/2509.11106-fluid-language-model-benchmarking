@@ -90,6 +90,7 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 
 - The previous successful job artifacts were generated before the latest packaging commit, so the algorithm audit and packaging audit briefly referred to different repository states. The resolved fix was a final cheap CPU validation run on the committed container.
 - The scheduler's generated setup-wrapper path was brittle in an earlier iteration. The final packaged environment follows repo protocol instead: OS-level packages stay in `environment/container.def`, and Python dependencies are installed from `environment/setup.sh`.
+- On 2026-05-15 23:28 UTC, the workspace was re-audited after reactivation. Local validation, Python byte-compilation, and shell syntax checks passed. `scripts/reproduce.sh` was tightened so the final `validate.py --compare` step now fails closed instead of being masked by `|| true`.
 
 ## Environment Details
 

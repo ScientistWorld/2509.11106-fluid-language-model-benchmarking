@@ -72,3 +72,8 @@
 - Final verification tightened method-agnostic problem and evaluation wording so from-scratch agents receive task and metric definitions without method-specific cues.
 - Removed an unused tracked duplicate copy of public HuggingFace data under `data/fluid-benchmarking`; `scripts/download.sh` remains the canonical fetch path into `data/downloads/`, and all committed fetch URLs returned HTTP 200.
 - Re-ran `python3 validate.py --compare` and shell syntax checks for the environment and script entrypoints successfully.
+
+### [2026-05-15 23:28] - secondary_claims
+- Re-audited the current workspace after reactivation and confirmed `method/fluid.py` still implements 2PL MAP ability estimation plus Fisher-information adaptive item selection rather than a surrogate.
+- Re-ran `python3 validate.py --compare`, `python3 -m py_compile`, and shell syntax checks successfully.
+- Tightened `scripts/reproduce.sh` so validation failures are no longer masked during end-to-end reproduction.

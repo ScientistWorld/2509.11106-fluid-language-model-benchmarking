@@ -1,3 +1,3 @@
 action: done
 milestone: secondary_claims
-notes: "Final verification passed after documentation cleanup, portable data cleanup, URL checks, and validation."
+notes: "Re-audited method/eval separation, reran validation and syntax checks, and tightened reproduce.sh to fail on validation errors."

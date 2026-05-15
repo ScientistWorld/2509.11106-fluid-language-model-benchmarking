@@ -38,7 +38,7 @@ bash scripts/evaluate.sh "$ROOT_DIR/checkpoints/experiment_results.json"
 
 echo ""
 echo "Step 3: Validating results..."
-python3 validate.py --compare 2>&1 || true
+python3 validate.py --compare
 
 echo ""
 echo "=== Reproduction complete ==="

@@ -1,5 +1,5 @@
 #!/bin/bash
-# CPU job entrypoint for train/test FLUID BENCHMARKING evaluation.
+# CPU job entrypoint for the real train/test FLUID BENCHMARKING evaluation run.
 #
 # Scores the frozen experiment payload into scoring/scores_{train,test}.json
 # and prints a small integrity summary for the job log.

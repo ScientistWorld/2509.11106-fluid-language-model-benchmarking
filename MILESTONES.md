@@ -52,3 +52,8 @@
 - Job `536b5f7b-fff` completed successfully; workspace fully validated.
 - Job `4e252a1b-379` completed successfully (Job #3); all three split experiments validated.
 - Job `91c49993-f12` completed successfully (Job #4); secondary_claims milestone closed.
+
+### [2026-05-15 23:02] - secondary_claims
+- Job `7c44965b-85c` completed the held-out train/test scoring pass with exit code 0 using `scripts/run.sh`.
+- Confirmed `scoring/scores_train.json` and `scoring/scores_test.json` each contain 96 finite metric values with matching method identifiers across Table 2, Appendix H, and Appendix F/Table 4.
+- Reconfirmed the workspace is above the `core_claim` threshold: `scoring/scores.json` contains the actual FLUID method run on released artifacts, where FLUID supports the primary Table 2 claim and the Appendix H full-accuracy secondary claim.

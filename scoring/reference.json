@@ -5,7 +5,7 @@
       "weight": 0.65,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks. Measures cross-benchmark validity: good selection should produce scores that rank LM abilities consistently across related benchmarks."},
+        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute OLL-reference rank deviation between paired benchmarks. Measures cross-benchmark validity: good selection should rank LM checkpoints consistently across related benchmarks."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves across checkpoints. Measures score stability: good selection should produce smooth, non-oscillating score progressions."},
         "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Absolute Spearman rank correlation between checkpoint index and score level. Measures learning curve shape: good selection should show monotonic improvement rather than flat or noisy curves."}
       },
@@ -29,7 +29,7 @@
       "weight": 0.15,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks. Measures cross-benchmark validity."},
+        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute OLL-reference rank deviation between paired benchmarks. Measures cross-benchmark validity."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves. Measures score stability."},
         "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Absolute Spearman rank correlation of checkpoint index vs score level. Measures learning curve shape."}
       },
@@ -43,7 +43,7 @@
       "weight": 0.20,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute rank deviation between paired benchmarks, averaged over checkpoints for one LM."},
+        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute OLL-reference rank deviation between paired benchmarks, averaged over checkpoints for one LM."},
         "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves across the six benchmarks for one LM."},
         "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Monotonicity of checkpoint score curves across the six benchmarks for one LM."}
       },

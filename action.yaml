@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: pending
+action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: ""
+notes: "Improvements: paper-style OLL rank-distance restored; held-out test validity pairs added; reference descriptions and design handoff updated. Notes: evaluator not run by design pass."

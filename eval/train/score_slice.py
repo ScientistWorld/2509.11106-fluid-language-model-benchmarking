@@ -16,13 +16,14 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 REFERENCE_PATH = REPO_ROOT / "scoring" / "reference.json"
 DEFAULT_RESULTS = REPO_ROOT / "checkpoints" / "experiment_results.json"
 DEFAULT_OUTPUT = REPO_ROOT / "scoring" / "scores_train.json"
+OLL_RESULTS_PATH = REPO_ROOT / "data" / "downloads" / "fluid-benchmarking" / "open_llm_leaderboard_results.json"
 
 TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
 TABLE4_EXPERIMENT = "appendix_f_table4_lm_breakdown_100"
 TABLE4_SPLIT_SEED = "81"
 BENCHMARKS = ["arc_challenge", "gsm8k", "hellaswag", "truthfulqa_mc2", "winogrande", "mmlu"]
-VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
+TRAIN_VALIDITY_PAIRS = [("arc_challenge", "mmlu"), ("hellaswag", "winogrande")]
 TRAIN_LMS = ["amber-7b", "olmo1-7b", "olmo2-7b"]
 TABLE4_RESULT_NAMES = {
     "amber-7b": "amber_7b",
@@ -91,21 +92,8 @@ def compute_saturation(scores: list[float]) -> float:
     return abs(numerator / denom)
 
 
-def descending_ordinal_ranks(values: list[float]) -> list[int]:
-    order = sorted(range(len(values)), key=lambda index: values[index])
-    ranks = [0] * len(values)
-    for ordinal, index in enumerate(order):
-        ranks[index] = len(values) - ordinal
-    return ranks
-
-
-def compute_rank_distance(source_scores: list[float], target_scores: list[float]) -> float:
-    n = len(source_scores)
-    if n < 2:
-        return 0.0
-    source_ranks = descending_ordinal_ranks(source_scores)
-    target_ranks = descending_ordinal_ranks(target_scores)
-    return sum(abs(source_rank - target_rank) for source_rank, target_rank in zip(source_ranks, target_ranks)) / n
+def rank_against_reference(score: float, reference_scores: list[float]) -> int:
+    return 1 + sum(reference_score > score for reference_score in reference_scores)
 
 
 def available_budgets(payload: dict) -> list[str]:
@@ -154,6 +142,7 @@ def filtered_curve_values(curve: dict, checkpoints: list[str]) -> list[float]:
 
 def compute_validity(
     payload: dict,
+    oll_results: dict,
     method: str,
     budget: str,
     lm_names: list[str],
@@ -162,29 +151,43 @@ def compute_validity(
     accuracy_curves = payload["accuracy_curves"]
     distances = []
 
-    for benchmark_a, benchmark_b in VALIDITY_PAIRS:
+    for benchmark_a, benchmark_b in TRAIN_VALIDITY_PAIRS:
         for source_benchmark, target_benchmark in (
             (benchmark_a, benchmark_b),
             (benchmark_b, benchmark_a),
         ):
+            source_reference_key = "accuracy" if method == "random" else "ability"
+            source_reference = [
+                float(value)
+                for value in oll_results[source_benchmark][source_reference_key].values()
+            ]
+            target_reference = [
+                float(value)
+                for value in oll_results[target_benchmark]["accuracy"].values()
+            ]
             for lm_name in lm_names:
                 source_curve = score_curves[method][budget][lm_name][source_benchmark]
                 target_curve = accuracy_curves[lm_name][target_benchmark]
                 checkpoints = ordered_shared_checkpoints(source_curve, target_curve)
                 if len(checkpoints) < 2:
                     continue
-                distances.append(
-                    compute_rank_distance(
-                        filtered_curve_values(source_curve, checkpoints),
-                        filtered_curve_values(target_curve, checkpoints),
+                for checkpoint in checkpoints:
+                    source_rank = rank_against_reference(
+                        float(source_curve[checkpoint]),
+                        source_reference,
                     )
-                )
+                    target_rank = rank_against_reference(
+                        float(target_curve[checkpoint]),
+                        target_reference,
+                    )
+                    distances.append(abs(source_rank - target_rank))
 
     return mean_or_nan(distances)
 
 
 def compute_method_metrics(
     payload: dict,
+    oll_results: dict,
     method: str,
     budget: str,
     lm_names: list[str],
@@ -199,32 +202,44 @@ def compute_method_metrics(
             saturation_values.append(compute_saturation(curve))
 
     return {
-        "rank_distance": compute_validity(payload, method, budget, lm_names),
+        "rank_distance": compute_validity(payload, oll_results, method, budget, lm_names),
         "total_variation": mean_or_nan(tv_values),
         "saturation": mean_or_nan(saturation_values),
     }
 
 
-def compute_full_accuracy_metrics(payload: dict, lm_names: list[str]) -> dict:
+def compute_full_accuracy_metrics(payload: dict, oll_results: dict, lm_names: list[str]) -> dict:
     accuracy_curves = payload["accuracy_curves"]
     rank_distances = []
-    for benchmark_a, benchmark_b in VALIDITY_PAIRS:
+    for benchmark_a, benchmark_b in TRAIN_VALIDITY_PAIRS:
         for source_benchmark, target_benchmark in (
             (benchmark_a, benchmark_b),
             (benchmark_b, benchmark_a),
         ):
+            source_reference = [
+                float(value)
+                for value in oll_results[source_benchmark]["accuracy"].values()
+            ]
+            target_reference = [
+                float(value)
+                for value in oll_results[target_benchmark]["accuracy"].values()
+            ]
             for lm_name in lm_names:
                 source_curve = accuracy_curves[lm_name][source_benchmark]
                 target_curve = accuracy_curves[lm_name][target_benchmark]
                 checkpoints = ordered_shared_checkpoints(source_curve, target_curve)
                 if len(checkpoints) < 2:
                     continue
-                rank_distances.append(
-                    compute_rank_distance(
-                        filtered_curve_values(source_curve, checkpoints),
-                        filtered_curve_values(target_curve, checkpoints),
+                for checkpoint in checkpoints:
+                    source_rank = rank_against_reference(
+                        float(source_curve[checkpoint]),
+                        source_reference,
                     )
-                )
+                    target_rank = rank_against_reference(
+                        float(target_curve[checkpoint]),
+                        target_reference,
+                    )
+                    rank_distances.append(abs(source_rank - target_rank))
 
     tv_values = []
     saturation_values = []
@@ -241,29 +256,42 @@ def compute_full_accuracy_metrics(payload: dict, lm_names: list[str]) -> dict:
     }
 
 
-def compute_table4_metrics(payload: dict, method: str, budget: str, lm_name: str) -> dict:
+def compute_table4_metrics(payload: dict, oll_results: dict, method: str, budget: str, lm_name: str) -> dict:
     score_curves = payload["score_curves"]
     accuracy_curves = payload["accuracy_curves"]
     benchmark_scores = score_curves[method][budget][lm_name]
     lm_accuracy_curves = accuracy_curves[lm_name]
 
     rank_distances = []
-    for benchmark_a, benchmark_b in VALIDITY_PAIRS:
+    for benchmark_a, benchmark_b in TRAIN_VALIDITY_PAIRS:
         for source_benchmark, target_benchmark in (
             (benchmark_a, benchmark_b),
             (benchmark_b, benchmark_a),
         ):
+            source_reference_key = "accuracy" if method == "random" else "ability"
+            source_reference = [
+                float(value)
+                for value in oll_results[source_benchmark][source_reference_key].values()
+            ]
+            target_reference = [
+                float(value)
+                for value in oll_results[target_benchmark]["accuracy"].values()
+            ]
             source_curve = benchmark_scores[source_benchmark]
             target_curve = lm_accuracy_curves[target_benchmark]
             checkpoints = train_checkpoint_subset(ordered_shared_checkpoints(source_curve, target_curve), lm_name)
             if len(checkpoints) < 2:
                 continue
-            rank_distances.append(
-                compute_rank_distance(
-                    filtered_curve_values(source_curve, checkpoints),
-                    filtered_curve_values(target_curve, checkpoints),
+            for checkpoint in checkpoints:
+                source_rank = rank_against_reference(
+                    float(source_curve[checkpoint]),
+                    source_reference,
                 )
-            )
+                target_rank = rank_against_reference(
+                    float(target_curve[checkpoint]),
+                    target_reference,
+                )
+                rank_distances.append(abs(source_rank - target_rank))
 
     tv_values = []
     saturation_values = []
@@ -291,6 +319,7 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
     if missing:
         raise ValueError(f"Results payload is missing slice LMs: {missing}")
 
+    oll_results = load_json(OLL_RESULTS_PATH)
     table_ref = reference["experiments"][TABLE2_EXPERIMENT]
     table_methods = table_ref["results"]
     scores = {"experiments": {TABLE2_EXPERIMENT: {"results": {}}}}
@@ -300,7 +329,7 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
             method_name = f"{method}_{budget}"
             if method_name not in table_methods:
                 continue
-            metrics = compute_method_metrics(payload, method, budget, lm_names)
+            metrics = compute_method_metrics(payload, oll_results, method, budget, lm_names)
             scores["experiments"][TABLE2_EXPERIMENT]["results"][method_name] = clean_metrics(
                 metrics,
                 table_ref,
@@ -314,7 +343,7 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
         scores["experiments"][APPENDIX_H_EXPERIMENT] = {
             "results": {
                 "full_accuracy": clean_metrics(
-                    compute_full_accuracy_metrics(payload, lm_names),
+                    compute_full_accuracy_metrics(payload, oll_results, lm_names),
                     appendix_ref,
                 )
             }
@@ -332,7 +361,7 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
                 if result_name not in table4_ref["results"]:
                     continue
                 table4_results[result_name] = clean_metrics(
-                    compute_table4_metrics(payload, method, "100", lm_name),
+                    compute_table4_metrics(payload, oll_results, method, "100", lm_name),
                     table4_ref,
                 )
         scores["experiments"][TABLE4_EXPERIMENT] = {"results": table4_results}

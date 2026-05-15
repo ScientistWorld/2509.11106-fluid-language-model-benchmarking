@@ -1,59 +1,29 @@
-# Design Notes — FLUID BENCHMARKING Train/Test Evaluation
+# Design Notes - FLUID BENCHMARKING Train/Test Evaluation
 
-## Final Split
+## What I Checked
 
-The shipped split uses two different mechanisms:
-- `table2_ablation_comparison` and `appendix_h_full_accuracy_comparison` split by LM family.
-- `appendix_f_table4_lm_breakdown_100` keeps all LM rows in both slices but splits each LM's checkpoints into disjoint hash-balanced subsets.
+- Compared `scripts/evaluate_train.sh` and `scripts/evaluate_test.sh`: train calls `eval/train/score_slice.py` and writes `scoring/scores_train.json`; test calls `eval/test/score_slice.py` and writes `scoring/scores_test.json`.
+- Checked for hardcoded method defaults: both slice scorers enumerate methods from the result payload and do not use a fixed `METHOD_NAME`.
+- Checked train/test leakage with grep: no executable cross-imports between `eval/train/` and `eval/test/`; only docstring mentions remain.
+- Checked `scoring/reference.json` metric entries: active metrics have `higher_is_better`, `coefficient`, and `description`, and none are paper-agreement/error-to-publication metrics.
+- Confirmed `scoring/scores_train.json` and `scoring/scores_test.json` do not exist at handoff.
 
-Train slice:
-- LMs: `amber-7b`, `olmo1-7b`, `olmo2-7b`
-- Table 4 checkpoints: the deterministic hash-selected half of each LM curve using seed `81`
+## What Changed
 
-Test slice:
-- LMs: `k2-65b`, `pythia-3b`, `pythia-7b`
-- Table 4 checkpoints: the held-out complement of the seed-`81` hash split
+- Fixed a scientific-fidelity issue in both slice scorers: `rank_distance` now uses the paper-style OLL reference-rank calculation instead of the previous checkpoint-only ordinal-rank proxy.
+- Strengthened the hidden test slice against metric-gaming: train validity still uses the visible paper pairs `arc_challenge`/`mmlu` and `hellaswag`/`winogrande`, while test validity uses held-out pairs `gsm8k`/`mmlu` and `arc_challenge`/`truthfulqa_mc2`.
+- Applied the OLL-reference rank-distance calculation consistently to Table 2, Appendix H full-accuracy comparison, and Appendix F/Table 4 per-LM breakdown.
+- Updated `scoring/reference.json` descriptions for `rank_distance` so the schema matches the actual OLL-reference rank metric.
 
-This preserves the anti-shortcut goal: train is visible and optimized against, while test probes unseen LM families for the aggregate experiments and unseen checkpoints for the per-LM breakdown.
+## Runtime Concerns For Next Iteration
 
-## Real-Run Results
+- I did not run the evaluators or generate scores in this design pass. The runner should execute both scripts and check that the new held-out benchmark-pair split remains calibrated rather than overly punitive.
+- The test validity pairs intentionally differ from train, so train/test `rank_distance` values will no longer be directly pair-identical. The expected signal is stable method ordering with some absolute-value shift.
+- The slice scorers now require `data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json`. The file is present in this workspace; the runner should confirm packaged environments always obtain it through `scripts/download.sh`.
+- Table 4 still uses all LM result rows in both slices but splits checkpoints hash-wise. This preserves matching result identifiers, but subgroup-overfit protection for that experiment mainly comes from held-out checkpoints and held-out benchmark pairs, not held-out LM names.
 
-The evaluation job completed successfully and wrote both `scoring/scores_train.json` and `scoring/scores_test.json`.
+## Static Checks Completed
 
-Coverage:
-- `table2_ablation_comparison`: 12 train rows, 12 test rows
-- `appendix_h_full_accuracy_comparison`: 2 train rows, 2 test rows
-- `appendix_f_table4_lm_breakdown_100`: 18 train rows, 18 test rows
-- Result identifier sets match exactly across train and test for every experiment
-
-Signal quality on the frozen method:
-- Table 2: `fluid` beats both matched baselines on all 24 metric comparisons in train and all 24 in test
-- Appendix H: `fluid_500` beats `full_accuracy` on `total_variation` and `saturation` in both slices, and on `rank_distance` only in test
-- Table 4: `fluid` beats matched baselines on 36/36 train metric comparisons and 36/36 test comparisons
-
-## Checks Confirmed
-
-### Scripts
-- `scripts/evaluate_train.sh` writes `scores_train.json`
-- `scripts/evaluate_test.sh` writes `scores_test.json`
-- `scripts/run.sh` scores both slices from the frozen `checkpoints/experiment_results.json` payload
-- No method name is hardcoded; scorers enumerate available methods from the payload
-
-### Leakage
-- `eval/train/score_slice.py` and `eval/test/score_slice.py` remain self-contained
-- No cross-imports between train and test
-- No metric is defined as agreement with the paper
-
-### Calibration
-- The split is not byte-identical: average absolute train-test metric gap is `2.861` for Table 2, `2.736` for Appendix H, and `1.287` for Table 4
-- The method ranking signal remains stable across slices instead of collapsing
-
-## Main Caveat
-
-The largest train-test deltas are in `total_variation`, especially:
-- `random_irt_50` in Table 2: `16.11` train vs `41.32` test
-- `random_amber_7b_100` in Table 4: `7.45` train vs `22.40` test
-- `random_irt_pythia_7b_100` in Table 4: `9.80` train vs `22.38` test
-- `full_accuracy` in Appendix H: `4.97` train vs `17.13` test
-
-These do not break the benchmark, but they mean test is materially more punitive on volatility than train for some rows. That caveat should remain documented for downstream users.
+- `bash -n scripts/evaluate_train.sh`
+- `bash -n scripts/evaluate_test.sh`
+- grep checks for train/test cross-imports, hardcoded method names, paper-agreement metric names, and stale train/test score stubs

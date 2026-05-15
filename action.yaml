@@ -1,5 +1,5 @@
-action: done
+action: submit
 gpus: 0
-test: false
+test: true
 milestone: secondary_claims
-notes: "Packager audit fixed repo-relative run paths; download URLs and validation checks pass."
+notes: "CPU validation after restoring reproducible numpy/pandas/scipy setup; run full reproduction plus train/test scoring."

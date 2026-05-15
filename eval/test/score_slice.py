@@ -16,6 +16,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 REFERENCE_PATH = REPO_ROOT / "scoring" / "reference.json"
 DEFAULT_RESULTS = REPO_ROOT / "checkpoints" / "experiment_results.json"
 DEFAULT_OUTPUT = REPO_ROOT / "scoring" / "scores_test.json"
+DEFAULT_TRAIN_SCORES = REPO_ROOT / "scoring" / "scores_train.json"
 
 TABLE2_EXPERIMENT = "table2_ablation_comparison"
 APPENDIX_H_EXPERIMENT = "appendix_h_full_accuracy_comparison"
@@ -327,7 +328,7 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
         table4_ref = reference["experiments"][TABLE4_EXPERIMENT]
         table4_results = {}
         for lm_name, lm_result_name in TABLE4_RESULT_NAMES.items():
-            for method in ("random", "random_irt", "fluid"):
+            for method in available_methods(payload):
                 result_name = f"{method}_{lm_result_name}_100"
                 if result_name not in table4_ref["results"]:
                     continue
@@ -340,16 +341,53 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
     return scores
 
 
+def assert_same_result_keys(test_scores: dict, train_scores_path: Path) -> None:
+    if not train_scores_path.exists():
+        print(f"Train scores not found at {train_scores_path}; skipping key-set check")
+        return
+
+    train_scores = load_json(train_scores_path)
+    train_experiments = train_scores.get("experiments", {})
+    test_experiments = test_scores.get("experiments", {})
+    mismatches = []
+
+    for experiment_name, train_experiment in train_experiments.items():
+        train_keys = set(train_experiment.get("results", {}))
+        test_keys = set(test_experiments.get(experiment_name, {}).get("results", {}))
+        if train_keys != test_keys:
+            missing = sorted(train_keys - test_keys)
+            extra = sorted(test_keys - train_keys)
+            mismatches.append((experiment_name, missing, extra))
+
+    extra_experiments = sorted(set(test_experiments) - set(train_experiments))
+    for experiment_name in extra_experiments:
+        extra = sorted(test_experiments[experiment_name].get("results", {}))
+        mismatches.append((experiment_name, [], extra))
+
+    if mismatches:
+        details = []
+        for experiment_name, missing, extra in mismatches:
+            details.append(
+                f"{experiment_name}: missing_from_test={missing}, extra_in_test={extra}"
+            )
+        raise ValueError(
+            "Test slice result keys must match scoring/scores_train.json; "
+            + "; ".join(details)
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
     parser.add_argument("--reference", type=Path, default=REFERENCE_PATH)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--train-scores", type=Path, default=DEFAULT_TRAIN_SCORES)
     args = parser.parse_args()
 
     payload = load_json(args.results)
     reference = load_json(args.reference)
     scores = build_scores(payload, reference, TEST_LMS)
+    assert_same_result_keys(scores, args.train_scores)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w") as handle:
         json.dump(scores, handle, indent=2)

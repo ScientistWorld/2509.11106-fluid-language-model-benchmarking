@@ -327,7 +327,7 @@ def build_scores(payload: dict, reference: dict, lm_names: list[str]) -> dict:
         table4_ref = reference["experiments"][TABLE4_EXPERIMENT]
         table4_results = {}
         for lm_name, lm_result_name in TABLE4_RESULT_NAMES.items():
-            for method in ("random", "random_irt", "fluid"):
+            for method in available_methods(payload):
                 result_name = f"{method}_{lm_result_name}_100"
                 if result_name not in table4_ref["results"]:
                     continue

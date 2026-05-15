@@ -2,4 +2,4 @@ action: done
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Fixed validation: removed pre-generated scores_train/test.json; scripts now produce them at runtime."
+notes: "Train/test split by held-out LM families plus hash-balanced checkpoint partitions; 3 metrics in train and 3 in test; scripts written, scores produced later."

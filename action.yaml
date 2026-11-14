@@ -1,4 +1,3 @@
-action: submit
-gpus: 0
-test: false
-notes: "Audit: 3 exact full-data FLUID seeds, genuine stronger/weaker variants, and 15 artifact/scoring shortcut trials; unchanged no-argument hidden evaluator."
+action: done
+milestone: secondary_claims
+notes: "Scoring audit complete and committed: genuine gain below baseline seed spread; six higher-scoring shortcuts and two shortcut ties; original artifacts restored."

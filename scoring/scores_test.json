@@ -1,0 +1,184 @@
+{
+  "experiments": {
+    "table2_ablation_comparison": {
+      "results": {
+        "submitted_10": {
+          "rank_distance": 9.444306930693068,
+          "total_variation": 16.08146799457474,
+          "saturation": 0.6940829328227185
+        },
+        "submitted_50": {
+          "rank_distance": 8.076732673267326,
+          "total_variation": 7.017860010296118,
+          "saturation": 0.8486217881193112
+        },
+        "submitted_100": {
+          "rank_distance": 8.077970297029703,
+          "total_variation": 6.0479861706555065,
+          "saturation": 0.8577327579881704
+        },
+        "submitted_500": {
+          "rank_distance": 7.616336633663367,
+          "total_variation": 4.924489050343828,
+          "saturation": 0.879825196506816
+        }
+      },
+      "baselines": {
+        "random_10": {
+          "rank_distance": 25.083663366336634,
+          "total_variation": 43.76340899547249,
+          "saturation": 0.4041448469912995
+        },
+        "random_50": {
+          "rank_distance": 16.439356435643564,
+          "total_variation": 28.852272989858612,
+          "saturation": 0.5797858711367105
+        },
+        "random_100": {
+          "rank_distance": 13.616831683168318,
+          "total_variation": 32.634274710605226,
+          "saturation": 0.6373707205047008
+        },
+        "random_500": {
+          "rank_distance": 10.128960396039602,
+          "total_variation": 15.569200196069179,
+          "saturation": 0.7881767930576846
+        },
+        "random_irt_10": {
+          "rank_distance": 17.35618811881188,
+          "total_variation": 39.83213962165697,
+          "saturation": 0.4344420321393353
+        },
+        "random_irt_50": {
+          "rank_distance": 11.044306930693072,
+          "total_variation": 25.213334141009863,
+          "saturation": 0.6358423184651985
+        },
+        "random_irt_100": {
+          "rank_distance": 9.806683168316832,
+          "total_variation": 26.790565934492868,
+          "saturation": 0.6996330133357054
+        },
+        "random_irt_500": {
+          "rank_distance": 7.355445544554456,
+          "total_variation": 13.76543211742424,
+          "saturation": 0.8181427796064776
+        }
+      }
+    },
+    "appendix_h_full_accuracy_comparison": {
+      "results": {
+        "submitted_500": {
+          "rank_distance": 7.616336633663367,
+          "total_variation": 4.924489050343828,
+          "saturation": 0.879825196506816
+        }
+      },
+      "baselines": {
+        "full_accuracy": {
+          "rank_distance": 8.457920792079207,
+          "total_variation": 17.356118959309875,
+          "saturation": 0.8410760218407308
+        },
+        "full_ability": {
+          "rank_distance": 7.101485148514851,
+          "total_variation": 15.65653761670487,
+          "saturation": 0.8805014344741817
+        }
+      }
+    },
+    "appendix_f_table4_worst_lm_100": {
+      "results": {
+        "submitted_100": {
+          "rank_distance": 11.628205128205128,
+          "total_variation": 7.139497390928966,
+          "saturation": 0.8126182636122777
+        }
+      },
+      "baselines": {
+        "random_100": {
+          "rank_distance": 17.676923076923078,
+          "total_variation": 41.24482338994383,
+          "saturation": 0.5863549774624396
+        },
+        "random_irt_100": {
+          "rank_distance": 13.166666666666666,
+          "total_variation": 35.02041807315693,
+          "saturation": 0.6591695919140047
+        }
+      },
+      "per_lm": {
+        "k2-65b": {
+          "submitted": {
+            "rank_distance": 2.0652173913043477,
+            "total_variation": 7.139497390928966,
+            "saturation": 0.8922602528522973
+          },
+          "random": {
+            "rank_distance": 4.259782608695652,
+            "total_variation": 24.306836934083986,
+            "saturation": 0.6772605430000193
+          },
+          "random_irt": {
+            "rank_distance": 4.678260869565218,
+            "total_variation": 25.089965635473412,
+            "saturation": 0.6961453627548778
+          }
+        },
+        "pythia-3b": {
+          "submitted": {
+            "rank_distance": 8.073717948717949,
+            "total_variation": 6.546098276041896,
+            "saturation": 0.8126182636122777
+          },
+          "random": {
+            "rank_distance": 15.22628205128205,
+            "total_variation": 39.81791420434702,
+            "saturation": 0.6118059856867017
+          },
+          "random_irt": {
+            "rank_distance": 9.471153846153847,
+            "total_variation": 27.583494568021298,
+            "saturation": 0.7084026256703482
+          }
+        },
+        "pythia-7b": {
+          "submitted": {
+            "rank_distance": 11.628205128205128,
+            "total_variation": 4.458362844995658,
+            "saturation": 0.8683197574999365
+          },
+          "random": {
+            "rank_distance": 17.52564102564103,
+            "total_variation": 33.77807299338469,
+            "saturation": 0.6230456328273815
+          },
+          "random_irt": {
+            "rank_distance": 13.166666666666666,
+            "total_variation": 27.698237599983905,
+            "saturation": 0.6943510515818903
+          }
+        }
+      }
+    }
+  },
+  "status": "ok",
+  "slice": "test",
+  "lms": [
+    "k2-65b",
+    "pythia-3b",
+    "pythia-7b"
+  ],
+  "score_scale": "ability",
+  "evaluation": {
+    "sessions": 4848,
+    "replayed_sessions": 582,
+    "mean_items_queried": {
+      "10": 10.0,
+      "50": 50.0,
+      "100": 100.0,
+      "500": 500.0
+    },
+    "method_seconds": 158.3
+  }
+}

@@ -1,8 +1,8 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: pending
+action: submit
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: ""
+notes: "Hardening audit: reference, better (EAP final), weaker (random IRT) and 11 shortcut probes through the new evaluator-run protocol on the hidden test; reference + variants on train; analysis."

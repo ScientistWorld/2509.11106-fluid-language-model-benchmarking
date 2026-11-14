@@ -143,6 +143,38 @@ def main():
                 direction = 1 if metric == 'saturation' else -1
                 comparisons.append(direction*(results[f'fluid_{k}'][metric]-results[f'{baseline}_{k}'][metric]) > 0)
     summary['table2_reference_baseline_wins'] = [sum(comparisons),len(comparisons)]
+    per_lm_comparisons = []
+    per_lm_exceptions = []
+    per_lm_results = reference['experiments'][TABLE4]['results']
+    for row, metrics in per_lm_results.items():
+        if not row.startswith('fluid_'):
+            continue
+        for baseline in ['random', 'random_irt']:
+            other_row = baseline + row[len('fluid'):]
+            for metric, value in metrics.items():
+                direction = 1 if metric == 'saturation' else -1
+                improvement = direction * (value-per_lm_results[other_row][metric])
+                per_lm_comparisons.append(improvement > 0)
+                if improvement <= 0:
+                    per_lm_exceptions.append({'row': row, 'baseline': other_row,
+                                              'metric': metric, 'fluid': value,
+                                              'baseline_value': per_lm_results[other_row][metric]})
+    summary['table4_reference_baseline_wins'] = [sum(per_lm_comparisons), len(per_lm_comparisons)]
+    summary['table4_reference_baseline_exceptions'] = per_lm_exceptions
+    summary['seed_metric_ranges'] = {
+        '/'.join(cell): max(cells(runs[f'reference_seed{i}']['scores'])[cell] for i in range(3))
+        - min(cells(runs[f'reference_seed{i}']['scores'])[cell] for i in range(3))
+        for cell in base}
+    # A mathematical upper bound, not an additional evaluated attempt. Even
+    # incompatible ideal metrics are allowed here, so this cannot understate
+    # the available headroom for a method that changes only proposed rows.
+    ideal_fluid = copy.deepcopy(reference)
+    for experiment in ideal_fluid['experiments'].values():
+        for row, metrics in experiment['results'].items():
+            if row.startswith('fluid_'):
+                for metric in metrics:
+                    metrics[metric] = 1.0 if metric == 'saturation' else 0.0
+    summary['mathematical_fluid_only_upper_bound_rank'] = rank(ideal_fluid, True)
     summary['bruteforce_fluid_vs_reference'] = summary['runs']['all_items_bruteforce_shortcut']
     summary['failure_outputs'] = {name: {'exit': run['status']['test_exit'], 'has_score_file': run['scores'] is not None}
                                   for name,run in runs.items() if run['status']['test_exit'] != 0}

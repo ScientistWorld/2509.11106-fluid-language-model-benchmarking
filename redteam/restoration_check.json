@@ -1,0 +1,14 @@
+{
+  "changed_initial_tracked_files": [
+    "action.yaml"
+  ],
+  "restored_ignored_artifacts": {
+    "checkpoints/experiment_results.json": true,
+    "data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json": true
+  },
+  "audit_python_ast_parse": "pass",
+  "audit_shell_syntax": "pass",
+  "case_count": 20,
+  "initial_commit": "dc74166ca5c323f43e1fbc5d67946b79dbaae469",
+  "note": "action.yaml is the required job-protocol exception; pre-existing changes were preserved by initial content hashes"
+}

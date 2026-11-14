@@ -2,7 +2,8 @@
 
 No test evaluator, hidden split, paper, reference.json, or hidden scores are read.
 The starting payload is produced by the public improve-mode method (recompute.py).
-Only read_target_data_shortcut reads unadministered paired-benchmark answers.
+read_target_data_shortcut reads unadministered paired-benchmark answers;
+all_items_bruteforce_shortcut reuses all-response MAP estimates from recompute.py.
 """
 import argparse
 import copy
@@ -65,7 +66,7 @@ def main():
     if name.startswith('reference_seed'):
         payload = json.loads((ROOT / 'redteam' / name / 'payload.json').read_text())
     elif name == 'better_denoising':
-        # A fixed local likelihood smoother. Uses estimated abilities, never
+        # A fixed local ability smoother. Uses estimated abilities, never
         # target answers, and preserves the original query budget at every cp.
         # Endpoints remain measured to avoid manufacturing end-to-end progress.
         for budget in fluid.values():

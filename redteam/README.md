@@ -31,3 +31,12 @@ null trials test whether a failure writes worst-case metrics.
 The job restores all touched data, checkpoints and score artifacts between
 cases. The final audit restores the original job script and action file except
 for the final protocol-required `action: done` signal.
+
+The completed audit is described in `../REDTEAM.md`. Twenty cases were run:
+three reference seeds, two genuine method variants, and fifteen shortcut trials.
+Six shortcuts score higher in the recorded cohort and two tie. Calibration
+replacement, fabricated curves, and fabricated curves with a reduced test size
+improve scored cells without worsening any, so their wins do not depend on the
+particular positive normalization scales. Mixed-direction wins do depend on
+the future attempt population. `restoration_check.json` verifies original file
+contents, including the ignored checkpoint and calibration artifacts.

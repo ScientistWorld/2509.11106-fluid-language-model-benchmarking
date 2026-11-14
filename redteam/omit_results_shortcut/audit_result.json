@@ -1,7 +1,7 @@
 {
   "test_exit": 0,
-  "rank": -1.9409736886832085e-16,
-  "fluid_only_rank": -2.7823022291102724e-16,
+  "rank": -1.9409736886832092e-16,
+  "fluid_only_rank": -2.782302229110273e-16,
   "scored_cells": 36,
   "missing_reference_cells": 60,
   "improved_cells": 0,

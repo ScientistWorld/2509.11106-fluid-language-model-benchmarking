@@ -82,3 +82,9 @@
 - Final verification fixed the top-level evaluator so `scripts/evaluate.sh` runs with only standard-library scoring code on the saved method artifact.
 - Re-ran `scripts/evaluate.sh`, `scripts/evaluate_train.sh`, and `scripts/evaluate_test.sh` against `checkpoints/experiment_results.json`; all regenerated score files include Table 2, Appendix H, and Appendix F/Table 4.
 - Updated the method-safe scoring documentation to match the active `scores.json` experiment surface.
+
+### [2026-11-14 09:45] - secondary_claims
+- Hardening (iteration 11): the evaluators now run the submitted method (`scripts/method.sh`) through an item-query protocol with enforced budgets, hidden held-out LMs (K2-65B, Pythia-2.8B, Pythia-6.9B) in `eval/test/`, evaluator-owned baselines and ground truth, and fail-closed worst-value scoring. Details in `HARDENING.md`.
+- Restored the paper's released response binarization (>= 0.5); held-out per-LM values now match Table 4 within 0.05 and the six-LM pooled validity matches Table 2 (10.12/8.78/8.65/8.27 vs 10.1/8.8/8.7/8.3).
+- Hidden test: FLUID beats both baselines on 23/24 Table 2 comparisons, 3/3 Appendix H, 18/18 per-LM. An honest calibrated variant beats the reference beyond paired-bootstrap noise (rank +0.216, CI [0.154, 0.278]).
+

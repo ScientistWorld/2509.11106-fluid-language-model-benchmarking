@@ -1,3 +1,5 @@
+> **Superseded (iteration 11 hardening):** this document describes the earlier payload-based gym. The evaluator now runs `scripts/method.sh` through an item-query protocol; see `HARDENING.md` and `briefing/evaluation.md`.
+
 This is a benchmark audit, not a proposed research method.
 
 Run `bash redteam/job.sh` in the packaged CPU container. It repeats the actual

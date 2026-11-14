@@ -11,23 +11,23 @@ Check off items as you complete them. Order doesn't matter — work however make
 ## Scoring
 - [x] `scoring/reference.json` — paper's reported numbers (Table 2, Appendix H, plus Appendix F reference coverage)
 - [x] Workspace validated via `python validate.py`
-- [x] `scoring/scores.json` — reproduced numbers (Table 2 plus Appendix H)
+- [x] `scoring/scores.json` / `scores_train.json` / `scores_test.json` — reference method scored by the evaluators (visible LMs / held-out LMs)
 - [x] `scoring/TARGETS.md` — primary, constraint, and ablation targets
 - [x] `scoring/CONSTRAINTS.md` — what a scientist must hold fixed
 - [x] `scoring/DIRECTION.md` — research direction scope for scientist
 - [x] `scoring/EXPERIMENTS.md` — experiment descriptions
 
 ## Code
-- [x] Evaluation code in `eval/` (compute_metrics, score_results, scoring, run_evaluation)
-- [x] Method implementation in `method/` (irt, fluid, experiment, fluid_benchmarking)
-- [x] Baseline implementations (integrated in method/fluid.py and wrapped by scripts/baseline.sh: RANDOM, RANDOM_IRT)
+- [x] Evaluation code in `eval/train/score.py` and `eval/test/score.py` (independent; run the method through the item-query protocol)
+- [x] Method implementation in `method/` (irt, fluid, serve = protocol server)
+- [x] Baselines: computed by the evaluators (RANDOM, RANDOM IRT, full accuracy, all-item ability); `scripts/baseline.sh` serves the ablations through the protocol
 
 ## Scripts
-- [x] `scripts/evaluate.sh` — self-contained evaluation runner
+- [x] `scripts/evaluate.sh` / `evaluate_train.sh` / `evaluate_test.sh` — no-argument evaluators
 - [x] `scripts/reproduce.sh` — end-to-end reproduction script
 - [x] `scripts/download.sh` — idempotent download script with size comment
-- [x] `scripts/method.sh` — runs FLUID method on experiment data
-- [x] `scripts/baseline.sh` — runs matched RANDOM and RANDOM_IRT baselines as part of the shared ablation experiment
+- [x] `scripts/method.sh` — the submission (FLUID protocol server)
+- [x] `scripts/baseline.sh` — RANDOM / RANDOM IRT served through the protocol
 - [x] `scripts/run.sh` — job script for compute submission
 
 ## Environment
@@ -40,8 +40,8 @@ Check off items as you complete them. Order doesn't matter — work however make
 
 ## Results
 - [x] Core claim verified: FLUID beats RANDOM on all metrics (rank_distance, total_variation, saturation) across all 4 budgets (10, 50, 100, 500)
-- [x] 12 Table 2 method-budget entries plus Appendix H full-accuracy comparison scored
-- [x] Packaged container path validated on cluster via `scripts/run.sh` → `scripts/reproduce.sh` → `scripts/evaluate.sh`
+- [x] Table 2 (4 budgets), Appendix H and worst-LM Table 4 experiments scored; hardening audit in `HARDENING.md`
+- [x] Packaged container path validated on cluster (jobs c6167f00-2ce, 69bcfe1b-31d)
 
 ## Milestones
 - [x] `method_runs` — FLUID algorithm executes end-to-end without errors

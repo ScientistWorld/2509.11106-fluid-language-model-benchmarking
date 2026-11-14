@@ -112,3 +112,9 @@ This closes the earlier packaging uncertainty. The shipped environment is now va
 - `method_runs`: The paper's 2PL IRT ability estimation and Fisher-information adaptive item-selection algorithm runs end-to-end.
 - `core_claim`: The independent reproduction verifies the Table 2 claim that FLUID beats RANDOM and RANDOM_IRT on validity, variance, and saturation at matched budgets.
 - `secondary_claims`: The packaged run also reproduces the Appendix H comparison showing `fluid_500` outperforming `full_accuracy` on the released artifact snapshot, and the containerized environment now passes the full validation path end-to-end.
+
+## Iteration 11 (hardening, 2026-11-14)
+- Replaced the payload-based scorer with an evaluator-run item-query protocol (`briefing/evaluation.md`); held-out LMs hidden in `eval/test/data/`; baselines/ground truth/reference population fixed in `eval/`; replay check for stateless per-session methods; failed runs score worst everywhere.
+- Restored the paper's 0.5 response binarization; reproduction matches the paper's Table 2/Table 4 closely.
+- Audit (`hardening/`): better calibrated variant +0.216 (CI excludes 0), weaker no-adaptivity −4.80, every old shortcut impossible or failed. See `HARDENING.md`.
+

@@ -1,0 +1,13 @@
+{
+  "map_estimation_seconds": 2.010670107905753,
+  "responses_used": 12953868,
+  "item_counts": {
+    "arc_challenge": 1172,
+    "gsm8k": 1319,
+    "hellaswag": 10042,
+    "truthfulqa_mc2": 817,
+    "winogrande": 1267,
+    "mmlu": 14042
+  },
+  "note": "all-item MAP timing excludes CSV loading and CAT reference computations"
+}

@@ -1,0 +1,176 @@
+{
+  "experiments": {
+    "table2_ablation_comparison": {
+      "results": {
+        "random_10": {
+          "rank_distance": 29.10148514851485,
+          "total_variation": 48.732094175354966,
+          "saturation": 0.42016052984249275
+        },
+        "random_irt_10": {
+          "rank_distance": 16.081683168316832,
+          "total_variation": 50.20694856868894,
+          "saturation": 0.46709592081317985
+        },
+        "fluid_10": {
+          "rank_distance": 9.448019801980198,
+          "total_variation": 13.590845138611877,
+          "saturation": 0.7029536782171244
+        },
+        "random_50": {
+          "rank_distance": 15.167079207920793,
+          "total_variation": 27.110260920789894,
+          "saturation": 0.6627499158575183
+        },
+        "random_irt_50": {
+          "rank_distance": 11.419554455445544,
+          "total_variation": 28.150502123948797,
+          "saturation": 0.6775293766813212
+        },
+        "fluid_50": {
+          "rank_distance": 8.087871287128714,
+          "total_variation": 6.919152699510404,
+          "saturation": 0.848279727274327
+        },
+        "random_100": {
+          "rank_distance": 18.314356435643564,
+          "total_variation": 37.47491782311065,
+          "saturation": 0.6320187766504449
+        },
+        "random_irt_100": {
+          "rank_distance": 9.654702970297029,
+          "total_variation": 26.337086279290062,
+          "saturation": 0.7095777423486875
+        },
+        "fluid_100": {
+          "rank_distance": 8.091584158415841,
+          "total_variation": 6.238364375424911,
+          "saturation": 0.8512105739422304
+        },
+        "random_500": {
+          "rank_distance": 10.793316831683168,
+          "total_variation": 13.55855300943255,
+          "saturation": 0.7978326570863985
+        },
+        "random_irt_500": {
+          "rank_distance": 8.150990099009901,
+          "total_variation": 14.740768946707542,
+          "saturation": 0.8406749156019322
+        },
+        "fluid_500": {
+          "rank_distance": 7.61509900990099,
+          "total_variation": 4.866498090744147,
+          "saturation": 0.877672422675523
+        }
+      }
+    },
+    "appendix_h_full_accuracy_comparison": {
+      "results": {
+        "full_accuracy": {
+          "rank_distance": 8.475247524752476,
+          "total_variation": 17.13438775236447,
+          "saturation": 0.8421155649077497
+        },
+        "fluid_500": {
+          "rank_distance": 7.61509900990099,
+          "total_variation": 4.866498090744147,
+          "saturation": 0.877672422675523
+        }
+      }
+    },
+    "appendix_f_table4_lm_breakdown_100": {
+      "results": {
+        "random_amber_7b_100": {
+          "rank_distance": 29.574324324324323,
+          "total_variation": 26.55754749792929,
+          "saturation": 0.582528978044823
+        },
+        "random_irt_amber_7b_100": {
+          "rank_distance": 20.08108108108108,
+          "total_variation": 28.05275328497564,
+          "saturation": 0.6190711183390586
+        },
+        "fluid_amber_7b_100": {
+          "rank_distance": 18.466216216216218,
+          "total_variation": 5.78876736096026,
+          "saturation": 0.8423818555397502
+        },
+        "random_k2_65b_100": {
+          "rank_distance": 3.619565217391304,
+          "total_variation": 8.325535649245221,
+          "saturation": 0.6625479168002045
+        },
+        "random_irt_k2_65b_100": {
+          "rank_distance": 4.282608695652174,
+          "total_variation": 5.675817396775332,
+          "saturation": 0.7253720650093559
+        },
+        "fluid_k2_65b_100": {
+          "rank_distance": 2.282608695652174,
+          "total_variation": 4.995064599810876,
+          "saturation": 0.8782938076416338
+        },
+        "random_olmo1_7b_100": {
+          "rank_distance": 12.547619047619047,
+          "total_variation": 5.228474074142192,
+          "saturation": 0.7491100473140565
+        },
+        "random_irt_olmo1_7b_100": {
+          "rank_distance": 7.041666666666667,
+          "total_variation": 4.557550668686354,
+          "saturation": 0.7807917066133035
+        },
+        "fluid_olmo1_7b_100": {
+          "rank_distance": 6.434523809523809,
+          "total_variation": 3.2709978558454917,
+          "saturation": 0.8785349647516408
+        },
+        "random_olmo2_7b_100": {
+          "rank_distance": 5.2712765957446805,
+          "total_variation": 5.174342315961295,
+          "saturation": 0.6966347344380653
+        },
+        "random_irt_olmo2_7b_100": {
+          "rank_distance": 4.5212765957446805,
+          "total_variation": 5.12143451808275,
+          "saturation": 0.6862336916644378
+        },
+        "fluid_olmo2_7b_100": {
+          "rank_distance": 3.8031914893617023,
+          "total_variation": 3.5307619315027794,
+          "saturation": 0.7760124372574665
+        },
+        "random_pythia_3b_100": {
+          "rank_distance": 24.275641025641026,
+          "total_variation": 40.6956640717614,
+          "saturation": 0.4830270073391558
+        },
+        "random_irt_pythia_3b_100": {
+          "rank_distance": 9.557692307692308,
+          "total_variation": 26.493114185961417,
+          "saturation": 0.6092230687989607
+        },
+        "fluid_pythia_3b_100": {
+          "rank_distance": 7.826923076923077,
+          "total_variation": 3.935324112733861,
+          "saturation": 0.8212267904218371
+        },
+        "random_pythia_7b_100": {
+          "rank_distance": 21.53846153846154,
+          "total_variation": 29.84031250472815,
+          "saturation": 0.6846291894219464
+        },
+        "random_irt_pythia_7b_100": {
+          "rank_distance": 12.185897435897436,
+          "total_variation": 14.794759629871365,
+          "saturation": 0.733937416985999
+        },
+        "fluid_pythia_7b_100": {
+          "rank_distance": 11.865384615384615,
+          "total_variation": 2.6655720061628023,
+          "saturation": 0.8539077037578525
+        }
+      }
+    }
+  }
+}

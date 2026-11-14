@@ -1,0 +1,13 @@
+{
+  "seed": 0,
+  "elapsed_seconds": 265.6894479059847,
+  "checkpoint_counts": {
+    "amber-7b": 73,
+    "k2-65b": 46,
+    "olmo1-7b": 83,
+    "olmo2-7b": 94,
+    "pythia-3b": 78,
+    "pythia-7b": 78
+  },
+  "algorithm": "existing adaptive_select_items + existing estimate_ability; exact prefix reuse"
+}

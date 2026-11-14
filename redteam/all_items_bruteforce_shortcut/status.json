@@ -1,0 +1,8 @@
+{
+  "name": "all_items_bruteforce_shortcut",
+  "train_exit": 0,
+  "test_exit": 0,
+  "scores_file_may_be_stale": false,
+  "test_command": "bash scripts/evaluate_test.sh",
+  "process_model": "method exits before evaluator starts; no environment or process tampering"
+}

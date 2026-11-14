@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/user/eval/test/score_slice.py", line 430, in <module>
+    main()
+  File "/home/user/eval/test/score_slice.py", line 418, in main
+    scores = build_scores(payload, reference, TEST_LMS)
+  File "/home/user/eval/test/score_slice.py", line 333, in build_scores
+    metrics = compute_method_metrics(payload, oll_results, method, budget, lm_names)
+  File "/home/user/eval/test/score_slice.py", line 201, in compute_method_metrics
+    curve = [float(value) for value in score_curves[method][budget][lm_name][benchmark].values()]
+  File "/home/user/eval/test/score_slice.py", line 201, in <listcomp>
+    curve = [float(value) for value in score_curves[method][budget][lm_name][benchmark].values()]
+TypeError: float() argument must be a string or a real number, not 'NoneType'

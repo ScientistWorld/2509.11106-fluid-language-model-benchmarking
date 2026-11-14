@@ -1,0 +1,176 @@
+{
+  "experiments": {
+    "table2_ablation_comparison": {
+      "results": {
+        "random_10": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_irt_10": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "fluid_10": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_50": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_irt_50": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "fluid_50": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_100": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_irt_100": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "fluid_100": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_500": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "random_irt_500": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "fluid_500": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        }
+      }
+    },
+    "appendix_h_full_accuracy_comparison": {
+      "results": {
+        "full_accuracy": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        },
+        "fluid_500": {
+          "rank_distance": 0.0,
+          "total_variation": 1.333333333333333,
+          "saturation": 1.0
+        }
+      }
+    },
+    "appendix_f_table4_lm_breakdown_100": {
+      "results": {
+        "random_amber_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_irt_amber_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "fluid_amber_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_k2_65b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_irt_k2_65b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "fluid_k2_65b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_olmo1_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_irt_olmo1_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "fluid_olmo1_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_olmo2_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_irt_olmo2_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "fluid_olmo2_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_pythia_3b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_irt_pythia_3b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "fluid_pythia_3b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_pythia_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "random_irt_pythia_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        },
+        "fluid_pythia_7b_100": {
+          "rank_distance": 0.0,
+          "total_variation": 2.0,
+          "saturation": 1.0
+        }
+      }
+    }
+  }
+}

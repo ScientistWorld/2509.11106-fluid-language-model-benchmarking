@@ -1,0 +1,34 @@
+{
+  "test_exit": 0,
+  "rank": -1.4229105969136069,
+  "fluid_only_rank": -2.7823022291102724e-16,
+  "scored_cells": 96,
+  "missing_reference_cells": 0,
+  "improved_cells": 32,
+  "worsened_cells": 28,
+  "ties": 36,
+  "strictly_dominates_reference": false,
+  "equal_to_reference": false,
+  "table2_fluid": {
+    "10": {
+      "rank_distance": 9.448019801980198,
+      "total_variation": 13.590845138611877,
+      "saturation": 0.7029536782171244
+    },
+    "50": {
+      "rank_distance": 8.087871287128714,
+      "total_variation": 6.919152699510404,
+      "saturation": 0.848279727274327
+    },
+    "100": {
+      "rank_distance": 8.091584158415841,
+      "total_variation": 6.238364375424911,
+      "saturation": 0.8512105739422304
+    },
+    "500": {
+      "rank_distance": 7.61509900990099,
+      "total_variation": 4.866498090744147,
+      "saturation": 0.877672422675523
+    }
+  }
+}

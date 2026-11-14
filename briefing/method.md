@@ -46,6 +46,14 @@ Fisher information is highest when the item difficulty matches the current abili
 
 This naturally adapts to the LM's capability: weaker LMs get easier items, stronger LMs get harder items. High-discrimination items (which better differentiate between LMs) are preferentially selected.
 
+### Implementation in this gym (paper's released settings)
+
+- Item parameters: the paper's released 2PL tables (one unidimensional model per benchmark); the MCMC fitting stage is not re-run.
+- Responses binarized at 0.5 (released loader; affects TruthfulQA-MC2).
+- MAP estimation with a N(0, 1) prior on [−4, 4] (Newton steps with backtracking, bisection fallback).
+- The first item is chosen by Fisher information at the mean reference-LM ability of the benchmark, which is also the first Newton starting point.
+- `method/serve.py` (policy `fluid`, run by `scripts/method.sh`) implements one evaluation session of this procedure for the gym's item-query protocol; `method/irt.py` and `method/fluid.py` hold the estimator and selection rule.
+
 ### Ablation studies
 
 The paper separates the contributions of IRT aggregation vs. dynamic selection:

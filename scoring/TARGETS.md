@@ -1,40 +1,43 @@
 # Evaluation Targets
 
+Every target is measured on the scored rows of `scoring/scores_test.json` (hidden LMs) and, for
+development, `scoring/scores_train.json` (visible LMs). Comparisons against baselines use the
+evaluator's own `baselines` in the same file.
+
 ## Primary: validity
-The submitted method should improve external validity relative to random subset evaluation.
+The submitted method's checkpoint scores should rank checkpoints consistently with a related
+benchmark.
 - **Metric**: `rank_distance` (lower is better)
-- **Experiment**: `table2_ablation_comparison`
-- **Evidence**: the submitted-method rows at 10, 50, 100, and 500 items should beat the corresponding random subset baselines, and typically also the reference-metadata random subset baselines
+- **Experiment**: `table2_ablation_comparison`, rows `submitted_10/50/100/500`
+- **Evidence**: lower than `random_<budget>` and `random_irt_<budget>` at every budget
+
+## Constraint: item budget (efficiency)
+At most 10, 50, 100 or 500 item queries per checkpoint-benchmark session.
+- **Enforced by**: the evaluator's query counter; one query beyond the budget fails the run and
+  every scored metric is written at its worst value
+- **Evidence**: `evaluation.mean_items_queried` in the score file
 
 ## Constraint: variance
-The submitted method should reduce step-to-step instability in checkpoint tracking.
-- **Metric**: `total_variation` (lower is better)
-- **Evidence**: the submitted-method rows should beat both matched baselines at the same item budget
+The submitted method should keep step-to-step instability of checkpoint curves low.
+- **Metric**: `total_variation` (lower is better); constant or endpoint-equal curves score 100
+- **Experiment**: `table2_ablation_comparison`
+- **Evidence**: lower than both matched baselines at every budget
 
 ## Constraint: saturation
-The submitted method should delay benchmark saturation so late-training progress remains visible.
-- **Metric**: `saturation` (higher is better)
-- **Evidence**: the submitted-method rows should have higher monotonicity than the random baselines, especially at small budgets
+Late-training progress should remain visible.
+- **Metric**: `saturation` (higher is better; a constant curve scores 0)
+- **Experiment**: `table2_ablation_comparison`
+- **Evidence**: higher than both matched baselines at every budget
 
 ## Ablation: efficiency_scaling
-The submitted method's advantage should persist from very small to moderate item budgets.
-Efficiency is represented by the item-budget sweep (`10`, `50`, `100`, and `500` items), not by a
-separate scalar metric.
-- **Metric**: all three metrics at budgets `10`, `50`, `100`, and `500`
-- **Evidence**: the directional advantage should remain visible as the item budget increases, with the largest gains at low budgets
+The advantage should persist from 10 to 500 items, with the largest gains at small budgets.
+- **Metric**: all three metrics across `submitted_10` ... `submitted_500` against the baselines
 
 ## Secondary: full_benchmark_accuracy
-The submitted method should outperform evaluating the entire benchmark with standard accuracy
-aggregation on the scored quality metrics.
-- **Metric**: `rank_distance`, `total_variation`, and `saturation`
-- **Experiment**: `appendix_h_full_accuracy_comparison`
-- **Evidence**: the 500-item submitted-method row should beat the full-accuracy baseline, showing that a lower-budget strategy can
-  improve evaluation quality even when full-benchmark accuracy uses more items
+A 500-item evaluation should beat full-benchmark accuracy on all three metrics.
+- **Experiment**: `appendix_h_full_accuracy_comparison`, row `submitted_500` against `baselines.full_accuracy`
 
 ## Secondary: per_model_consistency
-The submitted method's advantage should hold across individual language-model training trajectories,
-not only after averaging over all models.
-- **Metric**: `rank_distance`, `total_variation`, and `saturation`
-- **Experiment**: `appendix_f_table4_lm_breakdown_100`
-- **Evidence**: the submitted-method row for each model should remain competitive with or better
-  than the matched random subset baselines at the 100-item budget
+The quality should hold for every training trajectory, not only on average.
+- **Experiment**: `appendix_f_table4_worst_lm_100`, row `submitted_100` (worst LM per metric);
+  `per_lm` shows each LM against both baselines

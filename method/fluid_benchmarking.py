@@ -3,11 +3,12 @@ Fluid Benchmarking: IRT-based adaptive evaluation for language models.
 
 This module implements the core FLUID BENCHMARKING method from:
 "Hofmann et al. - Fluid Language Model Benchmarking (2025)"
+
+The per-session procedure the evaluators run is ``method/serve.py``.
 """
 
 from .irt import IRTModel, estimate_ability, fisher_information, logistic
-from .fluid import FluidBenchmarking
-from .metrics import compute_validity, compute_variance, compute_saturation
+from .fluid import FluidBenchmarking, adaptive_select_items
 
 __all__ = [
     'IRTModel',
@@ -15,7 +16,5 @@ __all__ = [
     'fisher_information',
     'logistic',
     'FluidBenchmarking',
-    'compute_validity',
-    'compute_variance',
-    'compute_saturation',
+    'adaptive_select_items',
 ]

@@ -1,32 +1,30 @@
 # Experiment Overview
 
-## table2_ablation_comparison
-Tests whether a submitted fixed-budget benchmarking method outperforms matched subset baselines on
-the three reported evaluation metrics: validity, variance, and saturation. The comparison is run at
-item budgets 10, 50, 100, and 500, averaged over 6 benchmarks, 6 language models, and all released
-checkpoints for those models. This experiment is the minimum target for the core claim.
+All three experiments score the same thing: the submitted benchmarking method (`scripts/method.sh`),
+run by the evaluator through the item-query protocol of `briefing/evaluation.md` on every checkpoint
+of the slice's language models, all six benchmarks and all four item budgets. Only the rows under
+each experiment's `results` are ranked. Baselines, ground truth, reference population, budgets and
+the checkpoint roster are fixed by the evaluator.
 
-The result rows cover three strategy families at each item budget:
-- A random subset baseline with standard accuracy aggregation.
-- A random subset baseline scored with the provided reference item metadata.
-- The submitted fixed-budget method at the same item budget.
+## table2_ablation_comparison (weight 0.65)
+Whether a fixed-budget benchmarking method yields valid, stable and non-saturated checkpoint
+curves. Scored rows `submitted_10`, `submitted_50`, `submitted_100`, `submitted_500` report
+validity (`rank_distance`), variance (`total_variation`) and saturation (`saturation`) at each
+item budget, averaged over the slice's LMs, benchmarks and checkpoints.
 
-## appendix_h_full_accuracy_comparison
-Tests whether the submitted fixed-budget method remains competitive with a full-benchmark accuracy
-curve even when efficiency is not the only concern. The reproduced `full_accuracy` curve uses all
-available item-level checkpoint responses with standard accuracy aggregation, while the submitted
-method row uses the 500-item run from the primary experiment.
+Unranked `baselines` at the same budgets, computed by the evaluator on five fixed random item
+subsets per benchmark and budget:
+- `random_<budget>`: accuracy on a random item subset.
+- `random_irt_<budget>`: maximum-a-posteriori 2PL ability on the same random subset.
 
-The result rows compare full-benchmark static accuracy against the submitted method at a
-500-item budget.
+## appendix_h_full_accuracy_comparison (weight 0.15)
+Whether a 500-item evaluation can beat evaluating the whole benchmark. Scored row `submitted_500`
+(the submitted method's 500-item result). Unranked `baselines`: `full_accuracy` (accuracy over all
+items of each benchmark) and `full_ability` (MAP ability over all items).
 
-## appendix_f_table4_lm_breakdown_100
-Tests whether the quality pattern in the primary comparison is consistent across individual
-language-model training trajectories at the 100-item budget. Metrics are computed separately for
-each released model trajectory and then reported as comparable rows for the same three strategy
-families used in the primary experiment.
-
-The result rows cover each model-specific trajectory for:
-- A random subset baseline with standard accuracy aggregation.
-- A random subset baseline scored with the provided reference item metadata.
-- The submitted fixed-budget method at the same item budget.
+## appendix_f_table4_worst_lm_100 (weight 0.20)
+Whether the quality holds for every training trajectory rather than only on average. Scored row
+`submitted_100`: at the 100-item budget, the worst LM of the slice on each metric (largest per-LM
+rank distance, largest per-LM total variation, smallest per-LM saturation). Unranked `baselines`
+are the same worst-LM values for RANDOM and RANDOM IRT; `per_lm` lists every LM's values for the
+submitted method and both baselines.

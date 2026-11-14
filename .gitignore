@@ -222,3 +222,10 @@ wheels/
 python_wheels/
 *.bundle
 *.bundle.lock
+
+# Evaluator run outputs (per-run details and method stderr logs)
+eval/train/output/
+eval/test/output/
+
+# Audit run details (per-session method outputs on held-out LMs)
+hardening/runs/*/details.json

@@ -1,41 +1,39 @@
 # Scientist Constraints
 
+## Interface
+The submission is the executable `scripts/method.sh`, run by the evaluators through the line
+protocol in `briefing/evaluation.md`. The method must:
+- answer every session (every checkpoint × benchmark × budget) with one finite score on the scale it
+  declared (`ability`, or `accuracy` in [0, 1]);
+- query at most `budget` distinct items per session; the evaluator counts and enforces this;
+- be a deterministic, stateless per-session procedure: a session's queries and score may depend
+  only on the benchmark, the budget and the answers received in that session. No information may
+  be carried between sessions (in memory, on disk or otherwise); the evaluator replays sessions in a
+  fresh process and fails the run on any difference;
+- not read anything under `eval/` and not modify `data/downloads/` (the evaluator fails the run if
+  the public data files change).
+
+**Why**: the paper evaluates each checkpoint independently with a fixed item budget; variance and
+saturation measure the noise of that per-checkpoint evaluation. Pooling or smoothing across
+checkpoints would change the measured quantity, and extra items would remove the efficiency
+constraint.
+
 ## Data
-The scientist must use only the reference-model item metadata and item-level responses provided in
-the dataset bundled by this environment. The scientist may not estimate new item metadata on
-additional data or use metadata fitted on different corpora.
+Use only what this environment provides: the released item parameters, the reference LMs'
+accuracies and abilities, and the visible LMs' item-level responses (for development). Do not
+re-fit item parameters on additional data, and do not obtain the held-out LMs' responses
+(K2-65B, Pythia-2.8B, Pythia-6.9B) from any source; the method may learn only from the visible LMs.
 
-The LM checkpoint data (6 LMs × 61-94 checkpoints each × 6 benchmarks with item-level 0/1 responses)
-must be used as-is. The scientist may not supplement with additional model checkpoints,
-additional benchmarks, or human-labeled data beyond what is provided.
+**Why**: the held-out runs are the test; any access to their answers beyond the protocol's queries
+invalidates it.
 
-The set of evaluation benchmarks (ARC Challenge, GSM8K, HellaSwag, MMLU, TruthfulQA, WinoGrande)
-and the 6 LM families (Amber-6.7B, K2-65B, OLMo1-7B, OLMo2-7B, Pythia-2.8B, Pythia-6.9B) define
-the evaluation scope. The scientist may not expand to other benchmarks or models.
-
-**Why**: The reference information is calibrated on a specific benchmark-response corpus. Re-fitting
-on different data or adding more models would change the target distribution and make comparisons
-to the reproduced results meaningless.
-
-## Item Budget
-Any proposed improvement must be evaluated under the same item budgets as the paper: 10, 50, 100,
-and 500 items. A method that only works well at 1000 items does not demonstrate the efficiency
-claim being evaluated here.
-
-**Why**: The core claim is improvement at the same item count. Beating the reproduced score at 1000
-items while losing at 100 items does not address the target problem.
-
-## Evaluation Metrics
-The scientist must use the paper's four evaluation dimensions: validity (rank distance), variance
-(total variation), saturation (Spearman correlation), and efficiency (performance vs. item count).
-The scientist may not redefine or rename these metrics to make a weaker method look better.
-
-**Why**: These four dimensions capture the paper's full thesis. Optimizing only one (e.g., only
-validity) while degrading others does not demonstrate genuine improvement.
+## Item budgets and metrics
+Budgets are 10, 50, 100 and 500 items. The metrics (validity rank distance against the 102
+reference LMs, normalized total variation, absolute Spearman monotonicity), the benchmark pairs and
+the six benchmarks are fixed by the evaluator and may not be changed.
 
 ## Compliance Checklist
-- [ ] Reference item metadata is from the provided dataset, not re-fitted
-- [ ] No external benchmarks, models, or datasets added beyond the provided data
-- [ ] Results reported at item counts 10, 50, 100, and 500
-- [ ] All four metrics (rank_distance, total_variation, saturation, efficiency) are reported
-- [ ] Comparison includes the two random subset baselines at matching item counts
+- [ ] `scripts/method.sh` speaks the protocol and writes logs to stderr only
+- [ ] At most `budget` queries per session; every session answered
+- [ ] Deterministic and stateless across sessions; no reads of `eval/`, no writes to `data/downloads/`
+- [ ] No held-out LM data, no re-fitted item parameters

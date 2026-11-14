@@ -1,46 +1,29 @@
 #!/bin/bash
-# Reproduce the paper's results end-to-end.
+# Reproduce the reference results end to end (runs inside the compute container).
 #
-# This script runs inside the compute container and executes the released-data
-# reproduction end to end. The method runner generates the raw experiment
-# payload and the evaluation runner converts it into scoring/scores.json.
+# The reference method (paper's FLUID BENCHMARKING, scripts/method.sh) is run by
+# the evaluators through the item-query protocol:
+#   1. visible LMs  -> scoring/scores_train.json   (scripts/evaluate_train.sh)
+#   2. visible LMs  -> scoring/scores.json         (scripts/evaluate.sh, public dev score)
+#   3. held-out LMs -> scoring/scores_test.json    (scripts/evaluate_test.sh)
 #
-# Assumes:
-#   - Container is built (environment/container.sif)
-#   - Data and models are downloaded (via scripts/download.sh)
-#   - Working directory is the repo root
-#
-# This is the "gold standard" reproduction —
-# You do not need to run this, but keep this in good shape
-# so other agents can easily run a full loop of reproduction and get the paper's numbers.
+# Assumes scripts/download.sh has been run (data/downloads/ and eval/*/data/).
 
-set -e
+set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
-export PYTHONPATH="$ROOT_DIR"
 
-echo "=== FLUID BENCHMARKING: Full Reproduction ==="
-echo ""
-
-# Verify data exists
-if [ ! -f "data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json" ]; then
+if [ ! -f data/downloads/fluid-benchmarking/open_llm_leaderboard_results.json ]; then
     echo "Data not found. Run scripts/download.sh first."
     exit 1
 fi
 
-echo "Step 1: Running FLUID BENCHMARKING method..."
-bash scripts/method.sh
-
-echo ""
-echo "Step 2: Running evaluation..."
-bash scripts/evaluate.sh "$ROOT_DIR/checkpoints/experiment_results.json"
-
-echo ""
-echo "Step 3: Validating results..."
+echo "=== FLUID BENCHMARKING: reference reproduction ($(date -u)) ==="
+bash scripts/evaluate_train.sh
+bash scripts/evaluate.sh
+if [ -f eval/test/data/hidden_responses.json ]; then
+    bash scripts/evaluate_test.sh
+fi
 python3 validate.py --compare
-
-echo ""
-echo "=== Reproduction complete ==="
-echo "Results are in scoring/scores.json"
-echo "Detailed results in checkpoints/experiment_results.json"
+echo "=== Reproduction complete ($(date -u)) ==="

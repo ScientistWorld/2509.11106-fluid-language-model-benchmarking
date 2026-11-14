@@ -1,30 +1,26 @@
 # Research Direction
 
 ## Research Problem
-This paper addresses the problem of evaluating language models efficiently and accurately.
-Traditional LLM benchmarks require thousands of items and are susceptible to benchmark saturation —
-as models improve, they begin to score near ceiling on existing benchmarks, making it hard to
-distinguish between models. The core research question for this gym is: can a lower-budget
-benchmarking strategy produce more valid, stable, and less saturated rankings than simple subset
-baselines?
+Evaluating language models efficiently and accurately during pretraining: with a budget of 10 to
+500 items per benchmark and checkpoint, produce benchmark scores whose checkpoint curves are valid
+(predict a related benchmark), stable (low step-to-step variation) and non-saturated (monotone
+progress), on training runs the method has never seen.
 
 ## Core Direction
-The scientist should work within efficient language-model benchmarking. Improvements should change
-how a fixed-budget evaluation strategy estimates benchmark performance or chooses which items to
-evaluate, while preserving the released data, model families, benchmark set, item budgets, and
-metric definitions.
+Improve the per-checkpoint evaluation procedure: which items to administer given the answers so
+far, and how to turn the observed answers into a score.
 
 ## Approach Scope
 The scientist may:
-- Improve fixed-budget item selection
-- Improve score estimation from item-level responses
-- Add constraints that preserve content coverage or difficulty coverage
-- Improve how checkpoint-level curves are summarized for ranking language models
+- change item selection (information criteria, exposure or content balancing, start rules,
+  multi-stage designs, use of item discrimination and difficulty);
+- change score estimation (estimators, priors, the score scale, calibration learned from the
+  visible LMs);
+- use the visible LMs' complete responses to design or tune the procedure;
+- serve any procedure through `scripts/method.sh` in any language available in the container.
 
 ## Out of Bounds
-- Using external data beyond the provided reference item metadata and item responses. The scientist
-  may not re-fit item metadata on additional data.
-- Changing the set of benchmarks or LMs used for evaluation. The paper's benchmark set and LM
-  selection define the evaluation scope.
-- Simply increasing the item count to beat the reproduced scores. The goal is a better fixed-budget
-  evaluation strategy, not more items.
+- Sharing information between sessions, e.g. smoothing a checkpoint's score with other
+  checkpoints' (the replay check fails such runs).
+- Querying more items than the budget, or obtaining the held-out LMs' responses outside the protocol.
+- Re-fitting item parameters on additional data, changing the benchmarks, LMs, budgets or metrics.

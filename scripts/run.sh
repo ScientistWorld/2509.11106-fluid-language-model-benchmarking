@@ -1,54 +1,16 @@
 #!/bin/bash
-# CPU job entrypoint for the packaged FLUID BENCHMARKING reproduction.
-#
-# Runs the full released-artifact reproduction, then scores the same raw method
-# output on deterministic train/test checkpoint slices.
+# CPU job: hardening audit. Runs the reference, a better and a weaker variant and
+# every shortcut probe through the unchanged evaluate_{test,train}.sh, leaving the
+# reference method's scores in scoring/, then analyses the audit cohort.
 
 set -euo pipefail
-
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
-export PYTHONPATH="$ROOT_DIR"
-export TMPDIR="${TMPDIR:-$ROOT_DIR/tmp}"
 export PYTHONDONTWRITEBYTECODE=1
-mkdir -p "$TMPDIR"
-
-echo "=== FLUID BENCHMARKING: Packaged Reproduction Job ==="
 echo "Start: $(date -u)"
-echo ""
-
-echo "=== Full reproduction ==="
-bash scripts/reproduce.sh
-
-echo ""
-echo "=== Train/test score slices ==="
-bash scripts/evaluate_train.sh "$ROOT_DIR/checkpoints/experiment_results.json"
-bash scripts/evaluate_test.sh "$ROOT_DIR/checkpoints/experiment_results.json"
-
-python3 - <<'PY'
-import json
-from pathlib import Path
-
-root = Path.cwd()
-train_path = root / "scoring" / "scores_train.json"
-test_path = root / "scoring" / "scores_test.json"
-train = json.loads(train_path.read_text())
-test = json.loads(test_path.read_text())
-
-print("\n=== scores_train.json ===")
-print(json.dumps(train, indent=2))
-print("\n=== scores_test.json ===")
-print(json.dumps(test, indent=2))
-
-print("\n=== integrity summary ===")
-for experiment_name, train_experiment in train["experiments"].items():
-    train_keys = sorted(train_experiment["results"])
-    test_keys = sorted(test["experiments"][experiment_name]["results"])
-    print(
-        f"{experiment_name}: train_results={len(train_keys)} "
-        f"test_results={len(test_keys)} keys_match={train_keys == test_keys}"
-    )
-PY
-
-echo ""
+python3 -c "import numpy, scipy; print('numpy', numpy.__version__, 'scipy', scipy.__version__)"
+id
+bash hardening/run_audit.sh
+python3 hardening/analyze.py
+python3 validate.py --post-design --compare || true
 echo "End: $(date -u)"

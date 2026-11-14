@@ -1,3 +1,0 @@
-Wrote /home/user/scoring/scores_train.json
-Train slice LMs: amber-7b, olmo1-7b, olmo2-7b
-Table 4 checkpoint slice: hash-balanced train partition per LM

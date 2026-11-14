@@ -1,77 +1,294 @@
 {
   "experiments": {
     "table2_ablation_comparison": {
-      "description": "Primary comparison of the proposed efficient benchmarking method against matched subset baselines across item budgets 10, 50, 100, and 500. Results are averaged over 6 benchmarks, 6 LMs, and 61-94 checkpoints per LM.",
+      "description": "Primary comparison at item budgets 10, 50, 100 and 500. Each scored row submitted_<budget> is the submitted method run by the evaluator through the item-query protocol on every checkpoint of the slice's LMs and all six benchmarks, with at most <budget> items per checkpoint-benchmark session. RANDOM and RANDOM IRT are computed by the evaluator itself (five fixed random subsets) and reported unranked under 'baselines'. Paper values below are the paper's Table 2 (FLUID BENCHMARKING in the submitted rows), averaged over all six LMs; each gym slice holds three LMs.",
       "weight": 0.65,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute OLL-reference rank deviation between paired benchmarks. Measures cross-benchmark validity: good selection should rank LM checkpoints consistently across related benchmarks."},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves across checkpoints. Measures score stability: good selection should produce smooth, non-oscillating score progressions."},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Absolute Spearman rank correlation between checkpoint index and score level. Measures learning curve shape: good selection should show monotonic improvement rather than flat or noisy curves."}
+        "rank_distance": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean absolute OLL-reference rank deviation between paired benchmarks. Measures cross-benchmark validity: good selection should rank LM checkpoints consistently across related benchmarks."
+        },
+        "total_variation": {
+          "higher_is_better": false,
+          "coefficient": -0.8,
+          "description": "Normalized total variation of score curves across checkpoints. Measures score stability: good selection should produce smooth, non-oscillating score progressions."
+        },
+        "saturation": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Absolute Spearman rank correlation between checkpoint index and score level. Measures learning curve shape: good selection should show monotonic improvement rather than flat or noisy curves."
+        }
       },
       "results": {
-        "random_10":     {"type": "baseline", "rank_distance": 20.0, "total_variation": 29.0, "saturation": 0.47},
-        "random_50":     {"type": "baseline", "rank_distance": 15.2, "total_variation": 19.1, "saturation": 0.62},
-        "random_100":    {"type": "baseline", "rank_distance": 16.9, "total_variation": 19.8, "saturation": 0.64},
-        "random_500":    {"type": "baseline", "rank_distance": 9.1,  "total_variation": 10.2, "saturation": 0.79},
-        "random_irt_10": {"type": "baseline", "rank_distance": 14.1, "total_variation": 18.2, "saturation": 0.48},
-        "random_irt_50": {"type": "baseline", "rank_distance": 11.1, "total_variation": 15.7, "saturation": 0.69},
-        "random_irt_100":{"type": "baseline", "rank_distance": 10.6, "total_variation": 17.8, "saturation": 0.71},
-        "random_irt_500":{"type": "baseline", "rank_distance": 8.4,  "total_variation": 10.9, "saturation": 0.85},
-        "fluid_10":      {"type": "proposed",  "rank_distance": 10.1, "total_variation": 10.7, "saturation": 0.76},
-        "fluid_50":      {"type": "proposed",  "rank_distance": 8.8,  "total_variation": 6.5,  "saturation": 0.86},
-        "fluid_100":     {"type": "proposed",  "rank_distance": 8.7,  "total_variation": 6.1,  "saturation": 0.85},
-        "fluid_500":     {"type": "proposed",  "rank_distance": 8.3,  "total_variation": 4.9,  "saturation": 0.88}
+        "random_10": {
+          "type": "baseline",
+          "rank_distance": 20.0,
+          "total_variation": 29.0,
+          "saturation": 0.47
+        },
+        "random_50": {
+          "type": "baseline",
+          "rank_distance": 15.2,
+          "total_variation": 19.1,
+          "saturation": 0.62
+        },
+        "random_100": {
+          "type": "baseline",
+          "rank_distance": 16.9,
+          "total_variation": 19.8,
+          "saturation": 0.64
+        },
+        "random_500": {
+          "type": "baseline",
+          "rank_distance": 9.1,
+          "total_variation": 10.2,
+          "saturation": 0.79
+        },
+        "random_irt_10": {
+          "type": "baseline",
+          "rank_distance": 14.1,
+          "total_variation": 18.2,
+          "saturation": 0.48
+        },
+        "random_irt_50": {
+          "type": "baseline",
+          "rank_distance": 11.1,
+          "total_variation": 15.7,
+          "saturation": 0.69
+        },
+        "random_irt_100": {
+          "type": "baseline",
+          "rank_distance": 10.6,
+          "total_variation": 17.8,
+          "saturation": 0.71
+        },
+        "random_irt_500": {
+          "type": "baseline",
+          "rank_distance": 8.4,
+          "total_variation": 10.9,
+          "saturation": 0.85
+        },
+        "submitted_10": {
+          "type": "proposed",
+          "rank_distance": 10.1,
+          "total_variation": 10.7,
+          "saturation": 0.76
+        },
+        "submitted_50": {
+          "type": "proposed",
+          "rank_distance": 8.8,
+          "total_variation": 6.5,
+          "saturation": 0.86
+        },
+        "submitted_100": {
+          "type": "proposed",
+          "rank_distance": 8.7,
+          "total_variation": 6.1,
+          "saturation": 0.85
+        },
+        "submitted_500": {
+          "type": "proposed",
+          "rank_distance": 8.3,
+          "total_variation": 4.9,
+          "saturation": 0.88
+        }
       }
     },
     "appendix_h_full_accuracy_comparison": {
-      "description": "Secondary comparison showing that the 500-item proposed method can outperform full-benchmark accuracy on the same validity, variance, and saturation metrics.",
+      "description": "Appendix H: the submitted method at 500 items against full-benchmark accuracy (all items, computed by the evaluator and reported unranked under 'baselines', together with all-item MAP ability). The scored row is the submitted method's 500-item result. Paper values: Appendix H over all six LMs.",
       "weight": 0.15,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute OLL-reference rank deviation between paired benchmarks. Measures cross-benchmark validity."},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves. Measures score stability."},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Absolute Spearman rank correlation of checkpoint index vs score level. Measures learning curve shape."}
+        "rank_distance": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Mean absolute OLL-reference rank deviation between paired benchmarks. Measures cross-benchmark validity."
+        },
+        "total_variation": {
+          "higher_is_better": false,
+          "coefficient": -0.8,
+          "description": "Normalized total variation of score curves. Measures score stability."
+        },
+        "saturation": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Absolute Spearman rank correlation of checkpoint index vs score level. Measures learning curve shape."
+        }
       },
       "results": {
-        "full_accuracy": {"type": "baseline", "rank_distance": 9.1, "total_variation": 23.8, "saturation": 0.85},
-        "fluid_500": {"type": "proposed", "rank_distance": 8.3, "total_variation": 4.9, "saturation": 0.88}
+        "full_accuracy": {
+          "type": "baseline",
+          "rank_distance": 9.1,
+          "total_variation": 23.8,
+          "saturation": 0.85
+        },
+        "submitted_500": {
+          "type": "proposed",
+          "rank_distance": 8.3,
+          "total_variation": 4.9,
+          "saturation": 0.88
+        }
       }
     },
-    "appendix_f_table4_lm_breakdown_100": {
-      "description": "Table 4 per-language-model breakdown at 100 items. Results are averaged over the 6 benchmarks and all released checkpoints for each LM.",
-      "weight": 0.20,
+    "appendix_f_table4_worst_lm_100": {
+      "description": "Per-LM consistency (Appendix F, Table 4) at 100 items, scored as the worst LM of the slice: the largest per-LM rank distance, the largest per-LM total variation and the smallest per-LM saturation of the submitted method. A method that is good on average but fails on one training trajectory scores badly here. Per-LM values of the submitted method and of the evaluator's baselines are reported unranked under 'per_lm'.",
+      "weight": 0.2,
       "primary_metric": "rank_distance",
       "metrics": {
-        "rank_distance": {"higher_is_better": false, "coefficient": -1.0, "description": "Mean absolute OLL-reference rank deviation between paired benchmarks, averaged over checkpoints for one LM."},
-        "total_variation": {"higher_is_better": false, "coefficient": -0.8, "description": "Normalized total variation of score curves across the six benchmarks for one LM."},
-        "saturation": {"higher_is_better": true, "coefficient": 1.0, "description": "Monotonicity of checkpoint score curves across the six benchmarks for one LM."}
+        "rank_distance": {
+          "higher_is_better": false,
+          "coefficient": -1.0,
+          "description": "Largest per-LM mean OLL-reference rank distance between paired benchmarks (validity) across the slice LMs."
+        },
+        "total_variation": {
+          "higher_is_better": false,
+          "coefficient": -0.8,
+          "description": "Largest per-LM mean normalized total variation of checkpoint score curves (variance) across the slice LMs."
+        },
+        "saturation": {
+          "higher_is_better": true,
+          "coefficient": 1.0,
+          "description": "Smallest per-LM mean absolute Spearman monotonicity of checkpoint score curves (saturation) across the slice LMs."
+        }
       },
       "results": {
-        "random_amber_7b_100": {"type": "baseline", "rank_distance": 25.5, "total_variation": 21.8, "saturation": 0.47},
-        "random_irt_amber_7b_100": {"type": "baseline", "rank_distance": 20.2, "total_variation": 16.2, "saturation": 0.66},
-        "fluid_amber_7b_100": {"type": "proposed", "rank_distance": 19.3, "total_variation": 5.5, "saturation": 0.82},
-
-        "random_k2_65b_100": {"type": "baseline", "rank_distance": 5.1, "total_variation": 14.7, "saturation": 0.65},
-        "random_irt_k2_65b_100": {"type": "baseline", "rank_distance": 5.2, "total_variation": 27.0, "saturation": 0.73},
-        "fluid_k2_65b_100": {"type": "proposed", "rank_distance": 2.1, "total_variation": 7.1, "saturation": 0.89},
-
-        "random_olmo1_7b_100": {"type": "baseline", "rank_distance": 10.7, "total_variation": 10.2, "saturation": 0.77},
-        "random_irt_olmo1_7b_100": {"type": "baseline", "rank_distance": 8.0, "total_variation": 11.4, "saturation": 0.83},
-        "fluid_olmo1_7b_100": {"type": "proposed", "rank_distance": 6.7, "total_variation": 5.8, "saturation": 0.91},
-
-        "random_olmo2_7b_100": {"type": "baseline", "rank_distance": 7.1, "total_variation": 15.4, "saturation": 0.63},
-        "random_irt_olmo2_7b_100": {"type": "baseline", "rank_distance": 6.1, "total_variation": 12.4, "saturation": 0.63},
-        "fluid_olmo2_7b_100": {"type": "proposed", "rank_distance": 3.4, "total_variation": 6.8, "saturation": 0.80},
-
-        "random_pythia_3b_100": {"type": "baseline", "rank_distance": 23.1, "total_variation": 35.7, "saturation": 0.62},
-        "random_irt_pythia_3b_100": {"type": "baseline", "rank_distance": 8.3, "total_variation": 26.1, "saturation": 0.67},
-        "fluid_pythia_3b_100": {"type": "proposed", "rank_distance": 8.1, "total_variation": 6.5, "saturation": 0.81},
-
-        "random_pythia_7b_100": {"type": "baseline", "rank_distance": 28.1, "total_variation": 20.9, "saturation": 0.71},
-        "random_irt_pythia_7b_100": {"type": "baseline", "rank_distance": 15.3, "total_variation": 13.7, "saturation": 0.73},
-        "fluid_pythia_7b_100": {"type": "proposed", "rank_distance": 11.6, "total_variation": 4.5, "saturation": 0.87}
+        "random_100": {
+          "type": "baseline",
+          "rank_distance": 28.1,
+          "total_variation": 35.7,
+          "saturation": 0.47
+        },
+        "random_irt_100": {
+          "type": "baseline",
+          "rank_distance": 20.2,
+          "total_variation": 27.0,
+          "saturation": 0.63
+        },
+        "submitted_100": {
+          "type": "proposed",
+          "rank_distance": 19.3,
+          "total_variation": 7.1,
+          "saturation": 0.8
+        }
+      },
+      "_note": "results are the worst-LM values derived from the paper's Table 4 over all six LMs (rank distance and TV: maximum over LMs; saturation: minimum). The gym's train and test slices hold three LMs each, so a slice's worst LM is not on exactly the paper's scale.",
+      "_paper_table4_per_lm_100_items": {
+        "random_amber_7b_100": {
+          "type": "baseline",
+          "rank_distance": 25.5,
+          "total_variation": 21.8,
+          "saturation": 0.47
+        },
+        "random_irt_amber_7b_100": {
+          "type": "baseline",
+          "rank_distance": 20.2,
+          "total_variation": 16.2,
+          "saturation": 0.66
+        },
+        "submitted_amber_7b_100": {
+          "type": "proposed",
+          "rank_distance": 19.3,
+          "total_variation": 5.5,
+          "saturation": 0.82
+        },
+        "random_k2_65b_100": {
+          "type": "baseline",
+          "rank_distance": 5.1,
+          "total_variation": 14.7,
+          "saturation": 0.65
+        },
+        "random_irt_k2_65b_100": {
+          "type": "baseline",
+          "rank_distance": 5.2,
+          "total_variation": 27.0,
+          "saturation": 0.73
+        },
+        "submitted_k2_65b_100": {
+          "type": "proposed",
+          "rank_distance": 2.1,
+          "total_variation": 7.1,
+          "saturation": 0.89
+        },
+        "random_olmo1_7b_100": {
+          "type": "baseline",
+          "rank_distance": 10.7,
+          "total_variation": 10.2,
+          "saturation": 0.77
+        },
+        "random_irt_olmo1_7b_100": {
+          "type": "baseline",
+          "rank_distance": 8.0,
+          "total_variation": 11.4,
+          "saturation": 0.83
+        },
+        "submitted_olmo1_7b_100": {
+          "type": "proposed",
+          "rank_distance": 6.7,
+          "total_variation": 5.8,
+          "saturation": 0.91
+        },
+        "random_olmo2_7b_100": {
+          "type": "baseline",
+          "rank_distance": 7.1,
+          "total_variation": 15.4,
+          "saturation": 0.63
+        },
+        "random_irt_olmo2_7b_100": {
+          "type": "baseline",
+          "rank_distance": 6.1,
+          "total_variation": 12.4,
+          "saturation": 0.63
+        },
+        "submitted_olmo2_7b_100": {
+          "type": "proposed",
+          "rank_distance": 3.4,
+          "total_variation": 6.8,
+          "saturation": 0.8
+        },
+        "random_pythia_3b_100": {
+          "type": "baseline",
+          "rank_distance": 23.1,
+          "total_variation": 35.7,
+          "saturation": 0.62
+        },
+        "random_irt_pythia_3b_100": {
+          "type": "baseline",
+          "rank_distance": 8.3,
+          "total_variation": 26.1,
+          "saturation": 0.67
+        },
+        "submitted_pythia_3b_100": {
+          "type": "proposed",
+          "rank_distance": 8.1,
+          "total_variation": 6.5,
+          "saturation": 0.81
+        },
+        "random_pythia_7b_100": {
+          "type": "baseline",
+          "rank_distance": 28.1,
+          "total_variation": 20.9,
+          "saturation": 0.71
+        },
+        "random_irt_pythia_7b_100": {
+          "type": "baseline",
+          "rank_distance": 15.3,
+          "total_variation": 13.7,
+          "saturation": 0.73
+        },
+        "submitted_pythia_7b_100": {
+          "type": "proposed",
+          "rank_distance": 11.6,
+          "total_variation": 4.5,
+          "saturation": 0.87
+        }
       }
     }
+  },
+  "_notes": {
+    "setup": "Released IRT parameters and item-level checkpoint responses (Hugging Face allenai/fluid-benchmarking, revision e0a11a3). Responses are binarized at 0.5 like the paper's released loader. The released K2 table has 46 checkpoints (paper: 61): 452 checkpoints / 2,712 checkpoint-benchmark pairs instead of 467 / 2,802.",
+    "slices": "train = Amber-6.7B, OLMo1-7B, OLMo2-7B (visible); test = K2-65B, Pythia-2.8B, Pythia-6.9B (hidden).",
+    "paper_values": "All 'results' values are the paper's reported numbers (Tables 2 and 4, Appendix H), unchanged; only the proposed-method rows were renamed from fluid_* to submitted_*."
   }
 }

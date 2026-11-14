@@ -1,3 +1,8 @@
-action: done
+# Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends.
+action: pending
+gpus: 0
+test: false
 milestone: secondary_claims
-notes: "Final verification passed after fixing the lightweight evaluator and aligning docs with the active Table 2, Appendix H, and Table 4 score surface."
+notes: ""

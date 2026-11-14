@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: secondary_claims
-notes: "Audit round 2: fit visible-LM calibration, run calibrated (better) and predicted-accuracy variants on test+train, rerun reference last, analysis + validate."
+notes: "Hardened: evaluator-run item-query protocol with enforced budgets, hidden held-out LMs, evaluator-owned baselines/ground truth, replay check, fail-closed worst scores; paper's binarization restored (Table 2/4 now match); calibrated variant beats reference beyond paired noise (+0.216, CI [0.154,0.278]); all REDTEAM shortcuts impossible or failed. See HARDENING.md."

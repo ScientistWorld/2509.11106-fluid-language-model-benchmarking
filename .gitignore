@@ -228,4 +228,4 @@ eval/train/output/
 eval/test/output/
 
 # Audit run details (per-session method outputs on held-out LMs)
-hardening/runs/*/details.json
+hardening/cases/*/details.json

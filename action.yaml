@@ -5,4 +5,4 @@ action: submit
 gpus: 0
 test: false
 milestone: secondary_claims
-notes: "Hardening audit: reference, better (EAP final), weaker (random IRT) and 11 shortcut probes through the new evaluator-run protocol on the hidden test; reference + variants on train; analysis."
+notes: "Audit round 2: fit visible-LM calibration, run calibrated (better) and predicted-accuracy variants on test+train, rerun reference last, analysis + validate."
